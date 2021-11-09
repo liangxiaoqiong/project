@@ -1,0 +1,15 @@
+<extend name="Public:base"/>
+<block name="content">
+  <style>
+    html, body, .page-404 {
+        height: 100%;
+    }
+    .page-404 {
+      flex-direction: column;
+    }
+  </style>
+  <div class="admin-main page-404 flex-row bg-white">
+    <img src="/Public/admin/img/common/no_authority.png">
+    <div style="color: #666666;margin-top: 14px;">您没有操作权限，请联系管理员</div>
+  </div>
+</block>

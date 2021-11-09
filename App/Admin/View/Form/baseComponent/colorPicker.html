@@ -1,0 +1,30 @@
+<!--组件》表单》颜色选择器-->
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-color-picker<br>
+    </div>
+    <ul>
+      <li class="mt-10">
+        <color-picker :info="info" param="bg_color" default-color="#dddddd"></color-picker>
+      </li>
+    </ul>
+  </div>
+  <include file="Public/components/picker/color_picker"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'color-picker': AppUtil.COMPONENTS.COLOR_PICKER_COMPONENT
+      },
+      data: function () {
+        return {
+          info: {
+            bg_color: '#dddddd'
+          }
+        }
+      }
+    })
+  </script>
+</block>

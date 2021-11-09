@@ -1,0 +1,77 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/7/5
+  -->
+<!-- template -->
+<script type="x-template" id="dialog_demo">
+  <!--region 模版-->
+  <!--默认不设置宽度=500px-->
+  <el-dialog
+    title="弹框"
+    width="700px"
+    :close-on-click-modal="false"
+    :visible.sync="isShowLayer">
+    <div class="dialog-scroll">
+      <div class="form-row">
+        <div class="row-cell">
+          <p class="row-t">姓名</p>
+          <input type="text" class="input-inner">
+        </div>
+        <div class="row-cell">
+          <p class="row-t">密码</p>
+          <input type="password" class="input-inner">
+        </div>
+        <div class="row-cell">
+          <p class="row-t">性别</p>
+          <el-radio-group class="checkbox-radio-group-box row-div" v-model="info.sex">
+            <el-radio label="0">保密</el-radio>
+            <el-radio label="1">女</el-radio>
+            <el-radio label="2">男</el-radio>
+          </el-radio-group>
+        </div>
+      </div>
+      <div class="form-row mb-10">
+        <p class="row-t">备注</p>
+        <textarea class="input-inner"></textarea>
+      </div>
+    </div>
+    <div slot="footer" class="dialog-footer">
+      <a class="xxbtn-white" @click="isShowLayer = false">取消</a>
+      <a class="xxbtn-primary" @click="submit">确定</a>
+    </div>
+  </el-dialog>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.DIALOG_DEMO = {
+    template: '#dialog_demo',
+    components: {},
+    props: {},
+    data: function () {
+      return {
+        isShowLayer: false,
+        info: {
+          sex: '0'
+        }
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      init: function () {
+        this.showLayer();
+      },
+      showLayer: function () {
+        this.isShowLayer = true;
+      },
+      submit: function () {
+        publicWap.layerMsg('保存成功', 1);
+        this.isShowLayer = false;
+      }
+    }
+  }
+</script>

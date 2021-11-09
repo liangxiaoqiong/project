@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>diy打印预览[无分页]</title>
+</head>
+<link rel="stylesheet" href="__PUBLIC__/common/js/plug-in/DragResize/DragResize.css?v={$V}">
+<body>
+<div id="app" v-cloak="">
+  <print-diy v-if="loadCompleted" :tpl-order="tplOrder" @submit-print="submitPrint" :style="'width:'+tplOrder.tpl.tpl_config.page_width"></print-diy>
+</div>
+
+<!--startprint-->
+<style>
+  body {
+    overflow-y: auto;
+    padding: 0;
+    margin: 0;
+  }
+  .drsElement {
+    background-color: transparent;
+  }
+  .editor-order-table {
+    width: 100%;
+    background: #FFFFff;
+    border: 1px solid #333;
+    border-collapse: collapse;
+  }
+  .editor-order-table td {
+    border: 1px solid #333;
+    min-width: 24px;
+  }
+
+  .print-table__2,
+  .print-table__2 td {
+    border: 2px solid #333;
+  }
+  .print-table__3,
+  .print-table__3 td {
+    border: 3px solid #333;
+  }
+  .print-table__4,
+  .print-table__4 td {
+    border: 4px solid #333;
+  }
+  .print-table__5,
+  .print-table__5 td {
+    border: 4px solid #333;
+  }
+  .drsElement.drs__order-table {
+    z-index: 1!important;
+  }
+
+  .drsElement .dragresize-content {
+    overflow: hidden;
+    max-height: 100%;
+  }
+  .drsElement .dragresize-content .custom-img {
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  /*region 热敏打印*/
+  .dragresize-direct .editor-order-table {
+    border: none;
+  }
+  .dragresize-direct .editor-order-table td {
+    border: none;
+    text-align: center;
+  }
+  #print-content-html .dragresize-box {
+    overflow-y: hidden;
+  }
+  .table-bottom .flex-between {
+    line-height: 20px;
+    font-size: 12px;
+  }
+  .flex-between {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .editor-order-table td {
+      word-break: break-all;
+  }
+  .position-r {
+    position: relative;
+  }
+</style>
+<div id="print-content-html"></div>
+<!--endprint-->
+</body>
+<script type="text/javascript" src="__JQUERY__"></script>
+<script type="text/javascript" src="__VUE_NEWEST__"></script>
+<script src="__APP_UTIL__"></script>
+<include file="PrintTpl/print/pages/print_diy" />
+<script>
+  var vm = new Vue({
+    el: '#app',
+    components: {
+      'print-diy': AppUtil.COMPONENTS.PRINT_DIY,
+    },
+    data: function () {
+      return {
+        loadCompleted: false,
+        query: {
+          id: '{$req["id"]}',
+          order_id: '{$req["order_id"]}', // 订单id
+          depot_id: '{$req["depot_id"]}', // 仓库id
+          show_bottom: '{$req["show_bottom"]}',// 是否显示底部统计信息
+        },
+        tplOrder: {
+          orderList: [
+            {
+              order_id: 1,
+              depotList: [
+                {
+                  depot_id: 0, // 如果没有分仓，默认id=0
+                  goodsList: [
+                    {id: 1, goods_name: '商品名称', goods_spec: '规格22',num: 1,goods_price: 2},
+                  ] // 订单商品数据
+                },
+              ], // 仓库列表
+            },
+          ],
+          tpl: {
+            tpl_content: [{}], //"string,模版列表(可拖动的元素列数据)，包含变量词，表格等"
+            tpl_config: {}
+          },
+        },
+      }
+    },
+    computed: {
+    },
+    mounted: function () {
+      this.initLoad();
+    },
+    methods: {
+      initLoad: function () {
+        var self = this;
+        self.getInfoData()
+      },
+      //获取模板详情
+      getInfoData: function () {
+        var self = this
+        AppUtil.ajaxRequest({
+          type: 'get',
+          url: '/Public/json/admin/PrintTpl/print/getPrintData_id'+self.query.id+'_order'+self.query.order_id+'.json',
+          data: self.query,
+        }).then(function (result) {
+          self.tplOrder = result.data
+          self.loadCompleted = true;
+        }).catch(function () {
+
+        }).finally(function () {
+          window.parent.layer.closeAll('loading');
+        })
+      },
+
+      submitPrint: function () {
+        this.$nextTick(function () {
+          bdhtml = window.document.body.innerHTML;
+          sprnstr = "<!--startprint-->";
+          eprnstr = "<!--endprint-->";
+          prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17);
+          prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
+          window.document.body.innerHTML = prnhtml;
+          window.document.body.style.backgroundColor = '#fff';
+          window.print();
+        })
+      }
+    },
+  })
+</script>
+</html>

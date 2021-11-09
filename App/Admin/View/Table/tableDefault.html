@@ -1,0 +1,56 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：class="table-default"
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>默认</div>
+        <table class="table-default">
+          <tr>
+            <th>序号</th>
+            <th>排序</th>
+            <th>商品名称</th>
+            <th>规格</th>
+            <th>单位</th>
+          </tr>
+          <tr v-for="(list, index) in 5">
+            <td>{{ index + 1 }}</td>
+            <td><input type="text" class="input-inner width-100"></td>
+            <td>很不错的商品哦</td>
+            <td>蓝色</td>
+            <td>箱</td>
+          </tr>
+        </table>
+      </li>
+      <li class="mt-10">
+        <div>表格里输入框高度降低、表格边距缩小【添加class="table-stock"】</div>
+        <table class="table-default table-stock">
+          <tr>
+            <th>序号</th>
+            <th>排序</th>
+            <th>商品名称</th>
+            <th>规格</th>
+            <th>单位</th>
+          </tr>
+          <tr v-for="(list, index) in 5">
+            <td>{{ index + 1 }}</td>
+            <td><input type="text" class="input-inner width-100"></td>
+            <td>很不错的商品哦</td>
+            <td>蓝色</td>
+            <td>箱</td>
+          </tr>
+        </table>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {}
+      }
+    })
+  </script>
+</block>

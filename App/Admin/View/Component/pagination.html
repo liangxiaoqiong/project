@@ -1,0 +1,50 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-pagination<br>
+    </div>
+    <pagination ref="pagination" v-show="+tableData.total > 0"
+                :query="query"
+                :table-total="tableData.total"
+                @temp-page-event="getTableData"></pagination>
+  </div>
+  <include file="Public/components/diy_table/pagination"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'pagination': AppUtil.COMPONENTS.TEMP_PAGINATION,
+      },
+      data: function () {
+        return {
+          query: {
+            page: 1,
+            limit: 20,
+            load: false
+          },
+          tableData: {
+            total: 0,
+            list: []
+          },
+        }
+      },
+      mounted: function () {
+        this.getTableData();
+      },
+      methods: {
+        getTableData: function () {
+          var self = this;
+          self.query.load = true;
+          var list = [];
+          for (var i = 0; i < 100; i++) {
+            list.push({});
+          }
+          self.tableData.total = 100;
+          self.tableData.list = list;
+          self.query.load = false;
+        }
+      }
+    })
+  </script>
+</block>

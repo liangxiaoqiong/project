@@ -1,0 +1,392 @@
+<!--报表管理/经营状况报表-->
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main has-nav" id="app" v-cloak="">
+    <div class="tab-nav">
+      <a :class="{'active': query.time_type === 'date'}" @click="changeTimeType('date')">日报</a>
+      <a :class="{'active': query.time_type === 'month'}" @click="changeTimeType('month')">月报</a>
+      <a :class="{'active': query.time_type === 'year'}" @click="changeTimeType('year')">年报</a>
+    </div>
+    <div class="tab-nav-right search-box">
+      <div class="search-item" style="margin-right: 0;">
+        <label>门店</label>
+        <el-select v-model="pickupId">
+          <el-option value="" label="全部"></el-option>
+          <el-option v-for="(item, i) in selectData.depot_pickup" :key="i" :value="item.id" :label="item.name"></el-option>
+        </el-select>
+      </div>
+    </div>
+    <div class="search-box mb-10">
+      <div><i></i><b class="font-16">后台商城经营报告</b></div>
+      <div class="search-item">
+        <label>时间</label>
+        <el-date-picker
+          v-model="query.time_string"
+          :value-format="query.date_value_format"
+          :type="query.time_type">
+        </el-date-picker>
+        <button type="button" class="xxbtn-primary ml-10" @click="getReportData">查询</button>
+      </div>
+    </div>
+
+    <!-- region 销售报表-->
+    <div class="list-row-ul6 mb-10">
+      <a>
+        <p>销售额(元)</p>
+        <h4 class="color-primary">{{ resultData.sale_meta.buy_price }}</h4>
+      </a>
+      <a>
+        <p>
+          <span>销售毛利(元)</span>
+          <el-popover placement="top" trigger="hover">
+            <span class="display-align width-200">销售毛利为当期每笔销售毛利累加值，单笔某商品销售毛利=销售额-成本价×销售量；负库存出库时，将会导致成本价出现偏差，在库存状况</span>
+            <i slot="reference" class="xxicon-warning-tip el-icon-warning"></i>
+          </el-popover>
+        </p>
+        <h4 class="color-primary">{{ resultData.sale_meta.gross_profit }}</h4>
+      </a>
+      <a>
+        <p>销售总笔数</p>
+        <h4>{{ resultData.sale_meta.buy_num }}</h4>
+      </a>
+      <a>
+        <p>
+          {{ query.time_type === 'date' ? '近七天' : '' }}日均销售额
+        </p>
+        <h4>107</h4>
+      </a>
+      <a>
+        <p>
+          {{ query.time_type === 'date' ? '近七天' : '' }}日均销售毛利</p>
+        <h4>{{ resultData.sale_meta.day_avg_buy_price }}</h4>
+      </a>
+      <a>
+        <p>
+          {{ query.time_type === 'date' ? '近七天' : '' }}日均销售笔数</p>
+        <h4>{{ resultData.sale_meta.day_avg_gross_profit }}</h4>
+      </a>
+    </div>
+    <!--endregion-->
+    <!--region 销售走势,折线图-->
+    <div class="box-div mb-10">
+      <div id="sale-line-chart" style="width:100%; height:400px;"></div>
+    </div>
+    <!--endregion-->
+
+    <!--region 利润余额收入，饼图-->
+    <ul class="chart-box chart-box-2 mb-10">
+      <li>
+        <div class="chart-title"><b class="font-16">利润总额</b></div>
+        <div class="chart-main">
+          <div class="chart-pie" id="total-profit-pie-chart"></div>
+          <div class="chart-text-box">
+            <div class="text-list">
+              <b>利润总额</b><b>{{ resultData.profit_meta.total_profit_price }}元</b>
+            </div>
+            <div class="text-list color-orange">
+              <span><i class="xxicon-empty-circle-orange"></i><font class="display-align">收入</font></span>
+              <font>{{ resultData.profit_meta.in_total }}元</font>
+            </div>
+            <div class="text-list color-primary">
+              <span><i class="xxicon-empty-circle-primary"></i><font class="display-align">支出</font></span>
+              <font>{{ resultData.profit_meta.out_total }}元</font>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li>
+        <div class="chart-title"><b class="font-16">账户总余额</b>
+          <a class="color-gray ml-10">更多详情></a>
+        </div>
+        <div class="chart-main">
+          <div class="chart-pie" id="account-pie-chart"></div>
+          <div class="chart-text-box">
+            <div class="text-list">
+              <b>账户总余额</b><b>{{ resultData.account_meta.meta.balance }}元</b>
+            </div>
+            <div class="text-list" :style="'color:'+chartColors[index]"
+                 v-for="(list, index) in reportData.profitPieData.chartList">
+              <span>
+                <i class="xxicon-empty-circle-" :style="'border-color:'+chartColors[index]"></i>
+                <font class="display-align">{{ list.name }}</font>
+              </span>
+              <font>{{ list.y }}元</font>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <!--endregion-->
+
+    <!--region 客户销售分布,进度条-->
+    <ul class="chart-box chart-box1 mb-10">
+      <li>
+        <div class="chart-title"><b class="font-16">客户销售分布</b>
+          <a class="color-gray ml-10">更多详情></a>
+        </div>
+        <div v-if="loadCompleted">
+          <template v-if="reportData.customerData.chartList.length > 0">
+            <table class="table-default table-progress">
+              <tr>
+                <th width="100px" class="text-right">客户名称</th>
+                <th></th>
+                <th width="100px">金额</th>
+                <th width="100px">占比</th>
+              </tr>
+              <tr v-for="(list, index) in reportData.customerData.chartList">
+                <td class="text-right">{{ list.name }}</td>
+                <td>
+                  <el-progress :text-inside="true" :show-text="false" :stroke-width="17" :percentage="customerPercent(list)"
+                               :color="+list.y > 0 ? '#003cff' : '#FF1818'"></el-progress>
+                </td>
+                <td><div class="progress-value" :class="+list.y > 0 ? 'color-primary' : 'color-red'">￥{{ list.y }}</div></td>
+                <td><div class="progress-value" :class="+list.y > 0 ? 'color-primary' : 'color-red'">{{ customerPercent(list) }}%</div></td></tr>
+            </table>
+          </template>
+          <template v-else>
+            <div class="chart-empty">暂无客户销售分布数据</div>
+          </template>
+        </div>
+      </li>
+    </ul>
+    <!--endregion-->
+  </div>
+  <script type="text/javascript" src="__COMMON_JS__/plug-in/chart/echart/5.1.1/echarts.min.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          loadCompleted: false,
+          chartColors: [
+            "#003cff",
+            "#FFA200",
+            "#91cc75",
+            "#ee6666",
+            "#73c0de",
+            "#3ba272",
+            "#fc8452",
+            "#9a60b4",
+            "#ea7ccc"],//图表颜色
+          query: {
+            pickup_id: '',//门店id
+            time_type: 'month',//时间类型，'date'-日报，'month'-月报，'year'-年报
+            time_string: '',//时间日期格式
+            date_value_format: '',//时间日期格式规则
+            is_obsolete: 0,
+          },
+          selectData: {
+            depot_pickup: [
+              {id: '', name: "总部"},
+              {id: '1', name: "安德鲁是"},
+              {id: '2', name: "澳门的门店"},
+            ], // 门店数据列表
+          },
+          resultData: {
+            date_list: [],
+            gross_profit_list: [],
+            buy_price_list: [],
+            sale_meta: {},
+            profit_meta: {},
+            account_meta: {
+              list: [],
+              meta: {},
+            },
+            customer_meta: {
+              list: [],
+              meta: {},
+            },
+            request: {},
+          },
+          reportData: {
+            search_time: '', //查询的日期，传过去的query.time_string
+            //利润余额数据
+            profitPieData: {
+              chartList: [],//饼图循环数据
+            },
+            //客户销售分布
+            customerData: {
+              chartList: []//饼图循环数据
+            }
+          }
+        }
+      },
+      computed: {
+        pickupId: {
+          set: function (val) {
+            this.query.pickup_id = val;
+            this.getReportData()
+          },
+          get: function () {
+            return this.query.pickup_id;
+          }
+        },
+        // 客户销售总额
+        customerSaleTotal: function () {
+          var total = 0;
+          this.reportData.customerData.chartList.forEach(function (value) {
+            total += Math.abs(+value.y);
+          })
+          return total;
+        }
+      },
+      mounted: function () {
+        this.changeTimeType();
+      },
+      methods: {
+        //初始化日期格式
+        initTime: function () {
+          var self = this
+          var myDate = new Date()
+          var year = myDate.getFullYear()
+          var month = myDate.getMonth() + 1
+          var day = myDate.getDate()
+          switch (self.query.time_type) {
+            case 'date':
+              self.query.time_string = year + '-' + month + '-' + day
+              self.query.date_value_format = 'yyyy-MM-dd'
+              break
+            case 'month':
+              self.query.time_string = year + '-' + month
+              self.query.date_value_format = 'yyyy-MM'
+              break
+            case 'year':
+              self.query.time_string = '' + year + ''
+              self.query.date_value_format = 'yyyy'
+              break
+            default:
+              break
+          }
+        },
+
+        changeTimeType: function (type) {
+          var self = this
+          if (typeof type !== 'undefined') {
+            self.query.time_type = type
+          }
+          self.initTime()
+          self.getReportData()
+        },
+
+        //获取报表数据
+        getReportData: function () {
+          var self = this
+          if (self.query.time_string === '' || self.query.time_string === null) {
+            self.initTime()
+          }
+          AppUtil.ajaxRequest({
+            url: '/Public/json/admin/report.json'
+          }).then(function (result) {
+            var customerMetaList = JSON.parse(JSON.stringify(result.data.customer_meta.list));
+            customerMetaList.sort(publicWap.compare('y', 'desc'));
+            self.resultData = result.data;
+            self.reportData = {
+              search_time: self.query.time_string,
+              profitPieData: {
+                chartList: self.resultData.account_meta.list,
+              },
+              customerData: {
+                chartList: customerMetaList,
+              }
+            }
+            self.loadCompleted = true;
+            self.$nextTick(function () {
+              self.chartHtml()
+            })
+          }).catch(function () {
+
+          })
+        },
+
+        //图表数据渲染
+        chartHtml: function () {
+          var self = this
+          self.chartSaleLine();
+          self.chartTotalProfitPie();
+          self.chartAccountPie();
+        },
+        // 销售走势,折线图
+        chartSaleLine: function () {
+          var self = this
+          adminObj.echartLine('sale-line-chart', {
+            title: {
+              text: self.reportData.search_time + '近七天销售走势',
+              subtext: '金额（元）',
+            },
+            legend: {
+              data: ['销售额', '销售毛利']
+            },
+            xAxis: {
+              data: self.resultData.date_list
+            },
+            series: [{
+              type: 'line',
+              lineStyle: {
+                width: 4
+              },
+              symbolSize: 10,
+              symbol: "emptyCircle",
+              label: {
+                show: true,
+              },
+              name: '销售额',
+              data: self.resultData.buy_price_list,
+            }, {
+              type: 'line',
+              lineStyle: {
+                width: 4
+              },
+              symbolSize: 10,
+              symbol: "emptyCircle",
+              label: {
+                show: true,
+              },
+              name: '销售毛利',
+              data: self.resultData.gross_profit_list,
+            }]
+          })
+        },
+
+        // 销售总额，饼图
+        chartTotalProfitPie: function () {
+          var self = this
+          adminObj.echartPie('total-profit-pie-chart', [{
+            value: self.resultData.profit_meta.in_total,
+            name: "收入",
+          },
+            {
+              value: self.resultData.profit_meta.out_total,
+              name: '支出'
+            }
+          ])
+        },
+
+        // 账户总余额，饼图
+        chartAccountPie: function () {
+          var self = this
+          var dataList = [];
+          self.reportData.profitPieData.chartList.forEach(function (value) {
+            dataList.push({
+              name: value.name,
+              value: value.y
+            })
+          })
+          adminObj.echartPie('account-pie-chart', dataList)
+        },
+
+        // 客户销售分布，进度条百分比
+        customerPercent: function (list) {
+          var self = this
+          if (+self.customerSaleTotal === 0) {
+            if (self.reportData.customerData.chartList.length === 1) {
+              return 100;
+            }
+            return +list.y;
+          }
+          var percent = ((+list.y / +self.customerSaleTotal) * 100).toFixed(2);
+          return Math.abs(+percent);
+        },
+      }
+    })
+  </script>
+</block>

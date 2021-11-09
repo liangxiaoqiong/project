@@ -1,0 +1,79 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：input-inner
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>默认宽度100%【高度height: 36px;】</div>
+        <input type="text" class="input-inner" />
+      </li>
+      <li class="mt-10">
+        <div>固定宽度class="width-400 width-100等"</div>
+        <div>
+          <input type="text" class="input-inner width-400" />
+          <input type="text" class="input-inner width-100" />
+        </div>
+      </li>
+      <li class="mt-10">
+        <div>小号输入框class="small"【高度30px】</div>
+        <input type="text" class="input-inner small" />
+      </li>
+      <li class="mt-10">
+        <div>只读输入框【read-only disabled】</div>
+        <input type="text" disabled class="input-inner" />
+      </li>
+      <li class="mt-10">
+        <div>输入框带单位【class="input-div"】</div>
+        <div class="flex-between">
+          <div class="input-div mr-10">
+            <input type="text" class="input-inner">
+            <font class="unit">元</font>
+          </div>
+          <div class="input-div ml-10">
+            <font class="unit">￥</font>
+            <input type="text" class="input-inner">
+          </div>
+        </div>
+      </li>
+      <li class="mt-10">
+        <div>前缀带有select选择框【element-ui组件el-input】</div>
+        <el-input class="input-with-select align-center">
+          <el-select v-model="value1" slot="prepend">
+            <el-option label="中国" value=""></el-option>
+          </el-select>
+        </el-input>
+      </li>
+      <li class="mt-10">
+        <div>范围段样式【class="input-two-period"】</div>
+        <div class="input-two-period">
+          <div class="input-div">
+            <input type="text" class="input-inner" />
+          </div>
+          <div class="input-div">
+            <input type="text" class="input-inner" />
+          </div>
+        </div>
+      </li>
+      <li class="mt-10">
+        <div>input组件【base-input】，主要用于输入框有验证时，具体看Public/components/base_input.html</div>
+        <base-input trans-type="absInt"></base-input>
+      </li>
+    </ul>
+  </div>
+  <include file="Public/components/base_input" />
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'base-input': AppUtil.COMPONENTS.BASE_INPUT_COMPONENT
+      },
+      data: function () {
+        return {
+          value1: ''
+        }
+      }
+    })
+  </script>
+</block>

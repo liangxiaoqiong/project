@@ -1,0 +1,121 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/7/14
+  -->
+<!-- template -->
+<script type="x-template" id="list_search">
+  <!--region 模版-->
+  <div>
+    <div class="search-box mb-10">
+      <div class="flex-left">
+        <a class="xxbtn-primary" @click="add">+ 添加</a>
+      </div>
+      <div class="flex-right">
+        <template v-if="!isShowToggle">
+          <div class="search-item">
+            <label>用户姓名</label>
+            <input type="text" class="input-inner">
+          </div>
+          <div class="search-item">
+            <label>状态条件</label>
+            <el-select v-model="query.status">
+              <el-option value="0" label="全部"></el-option>
+              <el-option value="1" label="进行中"></el-option>
+              <el-option value="2" label="已结束"></el-option>
+            </el-select>
+          </div>
+          <div class="search-btn">
+            <a class="xxbtn-primary" @click="search">搜索</a>
+            <a class="xxbtn-plain ml-10" @click="resetQuery">重置</a>
+            <a class="xxbtn-white ml-10" @click="isShowToggle = true">筛选</a>
+          </div>
+        </template>
+        <template v-else>
+          <a class="xxbtn-white" @click="isShowToggle = false">收起</a>
+        </template>
+      </div>
+    </div>
+    <el-collapse-transition>
+      <div class="search-toggle" v-show="isShowToggle">
+        <div class="ul">
+          <div class="li">
+            <label>用户姓名</label>
+            <input type="text" class="input-inner">
+          </div>
+          <div class="li">
+            <label>状态条件</label>
+            <el-select v-model="query.status">
+              <el-option value="0" label="全部"></el-option>
+              <el-option value="1" label="进行中"></el-option>
+              <el-option value="2" label="已结束"></el-option>
+            </el-select>
+          </div>
+          <div class="li">
+            <label>金额范围</label>
+            <div class="input-two-period">
+              <div class="input-div">
+                <input type="text" class="input-inner" />
+                <font class="unit">元</font>
+              </div>
+              <div class="input-div">
+                <input type="text" class="input-inner" />
+                <font class="unit">元</font>
+              </div>
+            </div>
+          </div>
+          <br>
+          <div class="li">
+            <label>创建时间</label>
+            <date-picker :info="query" :param="['start_time', 'end_time']"></date-picker>
+          </div>
+          <br>
+
+        </div>
+        <div class="ul-sub">
+          <a class="xxbtn-primary" @click="search">搜索</a>
+          <a class="xxbtn-plain ml-10" @click="resetQuery">重置</a>
+        </div>
+      </div>
+    </el-collapse-transition>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.LIST_SEARCH = {
+    template: '#list_search',
+    components: {
+      'date-picker': AppUtil.COMPONENTS.DATE_PICKER
+    },
+    props: {
+      query: Object,
+    },
+    data: function () {
+      return {
+        isShowToggle: false,
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      search: function () {
+        this.query.page = 1;
+        this.$emit('search');
+      },
+      resetQuery: function () {
+        this.$emit('reset');
+      },
+      add: function () {
+        adminObj.addLayuiTab({
+          title: '新建tab',
+          url: adminObj.getAdminUrl('Index', 'addTab'),
+          menu_type: 'add_tab',
+          parent_menu_type: 'search_demo',
+        })
+      }
+    }
+  }
+</script>

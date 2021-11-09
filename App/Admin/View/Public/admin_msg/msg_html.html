@@ -1,0 +1,137 @@
+<!--后台消息组件；右上角客服消息、订单消息、出入库单消息 父页面样式html-->
+<style>
+  .top-right-icon {
+    width: 30px;
+    height: 30px;
+    background: #F6F6F6;
+    border-radius: 4px;
+    position: fixed;
+    top: 15px;
+    cursor: pointer;
+    z-index: 99999;
+  }
+  .top-right-icon .position-r {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+  .top-right-icon .msg-num {
+    position: absolute;
+    z-index: 1;
+    font-style: normal;
+    min-width: 14px;
+    height: 14px;
+    line-height: 14px;
+    border-radius: 100%;
+    padding: 0 3px;
+    color: #ffffff;
+    right: -7px;
+    top: -7px;
+    background-color: #FF0000;
+    text-align: center;
+  }
+  .title-order-msg {
+    right: 95px;
+  }
+  .title-customer-msg {
+    right: 55px;
+  }
+  .msg-layer {
+    width: 250px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    border-radius: 8px;
+    padding: 20px;
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    cursor: pointer;
+    z-index: 99999;
+    display: none;
+  }
+  .msg-layer .msg-list {
+    margin-bottom: 20px;
+    vertical-align: middle;
+  }
+  .msg-layer .msg-list:last-child {
+    margin-bottom: 0;
+  }
+  .msg-layer .msg-list .list-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: rgba(0, 60, 255, .1);
+  }
+  .msg-layer .msg-list .list-icon i {
+    font-size: 24px;
+  }
+  .msg-layer .msg-list .list-text {
+    flex: 1;
+    padding-left: 10px;
+  }
+  .msg-layer .msg-list .list-text .t {
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+</style>
+<!--region 订单消息-->
+<div class="top-right-icon title-order-msg" onclick="showMsgLayer()">
+  <div class="position-r">
+    <i class="xxicon-bells"></i>
+    <i class="msg-num order-msg-num" id="order-msg-num-top" style="display:none;">0</i>
+  </div>
+</div>
+<audio src="" id="unread-msg-audio-order" autoplay="autoplay"></audio>
+<div class="msg-layer" id="order-msg-layer">
+  <a class="msg-list flex-between" onclick="viewOrderList()">
+    <span class="list-icon flex-row" style="background-color: rgba(247, 83, 83, 0.1)"><i class="xxicon-order-0"></i></span>
+    <div class="list-text">
+      <div class="t">未接订单预警</div>
+      <div class="desc">您有<font class="color-red order-msg-num">0</font>笔订单需要处理</div>
+    </div>
+  </a>
+  <a class="msg-list flex-between">
+    <span class="list-icon flex-row"><i class="xxicon-chuku"></i></span>
+    <div class="list-text">
+      <div class="t">待出库单处理</div>
+      <div class="desc">您有<font class="color-red">0</font>笔待出库单需要处理</div>
+    </div>
+  </a>
+  <a class="msg-list flex-between" style="display: none">
+    <span class="list-icon flex-row"><i class="xxicon-ruku"></i></span>
+    <div class="list-text">
+      <div class="t">待入库单处理</div>
+      <div class="desc">您有0笔待入库单需要处理</div>
+    </div>
+  </a>
+</div>
+<script>
+  function showMsgLayer () {
+    $("#order-msg-layer").toggle(300);
+    event.preventDefault();
+  }
+  // 点击显示订单列表iframe
+  function viewOrderList () {
+    $('[title="order_list"]').click()
+  }
+</script>
+<!--endregion-->
+
+<!--region 客服消息-->
+<div class="top-right-icon title-customer-msg" onclick="viewCustomerMsg()">
+  <div class="position-r">
+    <i class="xxicon-msg-1"></i>
+    <i class="msg-num customer-msg-num" id="customer-msg-num-top" style="display:none;">0</i>
+  </div>
+</div>
+<audio src="" id="unread-msg-audio-customer" autoplay="autoplay"></audio>
+<script>
+  // 点击显示客户消息iframe
+  function viewCustomerMsg () {
+    $('[title="customer_msg_page"]').click()
+  }
+</script>
+<!--endregion-->

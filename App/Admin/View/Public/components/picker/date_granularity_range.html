@@ -1,0 +1,310 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/10/11
+  -->
+<!-- template -->
+<script type="x-template" id="date_granularity_range">
+  <!--region 模版-->
+  <div class="search-item">
+    <label>日期粒度</label>
+    <el-select v-model="granularityType" @change="changeGranularityType">
+      <el-option value="day" label="日"></el-option>
+      <el-option value="week" label="周"></el-option>
+      <el-option value="month" label="月"></el-option>
+    </el-select>
+    <template v-if="granularityType === 'day'">
+      <el-date-picker
+        :size="size"
+        class="diy-time-picker"
+        v-model="dateRange"
+        type="daterange"
+        value-format="yyyy-MM-dd"
+        range-separator=""
+        :picker-options="timeOptions"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间">
+      </el-date-picker>
+    </template>
+    <template v-else-if="granularityType === 'week'">
+      <div class="display-align position-r granularity-week">
+        <template v-if="granularityType === 'week' && info[param[0]] !== '' && info[param[1]] !== ''">
+          <div class="flex-between float-text">
+            <span>{{ weekDateString(info[param[0]]) }}</span>
+            <span>{{ weekDateString(info[param[1]]) }}</span>
+          </div>
+        </template>
+        <el-date-picker
+          :size="size"
+          class="diy-time-picker"
+          v-model="dateRange"
+          type="daterange"
+          value-format="yyyy-MM-dd"
+          range-separator=""
+          :picker-options="timeOptions"
+          :editable="false"
+          start-placeholder="开始时间"
+          end-placeholder="结束时间">
+        </el-date-picker>
+      </div>
+    </template>
+    <template v-else>
+      <el-date-picker
+        :size="size"
+        class="diy-time-picker"
+        v-model="dateRange"
+        type="monthrange"
+        value-format="yyyy-MM"
+        range-separator=""
+        :picker-options="timeOptions"
+        start-placeholder="开始时间"
+        end-placeholder="结束时间">
+      </el-date-picker>
+    </template>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.DATE_GRANULARITY_RANGE = {
+    template: '#date_granularity_range',
+    components: {},
+    props: {
+      info: Object,
+      param: {
+        type: Array,
+        default: function () {
+          return ['start_time', 'end_time']
+        }
+      }, // 变量名
+      size: {
+        type: String,
+        default: 'mini'
+      },
+    },
+    data: function () {
+      return {}
+    },
+    computed: {
+      granularityType: {
+        set: function (val) {
+          this.$set(this.info, 'date_size', val);
+        },
+        get: function () {
+          return this.info.date_size || 'day';
+        }
+      },
+      dateRange: {
+        set: function (val) {
+          if (val === '' || val == null) {
+            this.info[this.param[0]] = ''
+            this.info[this.param[1]] = ''
+          } else {
+            var startTime = val[0];
+            var enTime = val[1];
+            if (this.granularityType === 'month') {
+              // 选择月份
+              startTime += '-01';
+              var checkTime = publicWap.dateTime_Str(new Date(val[1]))
+              var thisMonthEnd = new Date(new Date(checkTime).setMonth(new Date(checkTime).getMonth() + 1)).setDate(0);
+              var timeMax = (Date.now() - 3600 * 1000 * 24); // 不能查询当天&&当天以后
+              var arrSort = [thisMonthEnd, timeMax]
+              arrSort.sort();
+              enTime = publicWap.dateTime_Str(new Date(arrSort[0]), 'date')
+            }
+            this.info[this.param[0]] = startTime + ' 00:00:00'
+            this.info[this.param[1]] = enTime + ' 23:59:59'
+          }
+        },
+        get: function () {
+          if (this.info[this.param[0]] === '') {
+            return ''
+          }
+          return [this.info[this.param[0]], this.info[this.param[1]]]
+        }
+      },
+      timeOptions: {
+        set: function () {},
+        get: function () {
+          var self = this;
+          var timeMax = (Date.now() - 3600 * 1000 * 24); // 不能查询当天&&当天以后
+          var options = {};
+          var shortcutsList = [];
+          switch (self.granularityType) {
+            case 'day':
+              var today = new Date().getDate();
+              shortcutsList = [{
+                text: '昨日',
+                onClick(picker) {
+                  var time = publicWap.dayToTime(-1);
+                  picker.$emit('pick', [new Date(time[0]), new Date(time[1])]);
+                }
+              }, {
+                text: '上周',
+                onClick(picker) {
+                  var time = publicWap.dayToTime(1003);
+                  picker.$emit('pick', [new Date(time[0]), new Date(time[1])]);
+                }
+              }]
+              if (+today !== 1) {
+                shortcutsList = shortcutsList.concat([
+                  {
+                    text: '本月',
+                    onClick(picker) {
+                      var time = publicWap.dayToTime(1001);
+                      var end = new Date();
+                      end.setTime(end.getTime() - 3600 * 1000 * 24);
+                      picker.$emit('pick', [new Date(time[0]), end]);
+                    }
+                  }
+                ])
+              }
+              shortcutsList = shortcutsList.concat([
+                {
+                  text: '最近7天',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(7);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [new Date(time[0]), end]);
+                  }
+                },
+                {
+                  text: '最近15天',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(15);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [new Date(time[0]), end]);
+                  }
+                },
+                {
+                  text: '最近30天',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(30);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [new Date(time[0]), end]);
+                  }
+                },
+                {
+                  text: '最近90天',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(90);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [new Date(time[0]), end]);
+                  }
+                }
+              ])
+              break // 日
+            case 'week': // 周
+              shortcutsList = [
+                {
+                  text: '上周',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(1003);
+                    picker.$emit('pick', [new Date(time[0]), new Date(time[1])]);
+                  }
+                },
+                {
+                  text: '近四周',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(1006);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [new Date(time[0]), end]);
+                  }
+                },
+                {
+                  text: '近八周',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(1007);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [new Date(time[0]), end]);
+                  }
+                },
+              ]
+              break
+            case 'month': // 月
+              shortcutsList = [
+                {
+                  text: '上个月',
+                  onClick(picker) {
+                    var time = publicWap.dayToTime(1002);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [new Date(time[0]), end]);
+                  }
+                },
+                {
+                  text: '最近三个月',
+                  onClick(picker) {
+                    var start = new Date();
+                    start.setMonth(start.getMonth() - 3 - 1);
+                    start.setDate(1);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+                {
+                  text: '最近六个月',
+                  onClick(picker) {
+                    var start = new Date();
+                    start.setMonth(start.getMonth() - 6 - 1);
+                    start.setDate(1);
+                    var end = new Date();
+                    end.setTime(end.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+              ]
+              break
+          }
+          options = {
+            disabledDate(time) {
+              return time.getTime() > timeMax;
+            },
+            shortcuts: shortcutsList
+          }
+          return options;
+        }
+      },
+    },
+    mounted: function () {
+    },
+    methods: {
+      changeGranularityType: function () {
+        this.info[this.param[0]] = '';
+        this.info[this.param[1]] = '';
+      },
+      // 日期转
+      weekDateString: function (dateString) {
+        return publicWap.dayTransWeekString(dateString);
+      },
+    }
+  }
+</script>
+<style>
+  .granularity-week .float-text {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
+  .granularity-week .float-text span {
+    width: 50%;
+    text-align: center;
+  }
+  .granularity-week .diy-time-picker {
+    background-color: transparent;
+    z-index: 2;
+  }
+  .granularity-week .diy-time-picker .el-range-input {
+    background-color: transparent;
+    opacity: 0;
+  }
+</style>

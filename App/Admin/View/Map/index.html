@@ -1,0 +1,91 @@
+<!--地图组件-->
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div>
+      <dl class="basic-dl">
+        <dt><b class="color-red">*</b>标注位置:</dt>
+        <dd>
+          <span class="display-align">经度</span>
+          <base-input class="display-align" trans-type="adsDouble" style="width: 98px;margin: 0 8px 0 4px;" trans-precision="6" v-model="info.longitude"></base-input>
+
+          <span class="display-align">纬度</span>
+          <base-input class="display-align" trans-type="adsDouble" style="width: 98px;margin: 0 8px 0 4px;" trans-precision="6" v-model="info.latitude"></base-input>
+
+          <a class="xxbtn-white medium display-align" style="padding: 0 10px;" @click="showMapLayer">
+            {{ +info.map_type === 1 ? '百度地图获取位置' : '谷歌地图获取位置' }}
+          </a>
+        </dd>
+      </dl>
+      <dl class="basic-dl" v-show="loadCompleted">
+        <dt><b class="color-red">*</b>联系地址:</dt>
+        <dd>
+          <cascader-region style="width: 400px;" ref="casaderRegion" :is-get-area="false" :props-region="region" :info="info"></cascader-region>
+        </dd>
+      </dl>
+      <dl class="basic-dl">
+      <dt><b class="color-red">*</b>详细地址:</dt>
+      <dd>
+        <input type="text" class="input-inner width-400" v-model="info.address">
+      </dd>
+    </dl>
+    </div>
+    <!--地图弹框-->
+    <map-layer ref="mapLayer" page-source="pick_store_info" :map-info="info"></map-layer>
+  </div>
+  <include file="Public/components/base_input"/>
+  <include file="Public/components/cascader/cascader_region" />
+  <include file="Public/components/map_layer"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'base-input': AppUtil.COMPONENTS.BASE_INPUT_COMPONENT,
+        'cascader-region': AppUtil.COMPONENTS.CASCADER_REGION,
+        'map-layer': AppUtil.COMPONENTS.MAP_LAYER,
+      },
+      data: function () {
+        return {
+          loadCompleted: false,
+          region: {},
+          info: {
+            address: '',
+            area: '',
+            area_id: '',
+            city: '',
+            city_id: '',
+            country: '',
+            country_id: '',
+            province_id: '',
+            province: '',
+            longitude: '',
+            latitude: '',
+            map_type: '1', // 1-百度地图，2-谷歌地图
+          }
+        }
+      },
+      mounted: function () {
+        this.getArea();
+      },
+      methods: {
+        getArea: function () {
+          var self = this
+          AppUtil.ajaxRequest({
+            url: '/Public/json/common/region.json'
+          }).then(function (result) {
+            self.region = result.data;
+            self.loadCompleted = true;
+            self.$nextTick(function () {
+              self.$refs.casaderRegion.init();
+              self.$refs.casaderRegion.setRegionVal(self.info);
+            })
+          })
+        },
+        //显示地图
+        showMapLayer: function () {
+          this.$refs.mapLayer.showLayer()
+        },
+      }
+    })
+  </script>
+</block>

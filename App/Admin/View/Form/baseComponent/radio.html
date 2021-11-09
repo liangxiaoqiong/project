@@ -1,0 +1,29 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-radio<br>
+      注意：v-model=绑定值，String和Number为2种类型【设置1=true时，'1'=false，点击'1'无反应】
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>el-radio</div>
+        <el-radio-group v-model="value1">
+          <el-radio :label="1">1</el-radio>
+          <el-radio label="1">'1'</el-radio>
+          <el-radio label="2">'2'</el-radio>
+        </el-radio-group>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          value1: 1,
+        }
+      }
+    })
+  </script>
+</block>

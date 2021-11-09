@@ -1,0 +1,84 @@
+<!-- template -->
+<script type="x-template" id="upload_file_component">
+  <!--region 模版-->
+  <input type="file" @change="upload" title="" v-bind="$attrs"/>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.UPLOAD_FILE_COMPONENT = {
+    template: '#upload_file_component',
+    // 使用该组件式 v-model="xxx" 这里统一命名xx为timeStr
+    model: {
+      prop: 'url',
+      event: 'change',
+    },
+    props: {
+      url: String,
+      imgData: {},
+      uploadType: {
+        type: [String, Number],
+        default: AppUtil.TYPE_ADV
+      },
+      checkFile: Function,
+    },
+    computed: {},
+    // 指令中修改了数据后 这里进行监听 并触发input事件,通知父组件 完成v-model
+    watch: {
+      'url': function (newValue) {
+        this.file.url = newValue;
+      },
+      'file.url': function (newValue) {
+        this.$emit('change', newValue);
+      },
+      'file.width': function (newValue) {
+        if (typeof this.imgData !== 'undefined') {
+          this.imgData.width = newValue
+        }
+      },
+      'file.height': function (newValue) {
+        if (typeof this.imgData !== 'undefined') {
+          this.imgData.height = newValue
+        }
+      }
+    },
+    mounted: function () {
+    },
+    data: function () {
+      return {
+        file: {
+          url: this.url,
+          width: typeof this.imgData !== 'undefined' ? this.imgData.width : '',
+          height: typeof this.imgData !== 'undefined' ? this.imgData.height : '',
+        }
+      }
+    },
+    methods: {
+      upload: function (event) {
+        var self = this;
+        console.log('upload')
+        var el = event.target;
+        if (typeof self.checkFile === 'function') {
+          var result = self.checkFile(el.files[0]);
+          if (result === false) {
+            return false;
+          }
+        }
+        var size = el.files[0].size;
+        if (size > 10 * 1024 * 1024) {
+          AppUtil.alert('文件大小不能超过10MB');
+          return false;
+        }
+        AppUtil.upload({
+          el: el,
+          type: self.uploadType,
+        }, function (url, img_info) {
+          self.file.url = url
+          self.file.width = img_info[0]
+          self.file.height = img_info[1]
+        });
+      },
+    },
+  }
+</script>

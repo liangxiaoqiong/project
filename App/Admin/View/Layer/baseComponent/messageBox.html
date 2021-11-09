@@ -1,0 +1,78 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element的messageBox弹框 组件<br>
+      $alert,$confirm,$prompt
+    </div>
+    <div>
+      <a class="xxbtn-white mr-10" @click="confirmLayer">confirm弹框</a>
+      <a class="xxbtn-white mr-10" @click="confirmLayer2">confirm弹框【有html内容】</a>
+      <a class="xxbtn-white mr-10" @click="alertLayer">alert弹框</a>
+      <a class="xxbtn-white mr-10" @click="promptLayer">prompt弹框</a>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          remark: '这是默认的备注'
+        }
+      },
+      methods: {
+        confirmLayer: function () {
+          var self = this;
+          self.$confirm('', {
+            title: '确定删除该内容吗？',
+            customClass: 'dialog-confirm',
+          }).then(function () {
+            publicWap.layerMsg('删除成功', 1);
+          }).catch(function () {
+
+          })
+        },
+        confirmLayer2: function () {
+          var self = this;
+          var html = '' +
+            '<label class="diy-checkbox">\n' +
+            '<input type="checkbox" name="del_record" value="1" />\n' +
+            '<font>确定一并删除该项关联的数据吗？</font>\n' +
+            '</label>';
+          self.$confirm(html, {
+            title: '确定删除该内容吗？',
+            customClass:'dialog-confirm has-content',
+            dangerouslyUseHTMLString: true // 内容为html时使用
+          }).then(function () {
+            self.$nextTick(function () {
+              var isDelRecord = $('input[name="del_record"]').is(":checked")
+              var del_record = isDelRecord ? 1 : 0;
+              publicWap.layerMsg('删除成功_' + del_record, 1);
+            })
+          }).catch(function () {
+
+          })
+        },
+        alertLayer: function () {
+          var self = this;
+          self.$alert('是很不错哦，我是内容！！！！', {
+            title: '这个内容很不错哦',
+            customClass: 'dialog-confirm has-content',
+          })
+        },
+        promptLayer: function () {
+          var self = this;
+          self.$prompt('', {
+            title: '备注哈',
+            closeOnClickModal: false,
+            inputPattern: /./, // 正则匹配不能为空
+            inputValue: self.remark,
+            inputErrorMessage: '请输入备注内容'
+          }).then(function ({value}) {
+            publicWap.layerMsg('备注为：'+ value, 1);
+          })
+        }
+      }
+    })
+  </script>
+</block>

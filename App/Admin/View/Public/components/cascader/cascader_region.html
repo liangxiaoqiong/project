@@ -1,0 +1,198 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/3/1
+  -->
+<!-- template 地址级联选择器-->
+<script type="x-template" id="cascader_region">
+  <!--region 模版-->
+  <el-cascader
+    v-bind="$attrs"
+    ref="cascaderHandle"
+    v-model="region_value"
+    separator=""
+    :options="regionList"
+    :props="cascaderProps"
+    @change="changeRegion"></el-cascader>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.CASCADER_REGION = {
+    template: '#cascader_region',
+    props: {
+      placeholder: String,
+      info: Object,
+      // 可通过 props.checkStrictly = true 来设置父子节点取消选中关联，从而达到选择任意一级选项的目的。
+      cascaderProps: {
+        type: Object,
+        default: function () {
+          return {
+            checkStrictly: false,
+          }
+        }
+      },
+      isGetArea: {
+        type: Boolean,
+        default: true
+      }, // 是否在当前加载地址接口数据,主要用于一个页面循环多个该组件时，
+      propsRegion: Object //isGetArea===false时，父组件传递的地址区域信息
+    },
+    data: function () {
+      return {
+        isLoadRegion: false, // 是否已加载了地址信息，true-不请求接口，false-请求接口
+        region_value: [],
+        region: {
+          countryList: [],
+          provinceList: [],
+          cityList: [],
+          areaList: [],
+        },
+        regionList: []
+      }
+    },
+    mounted: function () {
+    },
+    methods: {
+      init: function () {
+        var self = this
+        if (this.isGetArea) {
+          if (!self.isLoadRegion) {
+            self.getArea()
+          }
+        } else {
+          self.region = JSON.parse(JSON.stringify(self.propsRegion));
+          self.initRegionData();
+          self.$emit('region-loaded'); // 获取地址数据后执行；获取页面数据
+          self.isLoadRegion = true;
+        }
+      },
+      setRegionVal: function (item) {
+        var region_value = []
+        if (item.country_id != null) {
+          region_value.push(item.country_id + '');
+        }
+        if (item.province_id != null && +item.province_id !== 0) {
+          region_value.push(item.province_id + '');
+        }
+        if (item.city_id != null && +item.city_id !== 0) {
+          region_value.push(item.city_id + '');
+        }
+        if (item.area_id != null && +item.area_id !== 0) {
+          region_value.push(item.area_id + '');
+        }
+        this.region_value = region_value;
+      },
+      getArea: function () {
+        var self = this
+        AppUtil.ajaxRequest({
+          url: '/Public/json/common/region.json'
+        }).then(function (result) {
+          self.region = result.data;
+          self.initRegionData();
+          self.$emit('region-loaded');
+          self.isLoadRegion = true;
+        })
+      },
+      initRegionData: function () {
+        var self = this;
+        var regionList = JSON.parse(JSON.stringify(self.region.countryList));
+        regionList.forEach(function (country) {
+          self.$set(country, 'value', country.area_id);
+          self.$set(country, 'label', country.area_name);
+          self.$set(country, 'leaf', false);
+          var provinceList = self.getRegionChild({level: 1, value: country.value});
+          self.$set(country, 'children', provinceList);
+          country.children.forEach(function (province) {
+            var cityList = self.getRegionChild({level: 2, value: province.value});
+            self.$set(province, 'children', cityList);
+            province.children.forEach(function (city) {
+              var areaList = self.getRegionChild({level: 3, value: city.value});
+              self.$set(city, 'children', areaList);
+            })
+          })
+        })
+        self.regionList = regionList;
+      },
+      getRegionChild: function (node) {
+        var self = this;
+        var list = [];
+        switch (+node.level) {
+          case 0: // 国家
+            self.region.countryList.forEach(function (country) {
+              self.$set(country, 'value', country.area_id);
+              self.$set(country, 'label', country.area_name);
+              self.$set(country, 'leaf', false);
+            })
+            list = self.region.countryList;
+            break
+          case 1: //省
+            var listNew = [];
+            self.region.provinceList.forEach(function (province) {
+              if (province.area_pid === node.value) {
+                self.$set(province, 'value', province.area_id);
+                self.$set(province, 'label', province.area_name);
+                self.$set(province, 'leaf', false);
+                listNew.push(province);
+              }
+            })
+            list = listNew;
+            break
+          case 2: // 市
+            var listNew = [];
+            self.region.cityList.forEach(function (city) {
+              if (city.area_pid === node.value) {
+                self.$set(city, 'value', city.area_id);
+                self.$set(city, 'label', city.area_name);
+                self.$set(city, 'leaf', false);
+                listNew.push(city);
+              }
+            })
+            list = listNew;
+            break
+          case 3: // 区域县
+            var listNew = [];
+            self.region.areaList.forEach(function (area) {
+              if (area.area_pid === node.value) {
+                self.$set(area, 'value', area.area_id);
+                self.$set(area, 'label', area.area_name);
+                self.$set(area, 'leaf', true);
+                listNew.push(area);
+              }
+            })
+            list = listNew;
+            break
+          default:
+            break
+        }
+        return list;
+      },
+      getRegionName: function (level, type) {
+        var self = this;
+        var area_name = '';
+        try {
+          self.region[type + 'List'].find((list)=> {
+            if (list.area_id === self.info[type + '_id']) {
+              area_name = list.area_name;
+              throw Error;
+            }
+          })
+        }catch (e) {}
+        return area_name;
+      },
+      changeRegion: function (value) {
+        var self = this;
+        self.info.country_id = value[0];
+        self.info.country = self.getRegionName(0, 'country');
+        self.info.province_id = value[1];
+        self.info.province = self.getRegionName(1, 'province');
+        self.info.city_id = value[2];
+        self.info.city = self.getRegionName(2, 'city');
+        self.info.area_id = value[3];
+        self.info.area = self.getRegionName(3, 'area');
+        self.$refs.cascaderHandle.dropDownVisible = false;
+      },
+    }
+  }
+</script>

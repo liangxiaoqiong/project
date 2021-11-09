@@ -1,0 +1,51 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要用于弹框的表单提交【新增、编辑】
+    </div>
+    <div class="form-row">
+      <div class="row-cell">
+        <p class="row-t">姓名</p>
+        <input type="text" class="input-inner">
+      </div>
+      <div class="row-cell">
+        <p class="row-t">密码</p>
+        <input type="password" class="input-inner">
+      </div>
+      <div class="row-cell">
+        <p class="row-t">职位</p>
+        <el-select class="row-div" v-model="info.job_id">
+          <el-option value="1" label="主管"></el-option>
+          <el-option value="2" label="组长"></el-option>
+          <el-option value="3" label="总监"></el-option>
+        </el-select>
+      </div>
+      <div class="row-cell">
+        <p class="row-t">性别</p>
+        <el-radio-group class="checkbox-radio-group-box row-div" v-model="info.sex">
+          <el-radio label="0">保密</el-radio>
+          <el-radio label="1">女</el-radio>
+          <el-radio label="2">男</el-radio>
+        </el-radio-group>
+      </div>
+    </div>
+    <div class="form-row mb-10">
+      <p class="row-t">备注</p>
+      <textarea class="input-inner"></textarea>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          info: {
+            sex: '0',
+            job_id: '2'
+          }
+        }
+      }
+    })
+  </script>
+</block>

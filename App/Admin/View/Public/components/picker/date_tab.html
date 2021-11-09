@@ -1,0 +1,93 @@
+<!--时间类型tab切换-->
+<!-- template -->
+<script type="x-template" id="date_tab">
+  <!--region 模版-->
+  <div class="tab-nav">
+    <a v-for="(type, index) in timeTypeString"
+        :class="{'active': +select_time_type === index}"
+        @click="setTimeType(index)">{{ type }}</a>
+    <a :class="[(+select_time_type === 5 ? 'active' : ''), (isShowRange ? 'show-range' : '')]"
+        class="other-time">
+      <el-popover
+          placement="bottom"
+          trigger="click">
+        <div class="time-range">
+          <date-picker :info="query" :param="param" :fast-btn-list="[]"></date-picker>
+          <a class="xxbtn-primary" style="margin-left: 8px" @click="setTimeType(5)">确定</a>
+        </div>
+        <span slot="reference">
+          <font>其他时间</font><i class="el-icon-arrow-down color-gray"></i>
+        </span>
+      </el-popover>
+    </a>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.DATE_TAB = {
+    template: '#date_tab',
+    components: {
+      'date-picker': AppUtil.COMPONENTS.DATE_PICKER
+    },
+    props: {
+      param: {
+        type: Array,
+        default: function () {
+          return ['start_time', 'end_time'] //开始时间变量名，结束时间变量名
+        }
+      },//时间日期格式变量
+      query: Object
+    },
+    computed: {},
+    mounted: function () {
+    },
+    data: function () {
+      return {
+        isShowRange: false,
+        //'全部', '今日', '昨日', '本月', '上个月'
+        timeTypeString: ['全部', '今日', '昨日', '本月', '上个月'],
+        select_time_type: '0',//0-全部，1-今日，2-昨日，3-本月，4-上个月，5-其他
+      }
+    },
+    methods: {
+      //点击选择时间类型 0-全部，1-今日，2-昨日，3-本月，4-上个月，5-其他
+      setTimeType: function (type) {
+        var self = this
+        self.select_time_type = type
+        self.isShowRange = false
+        switch (type) {
+          case 1:
+            self.query[self.param[0]] = publicWap.dayToTime(1)[0]
+            self.query[self.param[1]] = publicWap.dayToTime(1)[1]
+            break;
+          case 2:
+            self.query[self.param[0]] = publicWap.dayToTime(-1)[0]
+            self.query[self.param[1]] = publicWap.dayToTime(-1)[1]
+            break;
+          case 3:
+            self.query[self.param[0]] = publicWap.dayToTime(1001)[0]
+            self.query[self.param[1]] = publicWap.dayToTime(1001)[1]
+            break;
+          case 4:
+            self.query[self.param[0]] = publicWap.dayToTime(1002)[0]
+            self.query[self.param[1]] = publicWap.dayToTime(1002)[1]
+            break;
+          case 5:
+            break;
+          default:
+            self.query[self.param[0]] = ''
+            self.query[self.param[1]] = ''
+            break;
+        }
+        var options = {
+          type_id: self.select_time_type,
+          type_name: self.timeTypeString[+self.select_time_type]
+        }
+        self.$emit('synctimetab', options)
+      },
+    },
+    directives: {}
+  }
+</script>

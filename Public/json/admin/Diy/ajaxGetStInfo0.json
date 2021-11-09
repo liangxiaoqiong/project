@@ -1,0 +1,26 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": {
+    "st_id": "31",
+    "st_name": "模版名称",
+    "st_desc": "",
+    "page_config": {"title_name":"店铺首页", "page_desc":"", "page_color":"#f9f9f9","shop_head":1},
+    "customer_msg":{"btn_text":"在线客服", "is_add":0},
+    "st_content": [],
+    "st_url": "http:\/\/dev.duinin.com\/index.php?c=Page&a=specialTopic&se=165&st=31",
+    "store_id": "165",
+    "channel_id": "0",
+    "create_time": "1523327359",
+    "is_delete": "-1",
+    "theme_title": {
+      "title_name": "模版名称",
+      "page_desc": "",
+      "bg_color": "#eff0f4",
+      "is_transparent": "1",
+      "page_gap": "0",
+      "img_gap": "0"
+    },
+    "maxModuleId": "55558"
+  }
+}

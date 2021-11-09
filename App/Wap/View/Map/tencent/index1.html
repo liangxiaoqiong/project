@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="format-detect" content="telephone=no"/>
+  <title>腾讯地图-多点标记，多文本标记，定位，【点聚合】</title>
+  <style>
+    #pickup-map {
+      width: 100%;
+      height: 800px;
+    }
+
+    .clusterBubble {
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 500;
+      text-align: center;
+      opacity: 0.88;
+      background-image: linear-gradient(139deg, #4294FF 0%, #295BFF 100%);
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.20);
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="">
+  <div id="pickup-map"></div>
+</div>
+</body>
+<include file="Public:base"/>
+<!--引入Javascript API GL，参数说明参见下文-->
+<script src="https://map.qq.com/api/gljs?v=1.exp&key=TU6BZ-JJWC3-W3E3N-3UGEZ-2JM4H-ERBCG"></script>
+<script type="text/javascript" src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js">/*腾讯地图定位用户位置*/</script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        currentPoint: {lng: '', lat: ''},//当前定位的经纬度
+        mapEl: '',//地图元素
+        makerList: [],
+        pickAddressData: {
+          pickup_list: [] // 自提门店列表
+        },
+      }
+    },
+    computed: {
+      currentPick: function () {
+        if (!this.pickAddressData.default_pickup > 0) {
+          return this.pickAddressData.pickup_list[0];
+        }
+        for (var i = 0; i < this.pickAddressData.pickup_list.length; i++) {
+          var pick = this.pickAddressData.pickup_list[i]
+          if (this.pickAddressData.default_pickup == pick.id) {
+            return pick;
+          }
+        }
+        return {};
+      },
+    },
+    mounted: function () {
+      var self = this
+      self.getPickupList().then(function (result) {
+        result.data.pickup_list.forEach(function (value) {
+          value.lng = value.longitude
+          value.lat = value.latitude
+          if (value.head_url === '') {
+            value.head_url = '/Public/common/img/icon_img/map_point2.png'
+          }
+        })
+        self.pickAddressData = result.data
+        self.$nextTick(function () {
+          self.createMap()
+          self.getLocateCurrent()
+        })
+      });
+    },
+    methods: {
+      getPickupList: function () {
+        var self = this
+        return AppUtil.ajaxRequest({
+          url: '/Public/json/wap/map/map_marker_list.json',
+        })
+      },
+      //创建地图
+      createMap: function () {
+        var self = this
+        //定义地图中心点坐标
+        var longitude = "";
+        var latitude = "";
+        self.pickAddressData.pickup_list.forEach(function (value, index) {
+          if (+value.id === +self.currentPick.id) {
+            longitude = value.lng
+            latitude = value.lat
+          }
+        })
+        var center = new TMap.LatLng(latitude, longitude)
+        //定义map变量，调用 TMap.Map() 构造函数创建地图
+        self.mapEl = new TMap.Map('pickup-map', {
+          center: center,//设置地图中心点坐标
+          zoom: 17.2,   //设置地图缩放级别
+         // pitch: 43.5,  //设置俯仰角
+         // rotation: 45    //设置地图旋转角度
+        });
+        self.mapMarker();
+        //self.mapCluster();
+      },
+      //门店标记点
+      mapMarker: function () {
+        var self = this
+        var geometriesLabelList = [];
+        self.pickAddressData.pickup_list.forEach(function (value, index) {
+          /*region 点标记*/
+          var geometriesObj = {
+            "id": "marker_"+value.id,
+            "styleId": 'marker',
+            "position": new TMap.LatLng(+value.lat, +value.lng),
+            "properties": {
+              "title": value.pick_name
+            }
+          }
+          var sizeWidth = 25;
+          var sizeHeight = 25;
+          var x = 16;
+          var y = 16;
+          var src = value.head_url;
+          if (+value.id === +self.currentPick.id) {
+            sizeWidth = 30;
+            sizeHeight = 30;
+            x = 18;
+            y = 18;
+            src = '/Public/common/img/icon_img/map_point1.png'
+          }
+          //初始化marker
+          var marker = new TMap.MultiMarker({
+            id: 'marker-layer_'+value.id,
+            map: self.mapEl,
+            styles: {
+              "marker": new TMap.MarkerStyle({
+                "width": sizeWidth,
+                "height": sizeHeight,
+                "anchor": { x: x, y: y },
+                "src": src
+              })
+            },
+            geometries: [geometriesObj]
+          });
+          marker.on("click", function () {
+            self.changeThisPickup(value)
+          })
+          /*endregion*/
+
+          geometriesLabelList.push({
+            'id': 'label'+index, //点图形数据的标志信息
+            'styleId': 'label', //样式id
+            'position': new TMap.LatLng(+value.lat, +value.lng), //标注点位置
+            'content': value.pick_name, //标注文本
+            'properties': { //标注点的属性数据
+              'title': 'label'
+            },
+            rank: index //文本碰撞时的优先级，值越大优先级越高
+          })
+        })
+        new TMap.MultiLabel({
+          id: 'label-layer',
+          map: self.mapEl,
+          enableCollision:true, //是否开启图层内部的文本标注碰撞
+          styles: {
+            'label': new TMap.LabelStyle({
+              //'color': '#3777FF', //颜色属性
+              'size': 12, //文字大小属性
+              'offset': { x: 0, y: 20 }, //文字偏移属性单位为像素
+              'angle': 0, //文字旋转属性
+              'alignment': 'center', //文字水平对齐属性
+              'verticalAlignment': 'middle' //文字垂直对齐属性
+            })
+          },
+          geometries: geometriesLabelList
+        });
+      },
+      // 点聚合
+      mapCluster: function () {
+        var self = this;
+        // 创建点聚合
+        var geometriesList = [];
+        self.pickAddressData.pickup_list.forEach(function (value, index) {
+          geometriesList.push({
+            position: new TMap.LatLng(+value.lat, +value.lng)
+          })
+        })
+        var markerCluster = new TMap.MarkerCluster({
+          id: 'cluster',
+          map: self.mapEl,
+          enableDefaultStyle: false, // 关闭默认样式
+          minimumClusterSize: 3,
+          geometries: geometriesList,
+          zoomOnClick: false,
+          gridSize: 60,
+          averageCenter: false
+        });
+        var clusterBubbleList = [];
+        var markerGeometries = [];
+        var marker = null;
+        // 监听聚合簇变化
+        markerCluster.on('cluster_changed', function (e) {
+          // 销毁旧聚合簇生成的覆盖物
+          if (clusterBubbleList.length) {
+            clusterBubbleList.forEach(function (item) {
+              item.destroy();
+            })
+            clusterBubbleList = [];
+          }
+          markerGeometries = [];
+
+          // 根据新的聚合簇数组生成新的覆盖物和点标记图层
+          var clusters = markerCluster.getClusters();
+          clusters.forEach(function (item) {
+            if (item.geometries.length > 1) {
+              var clusterBubble = new ClusterBubble({
+                map: self.mapEl,
+                position: item.center,
+                content: item.geometries.length,
+              });
+              clusterBubble.on('click', function (options) {
+                console.log(options)
+                console.log('0000')
+                self.mapEl.fitBounds(item.bounds);
+              });
+              clusterBubbleList.push(clusterBubble);
+            } else {
+              markerGeometries.push({
+                position: item.center
+              });
+            }
+          });
+          if (marker) {
+            // 已创建过点标记图层，直接更新数据
+            marker.setGeometries(markerGeometries);
+          } else {
+            // 创建点标记图层
+            marker = new TMap.MultiMarker({
+              map: self.mapEl,
+              styles: {
+                default: new TMap.MarkerStyle({
+                  'width': 34,
+                  'height': 42,
+                  'anchor': {
+                    x: 17,
+                    y: 21,
+                  },
+                  'src': 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/marker_blue.png',
+                }),
+              },
+              geometries: markerGeometries
+            });
+            marker.on("click", function (options) {
+              console.log(options)
+            })
+          }
+        });
+
+
+        markerCluster.on("click", function (options) {
+          console.log('changeThisPickup')
+        })
+      },
+      /**region 当前位置定位标记*/
+      //定位用户当前位置
+      getLocateCurrent: function () {
+        var self = this;
+        var geolocation = new qq.maps.Geolocation('TU6BZ-JJWC3-W3E3N-3UGEZ-2JM4H-ERBCG', 'xx');
+        geolocation.getLocation(function (position) {
+          self.currentPoint = position
+        }, function () {
+          alert('Error：定位失败！');
+        }, {enableHighAccuracy: true});
+      },
+      /**endregion*/
+      //切换当前门店地址
+      changeThisPickup: function (item) {
+        var self = this
+        //修改id为4的点标记的位置
+        markerLayer.updateGeometries([
+          {
+            "styleId":"marker",
+            "id": "4",
+            "position": new TMap.LatLng(39.994104, 116.287503),
+          }
+        ])
+        if (+self.pickAddressData.default_pickup !== +item.id) {
+          self.pickAddressData.default_pickup  = item.id;
+        }
+      },
+
+      //设置地图中心点
+      setMapCenter: function (point) {
+        var point = new BMap.Point(point.lng, point.lat)
+        this.mapEl.setCenter(point); // 设置地图中心点
+      }
+    }
+  })
+  // 以下代码为基于DOMOverlay实现聚合点气泡
+  function ClusterBubble(options) {
+    TMap.DOMOverlay.call(this, options);
+  }
+
+  ClusterBubble.prototype = new TMap.DOMOverlay();
+
+  ClusterBubble.prototype.onInit = function (options) {
+    this.content = options.content;
+    this.position = options.position;
+  };
+
+  // 销毁时需要删除监听器
+  ClusterBubble.prototype.onDestroy = function() {
+    this.dom.removeEventListener('click', this.onClick);
+    this.removeAllListeners();
+  };
+
+  ClusterBubble.prototype.onClick = function() {
+    this.emit('click');
+  };
+
+  // 创建气泡DOM元素
+  ClusterBubble.prototype.createDOM = function () {
+    var dom = document.createElement('div');
+    dom.classList.add('clusterBubble');
+    dom.innerText = this.content;
+    dom.style.cssText = [
+      'width: ' + (40 + parseInt(this.content) * 2) + 'px;',
+      'height: ' + (40 + parseInt(this.content) * 2) + 'px;',
+      'line-height: ' + (40 + parseInt(this.content) * 2) + 'px;',
+    ].join(' ');
+
+    // 监听点击事件，实现zoomOnClick
+    this.onClick = this.onClick.bind(this);
+    // pc端注册click事件，移动端注册touchend事件
+    dom.addEventListener('click', this.onClick);
+    return dom;
+  };
+
+  ClusterBubble.prototype.updateDOM = function () {
+    if (!this.map) {
+      return;
+    }
+    // 经纬度坐标转容器像素坐标
+    let pixel = this.map.projectToContainer(this.position);
+
+    // 使文本框中心点对齐经纬度坐标点
+    let left = pixel.getX() - this.dom.clientWidth / 2 + 'px';
+    let top = pixel.getY() - this.dom.clientHeight / 2 + 'px';
+    this.dom.style.transform = `translate(${left}, ${top})`;
+
+    this.emit('dom_updated');
+  };
+
+  window.ClusterBubble = ClusterBubble;
+</script>
+</html>

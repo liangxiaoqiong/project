@@ -1,0 +1,48 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <form id="submit-dom" method="post">
+      <h4 class="font-16 font-bold" style="padding: 14px 30px;">选择服务时长</h4>
+      <recharge-list ref="rechargeListRef"></recharge-list>
+      <div class="mt-10" style="padding-left: 30px">支付后服务时长至：2035-12-12</div>
+      <div class="text-center" style="margin: 30px 0;">
+        <a class="xxbtn-primary font-14" style="height: 40px;line-height: 38px;" @click="submit"><i class="imgicon-alipay-white"></i><font>立即支付</font></a>
+      </div>
+    </form>
+  </div>
+  <include file="Public/components/recharge_list"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'recharge-list': AppUtil.COMPONENTS.RECHARGE_LIST
+      },
+      data: function () {
+        return {
+          rechargeList: [
+            {type: 1, title: '零售版' + '1年期', price: '100'},
+            {type: 2, title: '零售版' + '2年期', price: '199'},
+            {type: 3, title: '零售版' + '3年期', price: '288'},
+          ],
+          query: {
+            rechargeType: 1 // 选择的充值方式
+          },
+        }
+      },
+      computed: {
+      },
+      mounted: function () {
+        this.init();
+      },
+      methods: {
+        init: function () {
+          var self = this;
+          self.$refs.rechargeListRef.init(self.rechargeList);
+        },
+        submit: function () {
+        }
+      }
+    })
+  </script>
+</block>
+

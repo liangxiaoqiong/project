@@ -1,0 +1,430 @@
+/*会员客服消息*/
+#customer-msg-layer {
+  /*display: none;*/
+}
+#customer-msg-layer .layer-shade {}
+#customer-msg-layer .msg-layer-body {
+  position: fixed;
+  z-index: 99999;
+  width: 80%;
+  height: 90%;
+  top: 5%;
+  left: 10%;
+  background-color: #FFFFff;
+  border-radius: 4px;
+}
+.customer-msg-layer * {
+  box-sizing: border-box;
+}
+.customer-msg-layer .msg-layer-head {
+  height: 64px;
+  border-bottom: 1px solid #ECECEC;
+  position: relative;
+}
+.customer-msg-layer .msg-layer-head .xxbtn-white {
+  padding: 0 9px;
+  border-radius: 4px;
+  height: 26px;
+  line-height: 24px;
+  margin-left: 5px;
+}
+.customer-msg-layer .head-left {
+  padding-left: 22px;
+  height: 100%;
+  width: calc(100% - 330px);
+}
+.head-right-close {
+  position: absolute;
+  z-index: 1;
+  right: 20px;
+  top: 10px;
+  padding: 10px;
+}
+.head-right-close i {
+  font-weight: bold;
+  font-size: 20px;
+}
+.customer-msg-layer .msg-layer-main {
+  width: 100%;
+  height: calc(100% - 64px);
+}
+.customer-msg-layer .msg-title {
+  font-size: 18px;
+}
+.customer-msg-layer .main-dialog {
+  width: calc(100% - 330px);
+  height: 100%;
+  float: left;
+}
+.customer-msg-layer .dialog-box {
+  height: calc(100% - 130px);
+  background-color: #F5F5F5;
+  overflow-y: auto;
+  padding: 10px 10px 0 6px;
+}
+.customer-msg-layer .dialog-box .in-end {
+  text-align: center;
+  margin: 10px;
+}
+/*region 消息*/
+.dialog-box .dialog-list {
+  position: relative;
+  text-align: right;
+  margin-bottom: 10px;
+}
+.dialog-box .dialog-list .dialog-time {
+  text-align: center;
+  color: #a09c9c;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.dialog-box .dialog-list .dialog-item {
+  position: relative;
+  width: 100%;
+}
+.dialog-box .dialog-list .msg-user {
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.dialog-box .dialog-list .msg-user img {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  border-radius: 4px;
+}
+.dialog-box .dialog-list .msg-content {
+  margin-right: 46px;
+}
+.dialog-box .dialog-list .msg-content .send-state {
+  text-align: right;
+  color: #999999;
+}
+.dialog-box .dialog-list .msg-content .send-state * {
+  display: inline-block;
+  vertical-align: middle;
+}
+.dialog-box .dialog-list .msg-content .send-state font {
+  color: #003CFF;
+  cursor: pointer;
+}
+.dialog-box .dialog-list .msg-box {
+  border-radius: 4px;
+  display: inline-block;
+  padding: 8px 10px;
+  position: relative;
+  border: 1px solid #e0e0e0;
+  min-height: 36px;
+  vertical-align: middle;
+  text-align: left;
+  line-height: 20px;
+  background-color: #FFFFff;
+}
+.dialog-box .dialog-list .msg-box:after {
+  position: absolute;
+  content: '';
+  border-right: 1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
+  border-left: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  height: 10px;
+  right: -5.5px;
+  top: 12.5px;
+  width: 10px;
+  background: #FFFFff;
+  transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+}
+.dialog-box .msg-goods {color: inherit;width: 255px;text-align: left;box-sizing: border-box;display: inline-block;}
+.dialog-box .msg-goods:after {
+  display: none;
+}
+.dialog-box .msg-goods img{width: 50px;height: 50px;display: inline-block;vertical-align: middle;max-width: 50px!important;}
+.dialog-box .msg-goods .goods-text{width: calc(100% - 55px);display: inline-block;vertical-align: middle;padding-left: 8px;line-height: 17px;}
+.dialog-box .msg-goods .goods-text .line-two{color: #323232;font-size: 12px;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;overflow: hidden;line-height:inherit;margin-bottom: 5px;}
+.dialog-box .msg-goods .goods-text p:nth-child(2){color: #f75353;font-size: 12px;}
+
+.dialog-box .msg-box.msg-coupon {background-color: #fafafa;position: relative;padding: 10px;
+  color: #333;
+  width: 250px;
+  border: 1px solid #E9E9E9;
+  margin-bottom: 10px;
+  border-radius: 4px;}
+.dialog-box .msg-coupon:after {
+  display: none;
+}
+.dialog-box .msg-coupon .coupon-base {
+  margin-bottom: 8px;
+  max-width: calc(100% - 100px);
+}
+.dialog-box .msg-coupon .coupon-money{
+  color: #FF0000;
+  font-weight: bold;
+  margin-right: 20px;
+}
+.dialog-box .msg-img img {
+  max-width: 200px;
+}
+/*endregion*/
+.customer-msg-layer .layer-close-rt {
+  background: url('../../../common/img/close_white3.png')center center /100% 100% no-repeat!important;
+  width: 40px!important;
+  height: 40px!important;
+  display: inline-block!important;
+  background-position: 0!important;
+  vertical-align: middle;
+  position: fixed;
+  z-index: 99999;
+  left: calc(90% + 28px);
+  top: 23px;
+  cursor: pointer;
+}
+.customer-msg-layer .layer-close-rt:before {
+  position: absolute;
+  content: '';
+  width: 30px;
+  height: 2px;
+  left: -28px;
+  top: 18px;
+  display: inline-block;
+  background-color: #FFFFff;
+  vertical-align: middle;
+}
+/*region 右侧商品、优惠券*/
+.customer-msg-layer .main-right {
+  width: 330px;
+  height: 100%;
+  float: right;
+}
+.customer-msg-layer .main-right .goods-coupon-box {
+  width: 100%;
+  height: 100%;
+  padding: 10px 10px 0 10px;
+}
+
+.tab-flow {
+  height: calc(100% - 40px);
+}
+.tab-flow .search-goods-head {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+.tab-flow .search-goods-head .search-box .change-class-btn {
+  width: 110px;
+  color: #323232;
+  background-color: #FFFFff;
+  border: 1px solid #E9E9E9;
+  height: 30px;
+  padding: 0 10px;
+}
+.tab-flow .search-goods-head .search-box .change-class-btn.open {
+  border-color: #003CFF;
+}
+.tab-flow .search-goods-head .search-box .change-class-btn.open font {
+  color: #003CFF;
+}
+.tab-flow .search-goods-head .search-box .change-class-btn font {
+  width: 100%;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+  display: inline-block;
+ }
+.tab-flow .search-goods-head .search-box .search-input {
+  vertical-align: middle;
+  padding-left: 10px;
+  display: inline-block;
+  position: relative;
+}
+.tab-flow .search-goods-head .search-box .search-input i {
+  background: #f6f6f6 url('../../../common/img/searchGrey2.png')center center no-repeat;
+  background-size: 14px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  position: absolute;
+  left: 10px;
+  z-index: 2;
+  top: 6px;
+  cursor: pointer;
+}
+.tab-flow .search-goods-head .search-box .search-input input {
+  width: 113px;
+}
+.tab-flow .search-goods-head .class-list-layer {
+  position: absolute;
+  z-index: 4;
+  width: 100%;
+  background-color: #FFFFff;
+}
+.tab-flow .search-goods-head .class-list-layer .list-content {
+  max-height: 414px;
+  display: inline-block;
+  overflow-y: auto;
+  width: 100%;
+}
+.tab-flow .search-goods-head .class-list-layer .list-content ul {
+  display: inline-block;
+  width: 33.333%;
+  float: left;
+  min-height: 30px;
+  padding: 0;
+  margin: 0;
+}
+.tab-flow .class-list-layer .list-content ul li{display: inline-block;width: 100%;text-align: center;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;line-height: 30px;height: 30px;position: relative;font-size: 12px;padding: 0;
+  cursor: pointer;
+}
+.tab-flow .class-list-layer .list-content ul li.active{background-color: #f6f6f6;}
+.tab-flow .class-list-layer .list-content ul li.active:after{position: absolute;content: '';z-index: 1;height: 100%;left: 0;top: 0;width: 2px;background-color: #003CFF;display: inline-block}
+.tab-flow .class-list-layer .btn-submit{width: 100%;height: 34px;
+  background-color: #003CFF;display: inline-block;text-align: center;line-height: 34px;color: #FFFFff;cursor: pointer;}
+
+.tab-flow .flow-goods {
+  height: calc(100% - 44px);
+  display: inline-block;
+  overflow-y: auto;
+  width: 100%;
+}
+.tab-flow .flow-goods{display: inline-block;width: 100%;padding: 0;
+  margin: 10px 0 0 0;
+}
+.tab-flow .flow-goods li{	background-color: #fafafa;position: relative;padding: 10px;
+  border: 1px solid #E9E9E9;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+.tab-flow .flow-goods li img{width: 70px;height: 70px;background-color: #f3f3f3;border-radius: 4px;vertical-align: middle}
+.tab-flow .flow-goods li .chatpart-goods-text{width: calc(100% - 80px);vertical-align: middle;padding-left: 5px;display: inline-block;}
+.tab-flow .flow-goods li .chatpart-goods-text .line-two{color: #323232;font-size: 12px;    height: 35px;margin-bottom: 8px;}
+.tab-flow .flow-goods li .chatpart-goods-text p:nth-child(2) span{color: #ec2a2a;}
+.tab-flow .flow-goods li button{
+  width: 64px;height: 26px;color: #323232;font-size: 12px;text-align: center;background-color: #ffffff;border-radius: 4px;border: solid 1px #e6e6e6;line-height: 23px;float: right;outline: none;
+  position: absolute;
+  z-index: 3;
+  bottom: 10px;
+  right: 10px;
+}
+
+
+
+.tab-flow .flow-coupon {
+  padding: 0;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.tab-flow .flow-coupon li .coupon-base {
+  margin-bottom: 8px;
+  max-width: calc(100% - 100px);
+}
+.tab-flow .flow-coupon li .coupon-money{
+  color: #FF0000;
+  font-weight: bold;
+  margin-right: 20px;
+}
+/*endregion*/
+
+/*region 编辑栏，输入框*/
+.customer-msg-layer .edit-box {
+  padding: 10px 10px 10px 20px;
+  background-color: #FFFFff;
+  position: relative;
+  height: 130px;
+}
+.customer-msg-layer .edit-box .edit-tool .tool-list li {
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  vertical-align: middle;
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+}
+.customer-msg-layer .edit-box .edit-tool .tool-list li.tool-upload-img {
+  background: url('../../../pc/imgs/user/dialog_img.png')center center no-repeat;
+  background-size: 18px;
+}
+.customer-msg-layer .edit-box .edit-tool .tool-list li.tool-upload-img input[type=file] {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  opacity: 0;
+}
+.customer-msg-layer .edit-box .edit-tool .tool-list li.tool-emoji {
+  background: url('../../../common/customerMsg/img/custom/emoji_grey.png')center center no-repeat;
+  background-size: 20px;
+}
+.customer-msg-layer .edit-box .edit-text {
+  width: 100%;
+  height: 36px;
+  margin: 10px 0 0 0;
+}
+.customer-msg-layer .edit-box .edit-text textarea {
+  outline: none;
+  resize: none;
+  border: none;
+  line-height: 1.5;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+.customer-msg-layer .edit-box .edit-text textarea:focus {
+  outline: none;
+  resize: none;
+  border: none;
+  box-shadow: none;
+}
+.customer-msg-layer .edit-box .edit-submit {
+  text-align: right;
+  height: 46px;
+  padding: 10px 0;
+}
+/*endregion*/
+
+/*region 表情弹框列表*/
+.emoji-model {
+  position: absolute;
+  z-index: 3;
+  top: -268px;
+  left: 0;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #e1e1e1;
+}
+.emoji-model .emoji-list {
+  width: 100%;
+  height: 100%;
+}
+.emoji-model .emoji-list ul {
+  display: inline-block;
+  border-top: 1px solid #e1e1e1;
+  border-left: 1px solid #e1e1e1;
+  vertical-align: middle;
+  width: 391px
+}
+.emoji-model .emoji-list ul li {
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border-bottom: 1px solid #e1e1e1;
+  border-right: 1px solid #e1e1e1;
+  background-repeat: no-repeat;
+  float: left;
+  background-position: center center;
+  position: relative;
+}
+.emoji-model .emoji-list ul li:hover{border: 1px solid #f75353;}
+.emoji-model .emoji-list ul li .emoji-preview{display: none;position: absolute;border: 1px solid #f75353;width: 60px;height: 60px;bottom: -60px;right: -60px;z-index: 2;background-color: #fff;}
+.emoji-model .emoji-list ul li:hover .emoji-preview{display: inline-block}
+.emoji-model .emoji-list ul li .emoji-preview img{position: absolute;top: calc(50% - 15px);left: calc(50% - 15px);width: 30px;height: 30px;display: inline-block;}
+/*endregion*/

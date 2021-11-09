@@ -1,0 +1,132 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>element-ui图标</div>
+        <a class="color-link" href="https://element.eleme.cn/#/zh-CN/component/icon">
+          https://element.eleme.cn/#/zh-CN/component/icon
+        </a>
+      </li>
+      <li class="mt-10">
+        <div>font-awesome图标</div>
+        <a class="color-link" href="https://fontawesome.dashgame.com/">
+          https://fontawesome.dashgame.com/
+        </a>
+      </li>
+      <li class="mt-10">
+        <div>自定义打包的svg图标</div>
+        <div>
+          <div class="border-box-list" v-for="iconList in diyiconList">
+            <div class="title">{{ iconList.title }}</div>
+            <div class="list-item">
+              <a v-for="icon in iconList.list">
+                <i :class="icon.icon_class"></i>
+                <font>{{ icon.icon_class }}</font>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div>自定义图片图标</div>
+        <div>
+          <div class="border-box-list" v-for="iconList in imgiconList">
+            <div class="title">{{ iconList.title }}</div>
+            <div class="list-item">
+              <a v-for="icon in iconList.list" :style="+icon.is_white === 1 ? 'background: #003cff' : ''">
+                <i :class="icon.icon_class"></i>
+                <font>{{ icon.icon_class }}</font>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div>表格中状态标志图标</div>
+        <div class="position-r">
+          <div class="table-circle-icon">
+            <font>已作废</font>
+          </div>
+        </div>
+        <div class="display-align bg-gray" style="height: 100px;width: 100px"></div>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          diyiconList: [
+            {
+              title: '左侧菜单栏',
+              list: [
+                {icon_name: '商城', icon_class: 'xxicon-menu-shangcheng'},
+                {icon_name: '订单', icon_class: 'xxicon-menu-dingdan'},
+                {icon_name: '商品', icon_class: 'xxicon-menu-shangpin'},
+                {icon_name: '会员', icon_class: 'xxicon-menu-huiyuan'},
+                {icon_name: '代理', icon_class: 'xxicon-menu-daili'},
+                {icon_name: '合作', icon_class: 'xxicon-menu-hezuo'},
+                {icon_name: '分销', icon_class: 'xxicon-menu-fenxiao'},
+                {icon_name: '收银', icon_class: 'xxicon-menu-shouyin'},
+                {icon_name: '门店', icon_class: 'xxicon-menu-mendian'},
+                {icon_name: '发现', icon_class: 'xxicon-menu-faxian'},
+                {icon_name: '报表', icon_class: 'xxicon-menu-baobiao'},
+                {icon_name: '员工', icon_class: 'xxicon-menu-yuangong'},
+                {icon_name: '增值', icon_class: 'xxicon-menu-zengzhi'},
+              ]
+            },
+            {
+              title: '其他通用',
+              list: [
+                {icon_name: '铃铛', icon_class: 'xxicon-bells'},
+                {icon_name: '出库', icon_class: 'xxicon-chuku'},
+                {icon_name: '入库', icon_class: 'xxicon-ruku'},
+                {icon_name: '订单', icon_class: 'xxicon-order-0'},
+                {icon_name: '短信', icon_class: 'xxicon-sms'},
+                {icon_name: '消息', icon_class: 'xxicon-msg'},
+                {icon_name: '消息1', icon_class: 'xxicon-msg-1'},
+                {icon_name: '星星', icon_class: 'xxicon-star-0'},
+                {icon_name: '星星1', icon_class: 'xxicon-star-1'},
+                {icon_name: '表情', icon_class: 'xxicon-emoji'},
+                {icon_name: '店铺', icon_class: 'xxicon-shop'},
+                {icon_name: '加号', icon_class: 'xxicon-plus'},
+                {icon_name: '减号', icon_class: 'xxicon-remove'},
+                {icon_name: '扫描', icon_class: 'xxicon-scan'},
+                {icon_name: '图片', icon_class: 'xxicon-img'},
+                {icon_name: '锁', icon_class: 'xxicon-lock-0'},
+                {icon_name: '锁1', icon_class: 'xxicon-lock-1'},
+                {icon_name: '灯泡', icon_class: 'xxicon-bulb'},
+                {icon_name: '微信', icon_class: 'xxicon-wx'},
+                {icon_name: '用户', icon_class: 'xxicon-user'},
+                {icon_name: '导入', icon_class: 'xxicon-import'},
+                {icon_name: '导出', icon_class: 'xxicon-export'},
+                {icon_name: '保存', icon_class: 'xxicon-save'},
+                {icon_name: '选中', icon_class: 'xxicon-checked'},
+                {icon_name: '选中2', icon_class: 'xxicon-checked-2'},
+                {icon_name: '搜索', icon_class: 'xxicon-search'},
+                {icon_name: '右箭头', icon_class: 'xxicon-right'},
+                {icon_name: '刷新', icon_class: 'xxicon-clear-cache'},
+                {icon_name: '密码', icon_class: 'xxicon-password'},
+                {icon_name: '手机', icon_class: 'xxicon-phone'},
+                {icon_name: '退出', icon_class: 'xxicon-sign-out'},
+              ]
+            },
+          ],
+          imgiconList: [
+            {
+              title: '',
+              list: [
+                {icon_class: 'imgicon-warn-red'},
+                {icon_class: 'imgicon-alipay-white', is_white: 1},
+                {icon_class: 'imgicon-table-setting'},
+              ]
+            },
+          ]
+        }
+      },
+      methods: {
+      }
+    })
+  </script>
+</block>

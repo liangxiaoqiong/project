@@ -1,0 +1,31 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      常用于主动操作后的反馈提示
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>layer.msg消息提示</div>
+        <a class="xxbtn-white" @click="showLayerMsg1">成功提示</a>
+        <a class="xxbtn-white" @click="showLayerMsg">失败提示</a>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {}
+      },
+      methods: {
+        showLayerMsg1: function () {
+          publicWap.layerMsg('这是成功提示', 1);
+        },
+        showLayerMsg: function () {
+          publicWap.layerMsg('这是失败提示');
+        },
+      }
+    })
+  </script>
+</block>

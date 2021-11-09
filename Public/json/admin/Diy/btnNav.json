@@ -1,0 +1,60 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": {
+    "style": "0",
+    "checked_nav": ["shop_module", "classify_module", "guide_module", "customer_service_module", "cart_module", "setting_module"],
+
+    "text_color": "#000000",
+    "background_color": "#FFFFFF",
+    "content": {
+      "nav_list": [
+        {
+          "id": "1",
+          "normal_img": "",
+          "selected_img": "",
+          "name": "",
+          "action": "no_action",
+          "action_data": "",
+          "is_show": "1"
+        },
+        {
+          "id": "2",
+          "normal_img": "",
+          "selected_img": "",
+          "name": "",
+          "action": "no_action",
+          "action_data": "",
+          "is_show": "1"
+        },
+        {
+          "id": "3",
+          "normal_img": "",
+          "selected_img": "",
+          "name": "",
+          "action": "no_action",
+          "action_data": "",
+          "is_show": "1"
+        },
+        {
+          "id": "4",
+          "normal_img": "",
+          "selected_img": "",
+          "name": "",
+          "action": "no_action",
+          "action_data": "",
+          "is_show": "1"
+        },
+        {
+          "id": "5",
+          "normal_img": "",
+          "selected_img": "",
+          "name": "",
+          "action": "no_action",
+          "action_data": "",
+          "is_show": "1"
+        }
+      ]
+    }
+  }
+}

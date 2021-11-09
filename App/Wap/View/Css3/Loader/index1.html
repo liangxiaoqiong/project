@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>圆点外扩波纹动画【xunxin wap端加载条】</title>
+  <style>
+    .layui-layer-loading0{
+      position: relative;
+      -webkit-transform: translateY(-30px);
+      -ms-transform: translateY(-30px);
+      transform: translateY(-30px);
+      background: none!important;
+    }
+    @-webkit-keyframes ball-scale-multiple {
+      0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        opacity: 0; }
+
+      5% {
+        opacity: 1; }
+
+      100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 0; } }
+
+    @keyframes ball-scale-multiple {
+      0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+        opacity: 0; }
+
+      5% {
+        opacity: 1; }
+
+      100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        opacity: 0; } }
+    .layui-layer-loading0 > div {
+      background-color: #ed5565;
+      border-radius: 100%;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      opacity: 0;
+      margin: 0;
+      width: 60px;
+      height: 60px;
+      -webkit-animation: ball-scale-multiple 1s 0s linear infinite;
+      animation: ball-scale-multiple 1s 0s linear infinite;
+    }
+    .layui-layer-loading1 > div:nth-child(2) {
+      -webkit-animation-delay: 0.2s;
+      animation-delay: 0.2s;
+    }
+    .layui-layer-loading1 > div:nth-child(3) {
+      -webkit-animation-delay: 0.4s;
+      animation-delay: 0.4s;
+    }
+    .layui-layer-loading1 {
+      margin-top: 120px;
+    }
+/*    .layui-layer-loading1 > div:nth-child(2) {
+      -webkit-animation-delay: -0.1s;
+      animation-delay: -0.1s;
+    }
+    .layui-layer-loading1 > div:nth-child(3) {
+      -webkit-animation-delay: -0.3s;
+      animation-delay: -0.3s;
+    }*/
+  </style>
+</head>
+<body style="margin: 100px 0">
+<!--以下动画在ios12部分手机上会出现动画异常问题
+【类似多个动画重叠】
+-->
+<div style="padding-bottom: 60px"><a href="https://zhuanlan.zhihu.com/p/23982450">解决办法</a></div>
+<div>
+  delay 正值在 iOS 上的坑<br>
+  delay 负值已经解释清楚了，所以为什么会突然需要用负值呢？源于这一 part 的标题… 还是在写上面企鹅 FM 的音频加载效果时遇到的。一言蔽之，在 iOS10 上 animation-delay 正值可能导致 iOS 无法正常计算 delay，导致动画效果和预期不符。 甚至现在 iOS7 和 iOS8 上这个 bug 原因（暂时）还找不到…<br>
+
+  下图是表现正常的动画截图，可以看出小矩形条彼此高度不一：<br>
+  <img src="/Public/wap/img/Css3/bug1.png" style="width: 100%">
+  <br>
+
+  下面的两张是在 iOS 测试的截图，左下图是页面中没有出现使用了 filter 属性，和上图相似，加载动画中每条小矩形高度不一；而右下图是页面中使用了 filter 属性，可以看出动画是有问题的，相邻小矩形高度相同：<br>
+  <div style="display: flex;justify-content: space-between">
+    <img src="/Public/wap/img/Css3/bug2.png" style="width: 50%">
+    <img src="/Public/wap/img/Css3/bug3.png" style="width: 50%">
+  </div>
+
+  具体代码可看这里（项目本身依赖了别的 less 文件，所以直接拷贝了生成的 css 文件 = =，我们是用 LESS 的嗷）。<br>
+  是不是非常奇怪！是的！！！<br>
+
+  但是我在各个地方都没有找到类似的 bug report，唯一一个稍微靠上边的是一个 13 年的 issue：页面滚动的时候会导致动画的时间线出现偏差。还有一个 SO 上一个性能极差导致的 delay 错误问题。再靠边一点的解释都木有找到，如果有人找到了，请一定要告诉我。<br>
+
+  因为找不到理论支持，所以只能进行推测：由于 filter 在使用上最为人诟病的就是性能问题，而且去掉 filter 动画就正常了，只能推锅给 Safari 内核在渲染 filter 效果时会造成 timer 的混乱，导致动画开始的时间点不对，delay 是正数时，动画开始执行的时刻取决于相对于 iOS timer 算出的开始时间点；delay 是负数时，动画执行情况是看此时落在哪一个 keyframe 区域上：<br>
+  <img src="/Public/wap/img/Css3/bug4.png" style="width: 100%">
+  <br>
+
+
+  用 delay 负值，只要 timer == 0 的时刻没有错，延迟就不会出错；用 delay 正值，鬼知道在 timer > 0 以后会发生什么影响 timer 的事情，导致延迟计时出问题。所以建议大家用 delay 负值来做动画~<br>
+
+  // 当然，如果用 GSAP 什么的…可能就不会有这个问题了<br>
+
+  // delay 正值在我这里的一个 demo 上（今天来不及整理代码了），在 iOS7 和 iOS8 也会有延迟问题。<br>
+</div>
+<div class="layui-layer-loading0">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+<div class="layui-layer-loading0 layui-layer-loading1">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+<div style="margin-bottom: 100px">==========bottom==========</div>
+</body>
+</html>

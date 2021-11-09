@@ -1,0 +1,276 @@
+<!-- template 上传图片[多图]可拖拽排序-->
+<script type="x-template" id="upload_multi_img_drag">
+  <!--region 模版-->
+  <div class="upload-multi-img-box" :class="{'multi-img-text': isImgText}">
+    <div>
+      <div class="img-list">
+        <div class="img-box" v-for="(item, index) in imgList"
+             v-dragging="vDragging(item)"
+             :key="item.url">
+          <div class="img-thumb">
+            <img :src="item.url">
+            <div class="upload-file-action">
+              <a class="fa fa-search-plus" @click="previewImg(item)"></a>
+              <a class="fa fa-trash-o" @click="removeFile(index)"></a>
+            </div>
+          </div>
+          <div v-if="isImgText">
+            <textarea class="img-text" v-model="item.text"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="img-box upload-btn">
+          <div class="upload-title">{{ uploadTitle }}</div>
+          <input type="file" multiple title=" " @change="upload($event)">
+        </div>
+    </div>
+    <div class="upload-tip">{{ imgTip }}</div>
+
+    <el-dialog title="{:L('PREVIEW')}" :visible.sync="dialogVisible" :modal-append-to-body="false" :append-to-body="true">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script type="text/javascript" src="__PUBLIC__/common/js/plug-in/vue-2.x/vue-dragging/vue-dragging.js"></script>
+<script>
+  Vue.use(VueDragging)
+  AppUtil.COMPONENTS.UPLOAD_MULTI_IMG_DRAG = {
+    template: '#upload_multi_img_drag',
+    props: {
+      imgList: {
+        type: Array,
+        default: []
+      },
+      //{url: '', file_type: 'image', text: ''}
+      isImgText: {
+        type: Boolean,
+        default: false
+      }, //是否有图片描述，true-商品详情【简约图文详情】
+      uploadTitle: {
+        type: String,
+        default: '上传图片'
+      },
+      maxImgLen: {
+        type: [String, Number],
+        default: 20
+      }, //最多上传的图片数量，
+      imgTip: {
+        type: String,
+        default: ''
+      }, // 上传图片提示
+      isDrag: {
+        type: Boolean,
+        default: true
+      }, // 是否可以拖拽排序
+    },
+    data: function () {
+      return {
+        dialogImageUrl: '',
+        dialogVisible: false,
+      }
+    },
+    computed: {
+      vDragging: function () {
+        return function (item) {
+          if (this.isDrag) {
+            return { list: this.imgList, item: item, group: 'item' }
+          } else {
+            return {}
+          }
+        }
+      }
+    },
+    mounted: function () {
+    },
+    methods: {
+      upload: function (event) {
+        var self = this;
+        var load = layer.load(0);
+        var el = event.currentTarget;
+        var form = new FormData();
+        var limitLen = +self.maxImgLen - self.imgList.length;
+        var exceedFileNum = el.files.length <= limitLen ? el.files.length : limitLen;
+        if (exceedFileNum <= 0) {
+          publicWap.layerMsg('最多只能上传'+self.maxImgLen+'张');
+          $(el).val('');//input 清空
+          layer.close(load);
+          return false;
+        }
+        for (var i = 0; i < exceedFileNum; i++) {
+          if (el.files[i].size > 10 * 1024 * 1024) {
+            AppUtil.alert('文件大小不能超过10MB');
+            return false;
+          }
+          form.append('file', el.files[i]);
+          $.ajax({
+            url: '//file.duinin.com/upload.php?i='+i,
+            //url: uploadUrl,
+            data: form,
+            type:'post',
+            processData: false,
+            contentType: false,
+            dataType:'JSON',
+            success: function (result) {
+              if (result.result === 0) {
+                self.$nextTick(function () {
+                  var arr = {
+                    url: result.datas.ori_url,
+                    file_type: 'image',
+                  }
+                  if (self.isImgText) {
+                    arr.text = ''
+                  }
+                  self.imgList.push(arr)
+                  if (self.imgList.length >= self.maxImgLen) {
+                    publicWap.layerMsg('最多只能上传'+self.maxImgLen+'张')
+                  }
+                  if (i >= exceedFileNum) {
+                    $(el).val('');//input 清空
+                    layer.close(load);
+                  }
+                })
+              } else {
+                publicWap.layerMsg(result.debug);
+              }
+            }
+          })
+        }
+      },
+      previewImg: function (file) {
+        this.dialogImageUrl = file.url;
+        this.dialogVisible = true;
+      },
+      removeFile: function (index) {
+        this.imgList.splice(index, 1)
+      }
+    }
+  }
+</script>
+
+<style>
+  .upload-multi-img-box .img-list {
+    position: relative;
+    display: inline-block;
+  }
+  .upload-multi-img-box .img-box {
+    width: 88px;
+    height: 88px;
+    display: inline-block;
+    vertical-align: middle;
+    background: url('/Public/common/img/icon_img/bgImg.png') center center /2rem no-repeat;
+    position: relative;
+    margin-right: 10px;
+    border: 1px solid #E9E9E9;
+    border-radius: 2px;
+    overflow: hidden;
+    -webkit-transition: all .5s cubic-bezier(.55,0,.1,1);
+    transition: all .5s cubic-bezier(.55,0,.1,1);
+  }
+  .upload-multi-img-box .img-box .upload-file-action {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    -webkit-transition: opacity .3s;
+    transition: opacity .3s;
+  }
+  .upload-multi-img-box .img-box:hover .upload-file-action {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  .upload-multi-img-box .img-box .upload-file-action a {
+    cursor: pointer;
+    color: #FFFFff;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-right: 20px;
+  }
+  .upload-multi-img-box .img-box .upload-file-action a:last-child {
+    margin-right: 0;
+  }
+  .upload-multi-img-box .img-box .img-thumb {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 8px;
+    position: relative;
+  }
+  .upload-multi-img-box .img-box img {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 8px;
+  }
+  .upload-multi-img-box .upload-btn {
+    position: relative;
+    display: inline-block;
+    background: #fff url('/Public/common/img/icon_img/bgImg.png') center center /2rem no-repeat;
+  }
+  .upload-multi-img-box .upload-title {
+    position: absolute;
+    left: 0;
+    bottom: 8px;
+    background: none;
+    color: #003cff;
+    width: 100%;
+    text-align: center;
+    line-height: initial;
+    font-size: 12px;
+  }
+  .upload-multi-img-box input[type=file] {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .upload-multi-img-box .upload-tip {
+    color: #999;
+    margin-top: 5px;
+  }
+  .upload-multi-img-box.multi-img-text .img-box {
+    width: 170px;
+    height: 220px;
+  }
+  .upload-multi-img-box.multi-img-text .img-box .img-thumb {
+    width: 100%;
+    height: 150px;
+  }
+  .upload-multi-img-box.multi-img-text .img-box .img-thumb img {
+    border-radius: 8px 8px 4px 4px;
+  }
+  .upload-multi-img-box.multi-img-text .img-text {
+    box-sizing: border-box;
+    width: 100%;
+    height: 68px;
+    margin: 0;
+    border: none;
+    padding: 4px 6px;
+    border-radius: 0 0 2px 2px;
+    resize:none;
+  }
+</style>

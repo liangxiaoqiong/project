@@ -1,0 +1,167 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/6/3
+  -->
+<!-- template 日期弹框组件-->
+
+<script type="x-template" id="date_picker">
+  <!--region 模版-->
+  <div class="date-picker-box" :class="{'datetime-picker-box': isShowTime}">
+    <div class="date-input flex-row" @click="showLayer">
+      <template v-if="info[param] === '' || info[param] === ' '">
+        <span class="color-grey2">{{ popupTitle }}</span>
+      </template>
+      <template v-else>{{ dateTimeVal }}</template>
+    </div>
+    <!--region 选择日期【年月日】弹框-->
+    <van-popup position="bottom"
+               :close-on-click-overlay="false"
+               v-model="isShowDateLayer">
+      <van-datetime-picker
+        v-model="dateVal"
+        type="date"
+        :title="popupTitle"
+        :formatter="formatter"
+        @cancel="isShowDateLayer = false"
+        @confirm="confirmDate"
+      />
+    </van-popup>
+    <!--endregion-->
+
+    <!--region 选择时间【时分秒】弹框-->
+    <van-popup position="bottom"
+               :close-on-click-overlay="false"
+               v-model="isShowTimeLayer">
+      <van-datetime-picker
+      v-model="timeVal"
+      type="time"
+      title="选择时间"
+      @cancel="cancelTime"
+      @confirm="confirmTime"
+    />
+    </van-popup>
+    <!--endregion-->
+  </div>
+  <!--endregion-->
+</script>
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.DATE_PICKER = {
+    template: '#date_picker',
+    components: {},
+    props: {
+      info: Object,
+      param: {
+        type: String,
+        default: 'start_time'
+      },
+      timeType: {
+        type: String,
+        default: 'start'
+      }, // 时间类型【'start'-开始时间(秒=00),'end'-结束时间(秒=59)】
+      popupTitle: {
+        type: String,
+        default: '选择时间'
+      },
+      isShowTime: {
+        type: Boolean,
+        default: false
+      }, // 是否显示时间时分秒弹框组件
+    },
+    data: function () {
+      return {
+        isShowDateLayer: false,
+        isShowTimeLayer: false,
+        dateVal: new Date(), // 日期
+        timeVal: '00:00', // 时间
+        tempDateTime: '' // 临时存放的时间字符串'2021-07-14 15:11:23'
+      }
+    },
+    computed: {
+      dateTimeVal: function () {
+        if (this.isShowTime) {
+          return this.info[this.param].substr(0, this.info[this.param].length - 3);
+        } else {
+          return this.info[this.param].split(' ')[0]
+        }
+      }
+    },
+    mounted: function () {
+    },
+    methods: {
+      showLayer: function () {
+        this.tempDateTime = this.info[this.param];
+        if (this.tempDateTime !== '' && this.tempDateTime !== ' ') {
+          var reg = new RegExp( '-' , "g" )
+          var oldDate = this.tempDateTime.replace(reg, '/');
+          this.dateVal = new Date(oldDate);
+          if (this.isShowTime) {
+            var infoTime = this.tempDateTime.split(' ')[1];
+            this.timeVal = infoTime.substr(0, infoTime.length - 3);
+          }
+        }
+        this.isShowDateLayer = true;
+      },
+      formatter: function (type, val) {
+        if (type === 'year') {
+          return `${val}年`;
+        } else if (type === 'month') {
+          return `${val}月`;
+        } else if (type === 'day') {
+          return val + '日';
+        }
+        return val;
+      },
+      confirmDate: function (val) {
+        var year = val.getFullYear()
+        var month = val.getMonth() + 1
+        var day = val.getDate()
+        if (month >= 1 && month <= 9) { month = `0${month}` }
+        if (day >= 1 && day <= 9) { day = `0${day}` }
+        this.tempDateTime = `${year}-${month}-${day}`;
+        this.isShowDateLayer = false;
+        if (this.isShowTime) {
+          this.isShowTimeLayer = true;
+        } else {
+          this.info[this.param] = this.tempDateTime;
+        }
+      },
+      confirmTime: function (val) {
+        var timeSecond = this.timeType === 'start' ? '00' : '59';
+        this.tempDateTime = this.tempDateTime + ' ' + val + ':' + timeSecond;
+        this.info[this.param] = this.tempDateTime;
+        this.isShowTimeLayer = false;
+      },
+      cancelTime: function () {
+        var infoTime = this.info[this.param].split(' ')[1];
+        var timeHM = infoTime.substr(0, infoTime.length - 3);
+        var timeSecond = this.timeType === 'start' ? ':00' : ':59';
+        this.tempDateTime = this.tempDateTime + ' ' + timeHM + timeSecond;
+        this.info[this.param] = this.tempDateTime;
+        this.isShowTimeLayer = false;
+      }
+    }
+  }
+</script>
+<style>
+  .date-picker-box {
+      width: 5rem;
+      display: flex;
+      float: left;
+      height: 100%;
+  }
+  .date-picker-box.datetime-picker-box {
+      width: 6rem;
+  }
+  .date-input,
+  .date-input span {
+    font-size: .6rem;
+    text-align: center;
+    width: 100%;
+  }
+  .van-picker__mask {
+    top: -1px;
+    height: calc(100% + 1px);
+  }
+</style>

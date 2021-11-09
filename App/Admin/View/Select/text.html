@@ -1,0 +1,43 @@
+<extend name="Public:base"/>
+<block name="content">
+  <style>
+    .el-select-dropdown__wrap .el-select-dropdown__item.is-disabled {
+
+    }
+  </style>
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <el-select v-model="value">
+      <el-option value="" label="选项"></el-option>
+      <el-option value="2" label="选项2"></el-option>
+      <el-option value="3" label="选项3"></el-option>
+      <el-option value="4" class="is-disabled" label="选项4-禁用"></el-option>
+      <el-option value="5" disabled label="选项5-禁用"></el-option>
+    </el-select>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          value1: ''
+        }
+      },
+      computed: {
+        value: {
+          set: function (val) {
+            var self = this;
+            if (+val === 4) {
+            //  publicWap.layerMsg('不可新增，该供应商存在未审核的对账单，请先审核或者作废该对账单！');
+              self.$alert('该供应商存在未审核的对账单，请先审核或者作废该对账单！', {title: '不可新增', customClass: 'dialog-confirm has-content'})
+            } else {
+              this.value1 = val;
+            }
+          },
+          get: function () {
+            return this.value1;
+          }
+        }
+      },
+    })
+  </script>
+</block>

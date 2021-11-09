@@ -1,0 +1,179 @@
+/*region 地图容器*/
+html, body, #app {
+  height: 100%;
+}
+#map-box {
+  width: 100%;
+  height: 100%;
+}
+
+#map-box .BMap_Marker > div {
+  box-sizing: border-box;
+  overflow: initial !important;
+  top: 0;
+  background: url('../../img/Store/map_bg.png') center center no-repeat;
+  background-size: 100% 100%;
+  padding: 8.5px !important;
+  width: 47px;
+  height: 56.5px;
+}
+
+#map-box .BMap_Marker > div:after {
+  display: inline-block;
+  position: absolute;
+  content: '';
+  background: url("../../img/Store/map_point2.png") center center no-repeat;
+  background-size: 22px 22px;
+  width: 22px;
+  height: 22px;
+  z-index: -1;
+  box-shadow: 2px 2px 5px 0px rgba(23, 0, 0, 0.14);
+  border-radius: 100%;
+  left: 12.5px;
+  top: 46px;
+}
+
+#map-box .BMap_Marker > div > img {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  box-sizing: border-box;
+  display: inline-block !important;
+  border: 1px solid #e5e5e5 !important;
+}
+
+#map-box .BMapLabel {
+  font-size: 10px !important;
+  text-align: center;
+  padding: 0 5px !important;
+  border: none !important;
+  box-sizing: border-box;
+  line-height: 19px !important;
+  height: 18px;
+  border-radius: 0 5px 5px 0;
+  color: #ffffff;
+  box-shadow: none;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  margin-left: 18px;
+}
+
+#map-box .BMapLabel:before {
+  content: '';
+  position: absolute;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  left: -9px;
+  top: 0;
+  border-right: 9px solid rgba(0, 0, 0, 0.5);
+}
+
+#map-box .BMap_Marker:first-child > div {
+  top: -15px;
+  left: -8px;
+  padding: 9.5px !important;
+  width: 62px;
+  height: 75.5px;
+}
+
+#map-box .BMap_Marker:first-child > div:after {
+  top: 62px;
+  background: url("../../img/Store/map_point1.png") center center no-repeat;
+  background-size: 22px 22px;
+  left: 20px;
+}
+
+#map-box .BMap_Marker:first-child > div > img {
+  width: 43px;
+  height: 43px;
+}
+
+#map-box .BMap_Marker:first-child > .BMapLabel {
+  color: #323232;
+  box-shadow: 3px 3px 10px 0px rgba(31, 30, 27, 0.49);
+  background-color: #FFFFff !important;
+  border: 1px solid #dadada;
+  margin-left: 26px;
+  top: 50px !important;
+  left: 13px !important;
+}
+
+#map-box .BMap_Marker:first-child > .BMapLabel:before {
+  border-right: 9px solid #FFFFFF;
+}
+
+#map-box .BMap_Marker:last-child > div {
+  top: 0;
+  border: none !important;
+  box-shadow: none;
+  background: none;
+  padding: 0 !important;
+}
+
+#map-box .BMap_Marker:last-child > div:after {
+  display: none;
+}
+
+#map-box .BMap_Marker:last-child > div img {
+  width: 40px;
+  height: 87px;
+  border: none !important;
+  border-radius: 0;
+}
+/*endregion*/
+
+.current-btn {
+  position: fixed;
+  z-index: 1;
+  bottom: 7rem;
+  left: .5rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  background: url('../../img/Store/map_dingwei.png') center center no-repeat;
+  background-size: 100% 100%;
+}
+.map-bottom {
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  width: 100%;
+  background-color: #F3F3F3;
+}
+.map-bottom .map-info {
+  padding: .5rem .63rem;
+  color: #606060;
+}
+.map-bottom .map-info>div {
+  margin-bottom: .2rem;
+}
+.map-bottom .map-info>div:last-child {
+  margin-bottom: 0;
+}
+.map-bottom .map-info span {
+  margin-right: .95rem;
+  font-size: .6rem;
+  display: inline-block;
+  vertical-align: middle;
+  color: #606060;
+}
+.map-bottom .map-info font {
+  font-size: .6rem;
+  display: inline-block;
+  vertical-align: middle;
+  color: #606060;
+}
+.map-bottom .map-info i {
+  font-size: 12px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: .2rem;
+}
+.map-bottom .map-href {
+  padding: .63rem;
+  background-color: #FFFFff;
+}
+.map-bottom .map-href a {
+  color: #FFFFff;
+  font-size: .9rem;
+  height: 2.4rem;
+  border-radius: .25rem;
+}

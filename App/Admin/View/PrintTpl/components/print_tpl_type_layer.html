@@ -1,0 +1,74 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/3/11
+  -->
+<!-- template 打印模板》选择打印模板类型-->
+<script type="x-template" id="print_tpl_type_layer">
+  <!--region 模版-->
+  <div>
+    <el-dialog
+        title="选择打印模板类型"
+        width="500px"
+        :visible.sync="isShowLayer">
+      <div class="dialog-scroll">
+        <div class="form-row">
+          <p class="row-t">模板类型</p>
+          <el-select class="row-div" v-model="tplType">
+            <el-option v-for="(type, index) in tplTypeList" :key="index" :value="type.value" :label="type.label"
+                       v-if="isShowTpl(type)"></el-option>
+          </el-select>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <a class="xxbtn-white" @click="isShowLayer = false">取消</a>
+        <a class="xxbtn-primary" @click="submit">确定</a>
+      </div>
+    </el-dialog>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.PRINT_TPL_TYPE_LAYER = {
+    template: '#print_tpl_type_layer',
+    props: {
+      tplTypeList: Array
+    },
+    data: function () {
+      return {
+        isShowLayer: false,
+        tplType: 0, // 打印模板类型。0-A4打印；1-分仓打印；2-分仓针式打印；3-针式打印；4-热敏纸打印；
+        tpl: {}
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      init: function (item) {
+        this.tpl = item;
+        this.isShowLayer = true;
+      },
+      // 是否显示打印类型
+      isShowTpl: function (item) {
+        var self = this;
+        if (self.tpl.type && +self.tpl.type !== 0 && +self.tpl.type !== 18) {
+          return +item.is_erp_show === 1;
+        } else {
+          return true;
+        }
+      },
+      submit: function () {
+        var self = this;
+        if (+self.tplType < 0) {
+          publicWap.layerMsg('请选择打印模板类型');
+          return false
+        }
+        self.$emit('submit-select', {item: {tpl_type: self.tplType, type: self.tpl.type}});
+        self.isShowLayer = false;
+      }
+    }
+  }
+</script>

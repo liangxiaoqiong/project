@@ -1,0 +1,23 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-popover<br>
+    </div>
+    <img-popover :url="url"></img-popover>
+  </div>
+  <include file="Public/components/popover/img_popover"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'img-popover': AppUtil.COMPONENTS.IMG_POPOVER,
+      },
+      data: function () {
+        return {
+          url: 'http://dl.duinin.com/data/upload/20210623/06777639849765660.png?_180x180x2'
+        }
+      },
+    })
+  </script>
+</block>

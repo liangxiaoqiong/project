@@ -1,0 +1,144 @@
+<!-- template 上传图片【单图】-->
+<style>
+  .upload-img-box .box-container {
+    position: relative;
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+  }
+  .upload-img-box .box-container .img-box {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #E9E9E9;
+    border-radius: 2px;
+    background: url('/Public/common/img/icon_img/bgImg.png') center center no-repeat;
+    background-size: 30px 30px;
+  }
+  .upload-img-box .box-container .img-box .el-image {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .upload-img-box .box-container .upload-btn {
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 21px;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+  }
+  .upload-img-box .box-container:hover .upload-btn {
+    display: flex;
+    display: -webkit-flex;
+  }
+  .upload-img-box .box-container .upload-btn a {
+    height: 100%;
+    color: #FFFFff;
+    position: relative;
+    flex: 1;
+    text-align: center;
+    line-height: 21px;
+    cursor: pointer;
+  }
+  .upload-img-box .box-container input[type=file] {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .upload-img-box .upload-tip {
+     color: #999;
+     display: inline-block;
+     vertical-align: bottom;
+   }
+</style>
+<script type="x-template" id="upload_img_box">
+  <!--region 模版-->
+  <div class="upload-img-box">
+    <div class="box-container" :style="uploadImgStyle">
+      <div class="img-box">
+        <el-image v-if="info[param] && info[param] !== ''"
+                  :src="info[param]"
+                  :preview-src-list="[info[param]]">
+        </el-image>
+      </div>
+      <div class="upload-btn flex-row">
+        <a>
+          {{ (info[param] !== '' && info[param] != null) ? '替换' : '上传' }}
+          <upload-file v-model="info[param]"></upload-file>
+        </a>
+        <a v-if="isReset" @click="resetImg">重置</a>
+      </div>
+    </div>
+    <div class="upload-tip" v-if="imgTip !== ''" v-html="imgTip"></div>
+
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.UPLOAD_IMG_BOX = {
+    template: '#upload_img_box',
+    components: {
+      'upload-file': AppUtil.COMPONENTS.UPLOAD_FILE_COMPONENT,
+    },
+    props: {
+      info: Object,
+      param: String, // url变量名称
+      isReset: {
+        type: Boolean,
+        default: false
+      },// 是否可重置清空图片，
+      imgScale: {
+        type: [Number, String],
+        default: 1
+      }, //图片尺寸比例
+      imgTip: {
+        type: String,
+        default: ''
+      } // 上传图片提示
+    },
+    computed: {
+      uploadImgStyle: function () {
+        if (+this.imgScale !== 1) {
+          var width, height;
+          if (this.imgScale < 1) {
+            width = 150;
+            height = width / (this.imgScale);
+          } else {
+            height = 90;
+            width = height * (this.imgScale);
+          }
+          return {width: width + 'px', height: height + 'px'}
+        }
+      }
+    },
+    mounted: function () {
+    },
+    data: function () {
+      return {
+      }
+    },
+    methods: {
+      resetImg: function () {
+        var self = this
+        self.$nextTick(function () {
+          self.info[self.param] = '';
+        })
+      },
+    },
+    directives: {}
+  }
+</script>

@@ -1,0 +1,109 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/7/8
+  -->
+<!-- template 打印模板编辑器表格、非热敏打印的通用表格-->
+<script type="x-template" id="editor_table_default">
+  <!--region 模版-->
+  <table class="editor-order-table" :class="'print-table__'+item.tableBorderWidth" id="editor-order-table">
+    <!--region 表头-->
+    <thead>
+      <tr>
+        <td v-for="table in item.checkedItem" :width="tableTdWidth(table)" v-if="+table.is_checked === 1">
+          {{ table.diy_name !== '' ? table.diy_name : table.default_name }}
+        </td>
+      </tr>
+    </thead>
+    <!--endregion-->
+    <tbody>
+    <template v-for="(goods, gIndex) in 3">
+      <tr>
+        <td v-for="table in item.checkedItem" v-if="+table.is_checked === 1">
+          <!--备注不显示，用于打印后手写内容-->
+          <template v-if="table.type === 'remark'"></template>
+          <!--空白列1、空白列2、空白列3-->
+          <template v-else-if="table.type === 'other_1' || table.type === 'other_2' || table.type === 'other_3'">
+            <template v-if="+table.value_data.value_type === 1"><!--空白列项--></template>
+            <template v-else-if="+table.value_data.value_type === 2">
+              <!--固定列值-->
+              {{ table.value_data.default_value }}
+            </template>
+            <template v-else>
+              <!--关联其他基础数据值-->
+              xxxx
+            </template>
+          </template>
+          <template v-else>xxxx</template>
+        </td>
+      </tr>
+    </template>
+
+    <default-table-total :checked-item="item.checkedItem" type="'edit'"></default-table-total>
+
+    <!--region 额外新增的空白行【该功能暂隐藏】-->
+    <tr v-for="tr in item.otherTableItem" v-if="false">
+      <td :colspan="tableCheckedItemLen">&nbsp;</td>
+    </tr>
+    <!--endregion-->
+    </tbody>
+  </table>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<include file="PrintTpl/components/default_table_total" />
+<script>
+  AppUtil.COMPONENTS.EDITOR_TABLE_DEFAULT = {
+    template: '#editor_table_default',
+    components: {
+      'default-table-total': AppUtil.COMPONENTS.DEFAULT_TABLE_TOTAL
+    },
+    props: {
+      info: Object,
+      item: Object,
+    },
+    data: function () {
+      return {}
+    },
+    computed: {
+      // 显示的表格项个数
+      tableCheckedItemLen: function () {
+        var len = 0
+        this.item.checkedItem.forEach(function (value) {
+          if (+value.is_checked === 1) {
+            len++
+          }
+        })
+        return len
+      },
+    },
+    mounted: function () {
+    },
+    methods: {
+      //表格td宽度，热敏打印，均分
+      tableTdWidth: function (table) {
+        return diyPrintTpl.tableTdWidth(this.info, this.item, table);
+      },
+    }
+  }
+</script>
+
+<style>
+  .print-table__2,
+  .print-table__2 td {
+    border: 2px solid #333;
+  }
+  .print-table__3,
+  .print-table__3 td {
+    border: 3px solid #333;
+  }
+  .print-table__4,
+  .print-table__4 td {
+    border: 4px solid #333;
+  }
+  .print-table__5,
+  .print-table__5 td {
+    border: 4px solid #333;
+  }
+</style>

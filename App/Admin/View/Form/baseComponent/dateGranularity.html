@@ -1,0 +1,30 @@
+<!--组件》日期粒度组件-->
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form has-nav" id="app" v-cloak="">
+    <date-granularity-range :info="query"></date-granularity-range>
+  </div>
+  <include file="Public/components/picker/date_granularity_range"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'date-granularity-range': AppUtil.COMPONENTS.DATE_GRANULARITY_RANGE
+      },
+      data: function () {
+        return {
+          query: {
+            start_time: '',
+            end_time: ''
+          }
+        }
+      },
+      mounted: function () {
+
+      },
+      methods: {
+
+      }
+    })
+  </script>
+</block>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>筛选时间搜索</title>
+</head>
+<body>
+<div id="app" v-cloak="">
+  <search-time-box :query="query" :is-show-time="true" @submit="submitSearch"></search-time-box>
+</div>
+</body>
+<include file="Public:base"/>
+<include file="Public/components/date/search_time_box"/>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    components: {
+      'search-time-box': AppUtil.COMPONENTS.SEARCH_TIME_BOX
+    },
+    data: function () {
+      return {
+        query: {
+          start_time: '',
+          end_time: ''
+        }
+      }
+    },
+    methods: {
+      submitSearch: function () {
+
+      }
+    }
+  })
+</script>
+</html>

@@ -1,0 +1,23 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-popover<br>
+    </div>
+    <el-popover placement="right" trigger="hover">
+      <div v-html="tipContent"></div>
+      <a slot="reference" class="xxicon-warning-tip el-icon-warning"></a>
+    </el-popover>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {},
+      data: function () {
+        return {
+          tipContent: '这个是提示哈哈哈哈'
+        }
+      },
+    })
+  </script>
+</block>

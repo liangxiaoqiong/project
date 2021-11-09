@@ -1,0 +1,41 @@
+{
+  "code":200,
+  "msg":"",
+  "data":
+    [
+      {
+        "country":1,
+        "province":[
+          {
+            "province_id":1,
+            "province_name":"",
+            "city":[
+              {"city_id":11,
+                "city_name":"",
+                "area":[{"area_id":1,"area_name":""}]
+              },
+              {"city_id":12,
+                "city_name":"",
+                "area":[{"area_id":1,"area_name":""}]
+              }
+            ]
+          },
+          {
+            "province_id":1,
+            "province_name":"",
+            "city":[
+              {"city_id":11,
+                "city_name":"",
+                "area":[{"area_id":1,"area_name":""}]
+              },
+              {"city_id":12,
+                "city_name":"",
+                "area":[{"area_id":1,"area_name":""}]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+
+}

@@ -1,0 +1,31 @@
+<!-- template vue2 实现div contenteditable=“true”(类似于v-model)的效果-->
+<script type="x-template" id="editor_div">
+  <!--region 模版-->
+  <div contenteditable="true"
+       v-html="innerText"
+       @blur="changeText"></div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.EDITOR_DIV = {
+    template: '#editor_div',
+    props: ['value'],
+    data(){
+      return {innerText:this.value}
+    },
+    watch: {
+      'value': function () {
+        this.innerText = this.value
+      }
+    },
+    methods:{
+      changeText(){
+        this.innerText = this.$el.innerHTML;
+        this.$emit('input',this.innerText);
+      }
+    },
+    directives: {}
+  }
+</script>

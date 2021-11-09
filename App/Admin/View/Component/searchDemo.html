@@ -1,0 +1,45 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <list-search :query="query" @search="getTableData({page: 1})" @reset="resetQuery"></list-search>
+  </div>
+  <include file="Public/components/picker/date_picker"/>
+  <include file="Component/components/list_search"/>
+  <script>
+    var vm = new Vue({
+      el:'#app',
+      components: {
+        'list-search': AppUtil.COMPONENTS.LIST_SEARCH,
+      },
+      data: function () {
+        return {
+          query:{
+            page:1,
+            limit: 20,
+            status: '0',// 0,：全部，1:进行中，2:已结束
+            start_time:'',
+            end_time:'',
+            load: false
+          },//搜索条件
+          queryBack: '',
+          tableData: {
+            total: 0,
+            list: []
+          },
+        }
+      },
+      mounted:function(){
+        this.queryBack = JSON.stringify(this.query)
+        this.getTableData();
+      },
+      methods:{
+        resetQuery: function () {
+          this.query = JSON.parse(this.queryBack)
+        },
+        /**获取表格信息*/
+        getTableData:function () {
+        },
+      },
+    })
+  </script>
+</block>

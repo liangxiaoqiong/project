@@ -1,0 +1,92 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/6/30
+  -->
+<!-- template -->
+<script type="x-template" id="print_item">
+  <!--region 模版-->
+  <div class="drsElement" :style="diyItemStyle(item)">
+    <!--region 自定义上传的图片-->
+    <template v-if="item.type === 'custom-img'">
+      <img class="custom-img" style="width: 100%;height: 100%" :src="item.contentImg">
+    </template>
+    <!--endregion-->
+
+    <!--region 订单二维码-->
+    <template v-else-if="item.type === 'ORDER_QR_CODE'">
+      <img class="custom-img" style="width: 100%;height: 100%" :src="paramReplace(depot.params_data, item)">
+    </template>
+    <!--endregion-->
+
+    <template v-else>
+      <div v-html="paramReplace(depot.params_data, item)">
+      </div>
+    </template>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.PRINT_ITEM = {
+    template: '#print_item',
+    components: {},
+    props: {
+      item: Object,
+      depot: Object,
+      getTableDefaultStyle: Object,
+      tplOrder: {
+        type: Object,
+        default: function () {
+          return {
+            orderList: [],
+            tpl: {}
+          }
+        }
+      },
+    },
+    data: function () {
+      return {}
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      diyItemStyle: function (item) {
+        var self = this;
+        var top = item.top.replace('px', '');
+        switch (+item.position_type) {
+          case 1: // 表格里
+            top = +top - (+(self.tplOrder.tpl.tpl_content[0].height.replace('px', '')));
+            break
+          case 2: // 表格下方
+            top = +top - self.getTableDefaultStyle.bottomHeight;
+            break
+          default:
+            break
+        }
+        return {
+          top: top + 'px',
+          height: item.height,
+          left: item.left,
+          width: item.width,
+          zIndex: item.zIndex,
+          color: item.color,
+          fontFamily: item.fontFamily,
+          fontSize: item.fontSize,
+          fontWeight: +item.isFontBold === 1 ? 'bold' : '',
+          fontStyle: +item.isFontSlant === 1 ? 'italic' : '',
+          textDecoration: +item.isFontUnderline === 1 ? 'underline' : '',
+          textAlign: item.textAlign,
+          lineHeight: item.lineHeight,
+
+          overflow: 'hidden'
+        }
+      },
+      paramReplace: function (params_data, tpl) {
+        return diyPrintTpl.paramReplace(params_data, tpl)
+      },
+    }
+  }
+</script>

@@ -1,0 +1,62 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+
+    </div>
+    <div>
+      <div class="border-box-list" v-for="list in colorList">
+        <div class="title">{{ list.title }}</div>
+        <div class="list-item">
+          <a v-for="item in list.list">
+            <span class="font-14" :class="item.color_class">{{ item.class_name }}</span>
+            <font>{{ item.color_class }}</font>
+          </a>
+        </div>
+      </div>
+      <div class="border-box-list" v-for="list in bgcolorList">
+        <div class="title">{{ list.title }}</div>
+        <div class="list-item">
+          <a v-for="item in list.list" :class="item.color_class">
+            <span class="font-14">{{ item.class_name }}</span>
+            <font>{{ item.color_class }}</font>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          colorList: [
+            {
+              title: '文字颜色',
+              list: [
+                {class_name: '主色', color_class: 'color-primary'},
+                {class_name: '链接带下划线', color_class: 'color-link'},
+                {class_name: '灰色', color_class: 'color-gray'},
+                {class_name: '红色', color_class: 'color-red'},
+                {class_name: '橘色', color_class: 'color-orange'},
+              ]
+            }
+          ],
+          bgcolorList: [
+            {
+              title: '背景颜色',
+              list: [
+                {class_name: '白色', color_class: 'bg-white'},
+                {class_name: '灰色', color_class: 'bg-gray'},
+                {class_name: '主色透明', color_class: 'bg-selected'},
+                {class_name: '红色透明', color_class: 'bg-danger'},
+              ]
+            }
+          ],
+        }
+      },
+      methods: {
+      }
+    })
+  </script>
+</block>

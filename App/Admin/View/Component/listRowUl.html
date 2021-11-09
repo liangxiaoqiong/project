@@ -1,0 +1,37 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      list-row-ul：表格上方数据汇总统计<br>
+      <b class="font-14">【list-row-ul+数值】可以设置子级平分几个数据块</b>
+    </div>
+    <div>
+      <div class="list-row-ul mb-10">
+        <a><p>全部</p><h4>100</h4></a>
+      </div>
+      <div class="list-row-ul2 mb-10">
+        <a><p>全部</p><h4>100</h4></a>
+        <a><p>已提现</p><h4 class="color-primary">45</h4></a>
+      </div>
+      <div class="list-row-ul3 mb-10">
+        <a><p>全部</p><h4>100</h4></a>
+        <a><p>已提现</p><h4 class="color-primary">45</h4></a>
+        <a><p>待提现</p><h4 class="color-orange">45</h4></a>
+      </div>
+      <div class="list-row-ul4 mb-10">
+        <a><p>全部</p><h4>100</h4></a>
+        <a><p>已提现</p><h4 class="color-primary">45</h4></a>
+        <a><p>待提现</p><h4 class="color-orange">45</h4></a>
+        <a><p>已撤回</p><h4 class="color-red">10</h4></a>
+      </div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {}
+      }
+    })
+  </script>
+</block>

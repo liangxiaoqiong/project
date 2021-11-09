@@ -1,0 +1,8 @@
+图表
+echart
+https://echarts.apache.org/examples/zh/index.html
+封装的公共函数：
+adminObj.chartOptions // 公共初始化配置数据
+adminObj.echartLine(elName, optionData) // 折线图
+adminObj.echartPie(elName, seriesData) // 饼图
+adminObj.echartBar(elName, optionData) // 柱状图

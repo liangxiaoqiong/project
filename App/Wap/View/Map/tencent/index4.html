@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="format-detect" content="telephone=no"/>
+  <title>腾讯地图-多点标记，多文本标记，定位【修改点标记[会导致点击选中异常]】</title>
+  <link rel="stylesheet" type="text/css" href="/Public/wap/css/common/map.css?v={$V}">
+  <style>
+    #pickup-map {
+      width: 100%;
+      height: 800px;
+    }
+  </style>
+</head>
+<body>
+<div>
+  <div id="pickup-map"></div>
+</div>
+</body>
+<include file="Public:base"/>
+<!--引入Javascript API GL，参数说明参见下文-->
+<script src="https://map.qq.com/api/gljs?v=1.exp&key=TU6BZ-JJWC3-W3E3N-3UGEZ-2JM4H-ERBCG"></script>
+<script type="text/javascript" src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js">/*腾讯地图定位用户位置*/</script>
+<script>
+  var mapEl;
+  var markerLayer;
+  var pickAddressData = {
+    default_pickup: 1028,
+    pickup_list: [
+      {
+        "id": 1028,
+        "pick_id": "1028",
+        "store_id": 17223,
+        "pick_name": "杭州溪语宸章",
+        "link_tel": "1",
+        "checked": "0",
+        "province": "浙江省",
+        "city": "杭州市",
+        "area": "拱墅区",
+        "address": "1",
+        "longitude": 118.13838,
+        "latitude": 24.517868,
+        "staff": null,
+        "is_pick": 0,
+        "delivery_ctrl": 1,
+        "link_name": "服务中心",
+        "head_url": "",
+        "pick_address": "浙江省杭州市拱墅区1",
+        "limit_goods_list": [],
+        "distance": "0m",
+        "distance_num": 0
+      },
+      {
+        "id": 820,
+        "pick_id": "820",
+        "store_id": 17223,
+        "pick_name": "厦门裕发广场",
+        "link_tel": "1",
+        "checked": "0",
+        "province": "福建省",
+        "city": "厦门市",
+        "area": "湖里区",
+        "address": "厦禾路1017-1019号",
+        "longitude": 118.125289,
+        "latitude": 24.480613,
+        "staff": null,
+        "is_pick": 0,
+        "delivery_ctrl": 1,
+        "link_name": "服务中心",
+        "head_url": "http://dl.duinin.com/data/goods/20190611/06135656215818050.png",
+        "pick_address": "福建省厦门市湖里区厦禾路1017-1019号",
+        "limit_goods_list": [],
+        "distance": "2.97km",
+        "distance_num": 2966
+      },
+      {
+        "id": 814,
+        "pick_id": "814",
+        "store_id": 17223,
+        "pick_name": "厦门宏益大厦",
+        "link_tel": "1",
+        "checked": "0",
+        "province": "福建省",
+        "city": "厦门市",
+        "area": "思明区",
+        "address": "湖滨北路231-237号",
+        "longitude": 118.122365,
+        "latitude": 24.503489,
+        "staff": null,
+        "is_pick": 0,
+        "delivery_ctrl": 1,
+        "link_name": "服务中心",
+        "head_url": "http://dl.duinin.com/data/goods/20200918/06537447988472174.jpg",
+        "pick_address": "福建省厦门市思明区湖滨北路231-237号",
+        "limit_goods_list": [],
+        "distance": "3.3km",
+        "distance_num": 3303
+      },
+      {
+        "id": 1068,
+        "pick_id": "1068",
+        "store_id": 17223,
+        "pick_name": "厦门联发文创口岸",
+        "link_tel": "1",
+        "checked": "0",
+        "province": "福建省",
+        "city": "厦门市",
+        "area": "湖里区",
+        "address": "厦门市湖里区湖里大道18号（一层）文创口岸物业服务中心",
+        "longitude": 118.103976,
+        "latitude": 24.516655,
+        "staff": null,
+        "is_pick": 0,
+        "delivery_ctrl": 1,
+        "link_name": "服务中心",
+        "head_url": "http://dl.duinin.com/data/goods/20200917/06536541447195592.jpg",
+        "pick_address": "福建省厦门市湖里区厦门市湖里区湖里大道18号（一层）文创口岸物业服务中心",
+        "limit_goods_list": [],
+        "distance": "3.56km",
+        "distance_num": 3555
+      },]
+  }
+
+  pickAddressData.pickup_list.forEach(function (value) {
+    value.lng = value.longitude
+    value.lat = value.latitude
+    if (value.head_url === '') {
+      value.head_url = '/Public/common/img/icon_img/map_point2.png'
+    }
+  })
+  createMap();
+  //创建地图
+  function createMap () {
+    //定义地图中心点坐标
+    var longitude = "";
+    var latitude = "";
+    pickAddressData.pickup_list.forEach(function (value, index) {
+      if (+value.id === +pickAddressData.default_pickup) {
+        longitude = value.lng
+        latitude = value.lat
+      }
+    })
+    var center = new TMap.LatLng(+latitude, +longitude)
+    //定义map变量，调用 TMap.Map() 构造函数创建地图
+    mapEl = new TMap.Map('pickup-map', {
+      center: center,//设置地图中心点坐标
+      zoom: 15,   //设置地图缩放级别
+      // pitch: 43.5,  //设置俯仰角
+      // rotation: 45    //设置地图旋转角度
+    });
+    mapMarker();
+  }
+  //门店标记点
+  function mapMarker() {
+    var geometriesMarkerList = [];
+    var geometriesLabelList = [];
+    pickAddressData.pickup_list.forEach(function (value, index) {
+      var styleId = 'marker';
+      if (+value.id === +pickAddressData.default_pickup) {
+        styleId = 'marker-select';
+      }
+      geometriesMarkerList.push({
+        "id": "marker_" + value.id,
+        "styleId": styleId,
+        "position": new TMap.LatLng(+value.lat, +value.lng),
+        "properties": {
+          id: value.id,
+          pick_name: value.pick_name,
+          lat: value.lat,
+          lng: value.lng,
+        },
+        rank: index
+      });
+
+      geometriesLabelList.push({
+        'id': 'label'+index, //点图形数据的标志信息
+        'styleId': 'label', //样式id
+        'position': new TMap.LatLng(+value.lat, +value.lng), //标注点位置
+        'content': value.pick_name, //标注文本
+        'properties': { //标注点的属性数据
+          'title': 'label'
+        },
+        rank: index //文本碰撞时的优先级，值越大优先级越高
+      })
+    })
+    //初始化marker
+    markerLayer = new TMap.MultiMarker({
+      id: 'marker-layer',
+      map: mapEl,
+      styles: {
+        "marker": new TMap.MarkerStyle({
+          "width": 25,
+          "height": 25,
+          "anchor": { x: 14, y: 22 },
+          "src": '/Public/common/img/icon_img/map_point2.png'
+        }),
+        "marker-select": new TMap.MarkerStyle({
+          "width": 30,
+          "height": 40,
+          "anchor": { x: 14, y: 32 },
+          //"src": '/Public/common/img/icon_img/map_point2.png'
+        })
+      },
+      geometries: geometriesMarkerList
+    });
+    markerLayer.on("click", changeThisPickup)
+
+    new TMap.MultiLabel({
+      id: 'label-layer',
+      map: mapEl,
+      enableCollision:true, //是否开启图层内部的文本标注碰撞
+      styles: {
+        'label': new TMap.LabelStyle({
+          //'color': '#ff0000', //颜色属性
+          'size': 12, //文字大小属性
+          'offset': { x: 0, y: 10 }, //文字偏移属性单位为像素
+          'angle': 0, //文字旋转属性
+          'alignment': 'center', //文字水平对齐属性
+          'verticalAlignment': 'middle' //文字垂直对齐属性
+        })
+      },
+      geometries: geometriesLabelList
+    });
+  }
+  //切换当前门店地址
+  function changeThisPickup(options) {
+    var self = this;
+    var oldPick = getPickObj(pickAddressData.default_pickup);
+    var newPick = {
+      id: options.geometry.properties.id,
+      pick_name: options.geometry.properties.pick_name,
+      lat: options.geometry.properties.lat,
+      lng: options.geometry.properties.lng,
+    };
+    console.log('oldPick',oldPick)
+    console.log('newPick',newPick)
+    if (+oldPick.id === +newPick.id) return false
+    //修改点标记[会导致点击异常]
+    markerLayer.remove([oldPick.id, newPick.id])
+    markerLayer.add([
+      // 原来选中的点改为普通点
+      {
+        "styleId":"marker",
+        "id": 'marker_'+oldPick.id,
+        "position": new TMap.LatLng(+oldPick.lat, +oldPick.lng),
+        "properties": {
+          id: oldPick.id,
+          pick_name: oldPick.pick_name,
+          lat: oldPick.lat,
+          lng: oldPick.lng,
+        },
+      },
+      // 当前点改为选中点
+      {
+        "styleId":"marker-select",
+        "id": 'marker_'+newPick.id,
+        "position": new TMap.LatLng(newPick.lat, newPick.lng),
+        "properties": {
+          id: newPick.id,
+          pick_name: newPick.pick_name,
+          lat: newPick.lat,
+          lng: newPick.lng,
+        },
+      }
+    ])
+    pickAddressData.default_pickup = newPick.id;
+  }
+  function getPickObj(pick_id) {
+    var obj = {}
+    try {
+
+      pickAddressData.pickup_list.forEach(function (value, index) {
+        if (+pick_id === +value.id) {
+          obj = value
+        }
+      })
+    } catch (e) {
+
+    }
+    return obj
+
+  }
+</script>
+</html>

@@ -1,0 +1,14 @@
+ diy文本编辑器：PrintTpl/printTplInfo.html
+ 【可拖拽组件随意摆放位置】
+ 【可设置各组件的宽高、字体样式】
+ 【可通过Ctrl+Shift+点击 选中多个进行统一设置位置等，，，】
+ 【可设置表格列表、表格列选项位置、表格字体、表格边框等样式】
+
+ diy文本打印：PrintTpl/print.html
+ 【默认打印(未分页)】-PrintTpl/print/components/print_default.html：表格内容多少就打印多少
+ 【分页打印】-PrintTpl/print/components/print_page.html：选定每页显示6条，则每个订单表格数据每页打印6条，不管打印纸多大，都会自动换页；每一页都会显示表头
+ 【排版布局】：
+    所有内容悬浮一起，然后表格底部的根据计算，bottom+模板表格高度差；
+    =》会有bug：position：absolute在表格下方的变量，会根据【表格数据不同、打印设置的边距不同】存放的位置不对
+    =》解决办法：1【悬浮在表格上方】，2【悬浮在表格里】，3【悬浮在表格下方】
+                小范围使用position:absolute正常，不会导致错位

@@ -1,0 +1,79 @@
+<!--组件》时间组件-->
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form has-nav" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui<br>
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>时间类型tab切换【date-tab】【class="tab-nav"】</div>
+        <date-tab :query="query" @synctimetab="changeTimeType"></date-tab>
+        <div>
+          <template v-if="+select_time_type.type_id === 5">
+            {{ query.start_time }}~{{ query.end_time }}
+          </template>
+          <template v-else>{{ select_time_type.type_name }}</template>
+        </div>
+      </li>
+      <li class="mt-10">
+        <div>日期范围组件【date-picker】【高度height=30px】</div>
+        <div class="mt-10">
+          <div class="li-t">2个时间段关联选择【默认带有快捷按钮】</div>
+          <date-picker :info="query"></date-picker>
+        </div>
+        <div class="mt-10">
+          <div>2个时间段不关联选择【不带有快捷按钮||可设置显示哪些快捷按钮】</div>
+          <date-picker :info="query" :is-relate="false" :fast-btn-list="[]"></date-picker>
+        </div>
+        <div class="mt-10">
+          <div>尺寸 size='small'【高度height=36px】</div>
+          <date-picker :info="query" size="small"></date-picker>
+        </div>
+      </li>
+      <li class="mt-10">
+        <div>时间段组件【time-range-picker】【高度height=30px】</div>
+        <div class="mt-10">
+          <time-range-picker :info="query" :param="['time1', 'time2']"></time-range-picker>
+        </div>
+        <div class="mt-10">
+          <div>尺寸 size='small'【高度height=36px】</div>
+          <time-range-picker :info="query" :param="['time1', 'time2']" size="small"></time-range-picker>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <include file="Public/components/picker/date_picker"/>
+  <include file="Public/components/picker/time_range_picker" />
+  <include file="Public/components/picker/date_tab"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'date-picker': AppUtil.COMPONENTS.DATE_PICKER,
+        'time-range-picker': AppUtil.COMPONENTS.TIME_RANGE_PICKER,
+        'date-tab': AppUtil.COMPONENTS.DATE_TAB,
+      },
+      data: function () {
+        return {
+          query: {
+            start_time: '',
+            end_time: '',
+            time1: '',
+            time2: '',
+          },
+
+          select_time_type: {
+            type_id: '0',
+            type_name: '全部'
+          },
+        }
+      },
+      methods: {
+        changeTimeType: function (options) {
+          this.select_time_type = options
+        },
+      }
+    })
+  </script>
+</block>

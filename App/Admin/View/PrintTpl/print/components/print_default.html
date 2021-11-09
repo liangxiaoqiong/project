@@ -1,0 +1,191 @@
+<!-- template diy订单打印[无分页]-->
+<script type="x-template" id="diy_print_default">
+  <!--region 模版-->
+  <div>
+    <div :id="'print-content'+diyPrintId" v-if="loadCompleted">
+      <template v-for="order in tplOrder.orderList">
+        <template v-for="depot in order.depotList">
+          <div class="dragresize-box" style="border: none;page-break-after:always;overflow-y: hidden"
+               :class="[(+tplOrder.tpl.tpl_type === 4 ? 'dragresize-direct' : '')]">
+            <!--region 表格上方-->
+            <div class="position-r" :style="diyItemParentStyle(0)">
+              <template v-for="item in tplOrder.tpl.tpl_content" v-if="+item.position_type === 0">
+                <print-item :item="item" :depot="depot" :tpl-order="tplOrder" :get-table-default-style="getTableDefaultStyle"></print-item>
+              </template>
+            </div>
+            <!--endregion-->
+
+            <div class="position-r">
+              <!--region 表格-->
+              <div :style="printTableStyle" v-if="+tableCheckedItemLen(tplOrder.tpl.tpl_content[0]) > 0">
+                <template v-if="+tplOrder.tpl.tpl_type === 4">
+                  <print-table-mini :tpl-order="tplOrder" :depot="depot"></print-table-mini>
+                </template>
+                <template v-else>
+                  <print-table-default :tpl-order="tplOrder" :depot="depot"></print-table-default>
+                </template>
+              </div>
+              <!--endregion-->
+
+              <!--region 分仓打印，是否显示统计信息-->
+              <table-bottom-component :tpl-order="tplOrder" :depot="depot"></table-bottom-component>
+              <!--endregion-->
+
+              <!--region 表格里变量-->
+              <template v-for="item in tplOrder.tpl.tpl_content" v-if="+item.position_type === 1">
+                <print-item :item="item" :depot="depot" :tpl-order="tplOrder" :get-table-default-style="getTableDefaultStyle"></print-item>
+              </template>
+              <!--endregion-->
+            </div>
+
+            <!--region 表格下方-->
+            <div class="position-r" :style="diyItemParentStyle(2)">
+              <template v-for="item in tplOrder.tpl.tpl_content" v-if="+item.position_type === 2">
+                <print-item :item="item" :depot="depot" :tpl-order="tplOrder" :get-table-default-style="getTableDefaultStyle"></print-item>
+              </template>
+            </div>
+            <!--endregion-->
+
+
+          </div>
+        </template>
+      </template>
+    </div>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.DIY_PRINT_DEFAULT = {
+    template: '#diy_print_default',
+    components: {
+      'table-bottom-component': AppUtil.COMPONENTS.TABLE_BOTTOM_COMPONENT,
+      'print-item': AppUtil.COMPONENTS.PRINT_ITEM,
+      'print-table-default': AppUtil.COMPONENTS.PRINT_TABLE_DEFAULT,
+      'print-table-mini': AppUtil.COMPONENTS.PRINT_TABLE_MINI,
+    },
+    props: {
+      tplOrder: {
+        type: Object,
+        default: function () {
+          return {
+            orderList: [],
+            tpl: {}
+          }
+        }
+      },
+      orderTableStyle: Object,
+      diyPrintId: {
+        type: [String, Number],
+        default: ''
+      }, // diy打印模板标识,主要用于区分一个页面打印多个diy模板
+    },
+    data: function () {
+      return {
+        loadCompleted: false,
+      }
+    },
+    computed: {
+      printTableStyle: function () {
+        var item = this.tplOrder.tpl.tpl_content[0];
+        return {
+          marginLeft: item.left,
+          width: item.width,
+          color: item.color,
+          fontFamily: item.fontFamily + '!important',
+          fontSize: item.fontSize,
+          fontWeight: +item.isFontBold === 1 ? 'bold' : '',
+          fontStyle: +item.isFontSlant === 1 ? 'italic' : '',
+          textDecoration: +item.isFontUnderline === 1 ? 'underline' : '',
+          textAlign: item.textAlign,
+          lineHeight: item.lineHeight,
+        }
+      },
+      // 获取表格底部距离顶部的高度
+      getTableDefaultStyle: function () {
+        var self = this;
+        var tableTop = self.tplOrder.tpl.tpl_content[0].top.replace('px', ''); // diy模板表格距离顶部高度
+        var tableHeight = self.tplOrder.tpl.tpl_content[0].height.replace('px', ''); // diy模板表格默认高度
+        return {
+          top: +tableTop,
+          height: +tableHeight,
+          bottomHeight: (+tableTop) + (+tableHeight)
+        };
+      }
+    },
+    mounted: function () {
+    },
+    methods: {
+      init: function () {
+        var self = this
+        self.initLoad()
+      },
+
+      // 获取模板表格钟各个变量悬浮在表格中的位置
+      initLoad: function () {
+        var self = this
+        self.tplOrder.tpl.tpl_content.forEach(function (value) {
+          var position_type = -1; //-1: 表格属性(无需使用position:absolute) 0: 在表格上方的变量, 1: 在表格里的变量， 2：在表格下方的变量
+          if (value.type !== 'order-table') {
+            var top = +(value.top.replace('px', ''))
+            var height = +(value.height.replace('px', ''))
+            var topHeight = top + height;
+            if (topHeight <= self.getTableDefaultStyle.top) {
+              position_type = 0;
+            }
+            if (self.getTableDefaultStyle.top < topHeight && topHeight <= self.getTableDefaultStyle.bottomHeight) {
+              position_type = 1;
+            }
+            if (self.getTableDefaultStyle.bottomHeight < topHeight && topHeight) {
+              position_type = 2;
+            }
+          }
+          self.$set(value, 'position_type', position_type);
+        })
+        self.loadCompleted = true
+        self.$nextTick(function () {
+          self.printHtml();
+        })
+      },
+      // 悬浮在表格上方、下方的div块样式高度
+      diyItemParentStyle: function (type) {
+        var self = this;
+        var parentBoxHeight = 0;
+        self.tplOrder.tpl.tpl_content.forEach(function (value, index) {
+          if (+value.position_type === +type) {
+            var height = +(value.height.replace('px', ''))
+            var top = +(value.top.replace('px', ''))
+            var bottom = top + height
+            if (index === 0) {
+              parentBoxHeight = bottom
+            }
+            if (bottom > parentBoxHeight) parentBoxHeight = bottom
+          }
+        })
+        switch (+type) {
+          case 2: // 表格下方
+            parentBoxHeight -= self.getTableDefaultStyle.bottomHeight;
+            break
+          default:
+            break
+        }
+        return {height: parentBoxHeight + 'px'}
+      },
+
+      tableCheckedItemLen: function (item) {
+        return diyPrintTpl.tableCheckedItemLen(item)
+      },
+      isCheckedGoodsName: function (item) {
+        return diyPrintTpl.isCheckedGoodsName(item)
+      },
+
+
+
+      printHtml: function () {
+        this.$emit('print')
+      }
+    },
+    directives: {}
+  }
+</script>

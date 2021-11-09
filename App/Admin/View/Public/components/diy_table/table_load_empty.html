@@ -1,0 +1,52 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/3/11
+  -->
+<!-- template 表格内容加载中、为空时-->
+<script type="x-template" id="table_load_empty">
+  <!--region 模版-->
+  <div class="table-load-empty" :class="{'table-loading': query.load}"
+       v-if="+tableData.total === 0 || query.load">
+    <div class="table-tip">{{ query.load ? '数据加载中...' : emptyText }}</div>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.TABLE_LOAD_EMPTY = {
+    template: '#table_load_empty',
+    props: {
+      query: Object,
+      tableData: Object,
+      emptyText: {
+        type: String,
+        default: '暂无数据！'
+      }, // 无数据的文字提示
+    },
+    data: function () {
+      return {}
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {}
+  }
+</script>
+<style>
+  .table-load-empty {
+    min-height: 180px;
+    background: #FFFFff url('/Public/admin/img/common/empty_img.png')center 40px no-repeat;
+    background-size: 120px 64px;
+    padding-top: 113px;
+    text-align: center;
+  }
+  .table-load-empty .table-tip {
+    font-size: 12px;
+    color: #666666;
+  }
+  .table-load-empty.table-loading {
+    background: #FFFFff;
+  }
+</style>

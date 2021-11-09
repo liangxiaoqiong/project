@@ -1,0 +1,74 @@
+<!-- template -->
+<script type="x-template" id="base_input_component">
+  <!--region 模版-->
+  <input type="text" class="input-inner" :value="value" v-bind="$attrs" @input="triggerEvent($event)"/>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.BASE_INPUT_COMPONENT = {
+    template: '#base_input_component',
+    model: {
+      prop: 'value',
+      event: 'input',
+    },
+    props: {
+      value: [String, Number],
+      'trans-type': {
+        default: '',
+        type: String
+      },
+      'trans-precision': {
+        default: 2,
+        type: [String, Number]
+      },
+      maxLength: {
+        type: [String, Number],
+        default: ''
+      },
+      maxVal: {
+        type: [String, Number],
+        default: ''
+      }
+    },
+    computed: {},
+    watch: {},
+    mounted: function () {
+    },
+    data: function () {
+      return {}
+    },
+    methods: {
+      triggerEvent: function ($event) {
+        var value = $event.target.value;
+        if (this.transType !== '') {
+          var methods = {
+            'double': 'toDouble',
+            'absDouble': 'toAbsDouble',
+            'int': 'toInt',
+            'absInt': 'toAbsInt',
+          }
+          var method = methods[this.transType]
+          if (typeof AppUtil[method] === 'function') {
+            var func = AppUtil[method]
+            value = func(value, this.transPrecision)
+          }
+        }
+        if (this.maxLength !== '') {
+          if (value.length > +this.maxLength) {
+            value = value.substr(0, +this.maxLength);
+          }
+        }
+        if (this.maxVal !== '') {
+          if (+value > +this.maxVal) {
+            value = this.maxVal;
+          }
+        }
+        $event.target.value = value;
+        this.$emit('input', value);
+      },
+    },
+    directives: {}
+  }
+</script>

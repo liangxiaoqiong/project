@@ -1,0 +1,65 @@
+<include file="Public:head"/>
+<style>
+    .rebateList ul{margin: 0;}
+    .rebateList ul li{background-color: #EFF0F4;padding:10px;width: 100%;box-sizing: border-box;margin-bottom: 10px;}
+    .rebateList ul li input{width: 80px;text-align: center;margin: 0 3px;}
+    .rebateList ul li span{vertical-align: middle;margin-right: 30px;}
+    .rebateList ul li span:nth-child(1),
+    .rebateList ul li font{margin-top: 2px;display: inline-block}
+    .rebateList ul li .fr{margin-top: 5px;}
+    .rebateList ul li .fr:hover{color: red}
+    .rebateList>div{margin-top:20px}
+    .rebateList>div button{background-color:#66CC66;border-color: #66CC66}
+    .formBtn{margin:30px 0;border-top: 1px solid #eff0f4;padding: 20px 0;}
+    .formBtn button{margin-left:13.5%;}
+    .rebateList>div button,
+    .formBtn button{width: 80px;padding: 0;}
+</style>
+<form action="" method="POST" onsubmit="return submitRebate(this)" enctype="multipart/form-data">
+    <div class="container-fluid">
+        <div class="main-content">
+            <dl class="basic_dl">
+                <dt>{:L('GOODS_TAG_ID')}<!--商品标签ID-->：</dt>
+                <dd>
+                    <input type="text" name="goodsTag">
+                    <span class="colorGrey">{:L('INPUT_REBATE_TAG')}<!--填写可返利的商品标签--></span>
+                </dd>
+            </dl>
+            <dl class="basic_dl">
+                <dt class="img_top">{:L('SET_RABATE_RETIO')}<!--设置返利比例-->：</dt>
+                <dd class="rebateList">
+                    <ul>
+                        <li>
+                            <span class="key_">{:L('NUM_GEAR',array('for'=>'1'))}<!--1档--></span>
+                            <span>
+                                <font>{:L('REBATE_PRICE')}<!--返还金额--></font>
+                                <input type="text" name="rPrice[]" onkeyup="numPoint2(this)" onafterpaste="numPoint2(this)"><font>{$currencyUnit}<!--{$currencyUnit}-->；
+                                {:L('REBATE_PERIOD')}<!--返还期数--></font><input type="number" min="0" name="rNum[]" onkeyup="numInt(this)" onafterpaste="numInt(this)">{:L('PERIOD')}<!--期--></span>
+                            <span>
+                                <font>{:L('THIS_GEAR_WIN_NUM')}<!--该档中奖人数--></font>
+                                <input type="text" class="rWinN" name="rWinN[]" onkeyup="numInt(this)" onafterpaste="numInt(this)">
+                                <font>{:L('PEOPLE')}<!--人--></font>
+                            </span>
+                            <a class="colorRed fr" onclick="delRebate(this)">{:L('DELETE')}<!--删除--></a>
+                        </li>
+                    </ul>
+                    <div>
+                        <button type="button" onclick="addRebate()">+{:L('ADD_GEAR')}<!--新增档--></button>
+                        <font color="red">{:L('ADD_GEAR_PROMPT')}<!--注：最多12档--></font>
+                    </div>
+                </dd>
+            </dl>
+            <!--保存提交按钮-->
+            <div class="formBtn">
+                <button type="submit" onclick="">{:L('SAVE')}<!--保存--></button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<include file="Public:foot" />
+<include file="Public:lang" />
+<script type="text/javascript" src="__PUBLIC__/admin/js/setRebate.js"></script>
+<script>
+    setAdminTitle('{:L("REBATE_MANAGE")} > {:L("REBATE_SET")}');//返利管理 > 返利设置
+</script>

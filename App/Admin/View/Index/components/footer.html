@@ -1,0 +1,56 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/2/25
+  -->
+<!-- template 底部公共-->
+<script type="x-template" id="footer_component">
+  <!--region 模版-->
+  <div class="index-footer flex-row">
+    <a class="color-primary" @click="changeLanguage('zh-cn')">简体中文</a>
+    <font>|</font>
+    <a class="color-primary" @click="changeLanguage('en-us')">EngLish</a>
+    <span>
+        Copyright© 2012-2017 DuiNin.com.All Rights Reserved 闽ICP备14002883号 全国免费热线：400-991-5998
+    </span>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.FOOTER_COMPONENT = {
+    template: '#footer_component',
+    props: {},
+    data: function () {
+      return {}
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      // 语言切换
+      changeLanguage: function (l) {
+       // window.parent.location.replace('/admin.php?l=' + l)
+      },
+    }
+  }
+</script>
+<style>
+  .index-footer {
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    width: 100%;
+    color: #999999;
+    padding: 20px 0;
+    background-color: #F6F6F6;
+  }
+  .index-footer span {
+    margin-left: 5px;
+  }
+  .index-footer font {
+    margin: 0 3px;
+    color: #999999;
+  }
+</style>

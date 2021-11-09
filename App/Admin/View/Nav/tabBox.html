@@ -1,0 +1,41 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div>
+      <div>e-radio按钮样式【数据实时绑定渲染】</div>
+      <el-radio-group v-model="query.tabId" @change="changeRadio">
+        <el-radio-button :label="1">步骤一1</el-radio-button>
+        <el-radio-button :label="2">步骤一2</el-radio-button>
+      </el-radio-group>
+    </div>
+    <div class="mt-10">
+      <div>样式同e-radio按钮一样</div>
+      <div class="tab-box">
+        <ul>
+          <li :class="{'active': +query.tabId === 1}" @click="changeTab(1)">步骤一</li>
+          <li :class="{'active': +query.tabId === 2}" @click="changeTab(2)">步骤二</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          query: {
+            tabId: 1
+          }
+        }
+      },
+      methods: {
+        changeRadio: function () {
+          publicWap.layerMsg('changeRadio', 1);
+        },
+        changeTab: function (tid) {
+          this.query.tabId = tid;
+        },
+      }
+    })
+  </script>
+</block>

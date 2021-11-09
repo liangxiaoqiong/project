@@ -1,0 +1,33 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-select<br>
+      注意：v-model=绑定值，String和Number为单独的2种类型【设置1选中时，'1'=不会选中】
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>el-select【高度=36px】</div>
+        <el-select v-model="value1">
+          <el-option :value="1" :label="1" label="Number,1"></el-option>
+          <el-option value="1" label="String,1"></el-option>
+          <el-option value="2" label="String,2"></el-option>
+        </el-select>
+      </li>
+      <li class="mt-10">
+        <div>类似输入框的文本样式，点击无下拉框【class="select-diy"】【高度=30px】</div>
+        <span class="select-diy">请选择</span>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          value1: '1',
+        }
+      }
+    })
+  </script>
+</block>

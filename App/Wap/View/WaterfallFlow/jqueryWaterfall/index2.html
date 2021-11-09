@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>jQuery响应式Pinterest样式无限动态加载图片瀑布流特效</title>
+  <style>
+    * { margin: 0; box-sizing: border-box}
+    .box { float: left;
+      width: 50%;
+    }
+    .box-container {
+      background: #fff;
+    }
+    .box:hover { box-shadow: 0 0 10px #999; }
+    .box img { width: 100%; }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="">
+  <div id="goods_ul__5">
+    <div class="box" v-for="item in goodsList">
+      <div class="box-container">
+        <img :src="item.img" alt="">
+        <div class="">{{ item.goods_name }}</div>
+      </div>
+    </div>
+  </div>
+  <div>sdfsdkf</div>
+</div>
+</body>
+<include file="Public:base"/>
+
+<script type="text/javascript" src="/Public/common/js/plug-in/jquery-waterfall/jquery.waterfall.js"></script>
+<!--<script type="text/javascript" src="/Public/common/js/plug-in/jquery-waterfall/waterfall.js"></script>-->
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        goodsList: [
+          {
+            goods_name: '-1-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/02.jpg'
+          },
+          {
+            goods_name: '-2-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/01.jpg'
+          },
+          {
+            goods_name: '-3-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/03.jpg'
+          },
+          {
+            goods_name: '-4-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/04.jpg'
+          },
+          {
+            goods_name: '-5-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/05.jpg'
+          },
+          {
+            goods_name: '-6-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/06.jpg'
+          },
+          {
+            goods_name: '-7-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/07.jpg'
+          },
+          {
+            goods_name: '-8-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/08.jpg'
+          },
+          {
+            goods_name: '-9-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/07.jpg'
+          },
+          {
+            goods_name: '-10-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/08.jpg'
+          },
+          {
+            goods_name: '-11-上年扣税的你肯定就发给你大脑的功能发个',
+            img: '/Public/common/img/cs_img/img1.png'
+          },
+        ]
+      }
+    },
+    mounted: function () {
+      this.initWaterfall()
+    },
+    methods: {
+      initWaterfall: function () {
+        var self = this
+        self.$nextTick(function () {
+          $("#goods_ul__5").waterfall({
+            itemClass: ".box", //图片网格元素的class名称[默认："waterfall-item"]
+            spacingWidth: 8, //图片网格元素的水平间距[默认：10]
+            spacingHeight: 8, //图片网格元素的垂直间距[默认：10]
+            resizeable: true, //是否在加载图片时使用淡入淡出效果[默认：false]
+            colNum: 4, //显示的列数
+          });
+        })
+      }
+    }
+  })
+</script>
+</html>

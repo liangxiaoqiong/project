@@ -1,0 +1,34 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      基础样式：class="tip-box"
+    </div>
+    <div>
+      <div class="box-div">
+        <div>通用内容</div>
+        <div class="tip-box">
+          <h4>温馨提示：</h4>
+          <p>还是要注意安全！！！</p>
+          <p>还是要注意安全！！！</p>
+          <p>还是要注意安全！！！</p>
+          <p>还是要注意安全还是要注意安全还是要注意安全还是要注意安全！！！</p>
+        </div>
+      </div>
+      <div class="box-div">
+        <div>数据块内容</div>
+        <div class="tip-box tip-box-record">
+          <span v-for="i in 10"><font>金额:</font><font class="color-orange">500.32</font></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {}
+      }
+    })
+  </script>
+</block>

@@ -1,0 +1,44 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+    </div>
+
+    <div>
+      <p>引用element的el-dialog</p>
+      <a class="xxbtn-white" @click="showLayer">显示el-dialog弹框</a>
+      <dialog-demo ref="dialogDemoLayer"></dialog-demo>
+    </div>
+
+    <div class="mt-10">
+      <p>使用layer.open({type: 2});iframe调用弹框</p>
+      <a class="xxbtn-white" @click="showLayer2">显示iframe弹框</a>
+    </div>
+  </div>
+  <include file="Layer/components/dialog_demo" />
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'dialog-demo': AppUtil.COMPONENTS.DIALOG_DEMO
+      },
+      data: function () {
+        return {}
+      },
+      methods: {
+        showLayer: function () {
+          this.$refs.dialogDemoLayer.init();
+        },
+        showLayer2: function () {
+          var url = AppUtil.getTPUrl('User', 'editPassword');
+          adminObj.layerDialog({
+            type: 2,
+            title: '修改密码',
+            area: ['700px', '300px'],
+            content: url
+          });
+        }
+      }
+    })
+  </script>
+</block>

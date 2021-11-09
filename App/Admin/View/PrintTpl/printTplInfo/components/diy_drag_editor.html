@@ -1,0 +1,693 @@
+<!-- template 自定义可拖拽的文本编辑器-->
+<link rel="stylesheet" href="__PUBLIC__/common/js/plug-in/DragResize/DragResize.css?v={$V}">
+<link rel="stylesheet" href="__PUBLIC__/admin/css/diy_editor/editTool.css?v={$V}">
+<script type="x-template" id="diy_drag_editor">
+  <!--region 模版-->
+  <div class="drag-edit-box">
+    <!--region 编辑器工具栏-->
+    <div class="edit-tool">
+      <div v-for="tool in toolList" class="tool-list" :class="'tool-list__'+tool.btn_type">
+        <template v-if="tool.btn_type === 'select'">
+          <template v-if="checkedDragKeyArr.length === 1">
+          <el-select v-model="info.tpl_content[checkedDragKeyArr[0]][tool.style_type]" placeholder="请选择">
+            <el-option
+                v-for="option in tool.options"
+                :key="option.value"
+                :label="option.label"
+                :value="option.style_val">
+              <span :style="optionSelectStyle(tool, option)">{{ option.label }}</span>
+            </el-option>
+          </el-select>
+          </template>
+          <template v-else>
+            <el-select value="" disabled></el-select>
+          </template>
+        </template>
+        <template v-else-if="tool.btn_type === 'input'">
+          <span>
+            <font>{{ tool.label_name }}</font>
+            <input class="input-inner" :type="tool.input_type" :value="toolInput(tool)" :disabled="checkedDragKeyArr.length > 1"
+                   @blur="blurToolInput($event, tool)">
+            <font>px</font>
+          </span>
+        </template>
+        <template v-else>
+          <template v-for="option in tool.options">
+            <a class="tool-item tool-icon"
+               :class="[(option.icon), toolIconActive(tool, option)]"
+               :title="option.label" @click="editorTool(tool, option)"></a>
+          </template>
+        </template>
+      </div>
+      <template v-if="checkedDragKeyArr.length > 0">
+      <el-color-picker
+        v-model="toolColorModel"
+        show-alpha
+        :predefine="predefineColors">
+      </el-color-picker>
+      </template>
+      <div class="tool-list">
+        <a class="tool-item tool-icon icon-upload-img" title="添加图片">
+          <input type="file" title="添加图片" @change="uploadCustomImg($event)">
+        </a>
+      </div>
+      <div class="tool-list"><a class="tool-item tool-icon icon-add" title="添加元素" @click="addParam({type: 'custom-text'})"></a></div>
+      <div class="tool-list"><a class="tool-item tool-icon icon-close" title="移除元素" @click="deleteParam"></a></div>
+    </div>
+    <!--endregion-->
+
+    <!--region 编辑框-->
+    <div class="dragresize-box" :class="{'dragresize-direct': +info.tpl_type === 4}"
+         id="dragresize-box" @click.self="clearCheckedItem" :style="'width:'+info.tpl_config.page_width">
+      <template v-for="(item, index) in info.tpl_content">
+        <div class="drsElement drsMoveHandle" :style="drsElementStyle(item, index)"
+             :class="[(isItemActive(index) ? 'drs-active' : ''), ('drs__'+item.type)]"
+             @mousedown="changeDragItem($event, item, index)">
+          <!--region 表格-->
+          <template v-if="item.type === 'order-table'">
+            <template v-if="+tableCheckedItemLen(item) > 0">
+              <div class="dragresize-content" :style="drsContentStyle(item)">
+                <template v-if="+info.tpl_type === 4">
+                  <editor-table-mini :info="info" :item="item"></editor-table-mini>
+                </template>
+                <template v-else>
+                  <editor-table-default :info="info" :item="item"></editor-table-default>
+                </template>
+              </div>
+              <template v-if="+info.tpl_type !== 4">
+                <!--region 额外新增的空白行【该功能暂隐藏】-->
+                <template v-if="false">
+                  <div class="table-reduce" @click="tableTrAction('reduce')"><i class="el-icon-minus"></i></div>
+                  <div class="table-add" @click="tableTrAction('add')"><i class="el-icon-plus"></i></div>
+                </template>
+                <!--endregion-->
+                <div class="table-setting" @click="tableTrAction('setting')"><i class="el-icon-setting"></i></div>
+              </template>
+            </template>
+          </template>
+          <!--endregion-->
+
+          <!--region 自定义上传的图片||订单二维码-->
+          <template v-else-if="item.type === 'custom-img' || item.type === 'ORDER_QR_CODE'">
+            <div class="dragresize-content" :style="drsContentStyle(item)">
+              <div class="custom-img" :style="customImgStyle(item)"></div>
+            </div>
+          </template>
+          <!--endregion-->
+
+          <!--region 自定义文本||变量-->
+          <template v-else>
+            <div class="dragresize-content" :style="drsContentStyle(item)">
+              <edit-div v-model="item.content"></edit-div>
+            </div>
+          </template>
+          <!--endregion-->
+        </div>
+      </template>
+    </div>
+    <!--endregion-->
+
+    <!--表格模块设置-->
+    <tpl-table-setting-layer ref="tplTableSettingLayer" :info="info"></tpl-table-setting-layer>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script type="text/javascript" src="__PUBLIC__/common/js/plug-in/DragResize/DragResize.js?v={$V}"></script>
+<include file="PrintTpl/printTplInfo/components/tpl_table_setting_layer" />
+<include file="PrintTpl/printTplInfo/components/editor_table_mini" />
+<include file="PrintTpl/printTplInfo/components/editor_table_default" />
+<script src="__ROOT__/Public/admin/js/PrintTpl/preview_tpl.js?v={$V}"></script>
+<script>
+  AppUtil.COMPONENTS.DIY_DRAG_EDITOR = {
+    template: '#diy_drag_editor',
+    components: {
+      'edit-div': AppUtil.COMPONENTS.EDITOR_DIV,
+      'tpl-table-setting-layer': AppUtil.COMPONENTS.TPL_TABLE_SETTING_LAYER,
+      'editor-table-mini': AppUtil.COMPONENTS.EDITOR_TABLE_MINI,
+      'editor-table-default': AppUtil.COMPONENTS.EDITOR_TABLE_DEFAULT,
+    },
+    props: {
+      info: Object,
+    },
+    computed: {
+      toolColorModel: {
+        set: function (val) {
+          var self = this;
+          self.checkedDragKeyArr.forEach(function (value) {
+            self.info.tpl_content[value].color = val;
+          })
+        },
+        get: function () {
+          return this.info.tpl_content[this.checkedDragKeyArr[0]].color;
+        }
+      }
+    },
+    mounted: function () {
+    },
+    data: function () {
+      return {
+        predefineColors: AppUtil.PREDEFINECOLORS,
+        toolList: [
+          {
+            btn_type: 'checkbox',
+            options: [
+              {label: '加粗', style_type: 'fontWeight', icon: 'fa fa-bold'},
+              {label: '倾斜', style_type: 'fontStyle', icon: 'fa fa-italic'},
+              {label: '下划线', style_type: 'textDecoration', icon: 'fa fa-underline'},
+            ]
+          },
+          {
+            btn_type: 'radio',
+            style_type: 'textAlign',
+            options: [
+              {label: '居左', style_val: 'left', icon: 'icon-text-align-left'},
+              {label: '居中', style_val: 'center', icon: 'icon-text-align-center'},
+              {label: '居右', style_val: 'right', icon: 'icon-text-align-right'},
+            ]
+          },
+          {
+            btn_type: 'radio',
+            style_type: 'alignType',
+            options: [
+              {label: '向上靠齐', style_val: 'top', icon: 'icon-align-top'},
+              {label: '上下居中靠齐', style_val: 'level-center', icon: 'icon-align-level-center'},
+              {label: '向下靠齐', style_val: 'down', icon: 'icon-align-down'},
+              {label: '向左靠齐', style_val: 'left', icon: 'icon-align-left'},
+              {label: '左右居中靠齐', style_val: 'vertical-center', icon: 'icon-align-vertical-center'},
+              {label: '向右靠齐', style_val: 'right', icon: 'icon-align-right'},
+            ]
+          },
+          {
+            btn_type: 'click',
+            options: [
+              {label: '右移', style_type: 'move-right', icon: 'icon-move-right'},
+              {label: '左移', style_type: 'move-left', icon: 'icon-move-left'},
+              {label: '上移', style_type: 'move-up', icon: 'icon-move-up'},
+              {label: '下移', style_type: 'move-down', icon: 'icon-move-down'},
+            ]
+          },
+          {
+            btn_type: 'input',
+            label_name: '距离左侧',
+            style_val: 'left',
+            input_type: 'number'
+          },
+          {
+            btn_type: 'input',
+            label_name: '距离顶部',
+            style_val: 'top',
+            input_type: 'number'
+          },
+          {
+            btn_type: 'input',
+            label_name: '宽',
+            style_val: 'width',
+            input_type: 'number'
+          },
+          {
+            btn_type: 'input',
+            label_name: '高',
+            style_val: 'height',
+            input_type: 'number'
+          },
+          {
+            btn_type: 'select',
+            style_type: 'fontFamily',
+            options: [
+              {label: '宋体', style_val: '宋体, SimSun'},
+              {label: '微软雅黑', style_val: '微软雅黑, "Microsoft YaHei'},
+              {label: '楷体', style_val: '楷体, 楷体_GB2312, SimKai'},
+              {label: '黑体', style_val: '黑体, SimHei'},
+              {label: '隶书', style_val: '隶书, SimLi'},
+              {label: 'andale mono', style_val: '"andale mono"'},
+              {label: 'arial', style_val: 'arial, helvetica, sans-serif'},
+              {label: 'arial black', style_val: '"arial black", "avant garde"'},
+              {label: 'comic sans ms', style_val: '"comic sans ms"'},
+              {label: 'impact', style_val: 'impact, chicago'},
+              {label: '"times new roman"', style_val: '"times new roman"'},
+            ]
+          },
+          {
+            btn_type: 'select',
+            style_type: 'fontSize',
+            options: [
+              {label: '10px', style_val: '10px'},
+              {label: '11px', style_val: '11px'},
+              {label: '12px', style_val: '12px'},
+              {label: '14px', style_val: '14px'},
+              {label: '16px', style_val: '16px'},
+              {label: '18px', style_val: '18px'},
+              {label: '20px', style_val: '20px'},
+              {label: '24px', style_val: '24px'},
+              {label: '28px', style_val: '28px'},
+              {label: '30px', style_val: '30px'},
+              {label: '34px', style_val: '34px'},
+              {label: '36px', style_val: '36px'},
+            ]
+          },
+          {
+            btn_type: 'select',
+            style_type: 'lineHeight',
+            options: [
+              {label: '行距：1.0', style_val: '100%'},
+              {label: '行距：1.15', style_val: '115%'},
+              {label: '行距：1.5', style_val: '150%'},
+              {label: '行距：2.0', style_val: '200%'},
+              {label: '行距：2.5', style_val: '250%'},
+              {label: '行距：3.0', style_val: '300%'},
+            ]
+          }
+        ], //编辑器工具栏
+        checkedDragKeyArr: [], // 当前操作的元素，可多个
+        zIndexMax: 1, // 最高层级
+      }
+    },
+    methods: {
+      init: function () {
+        this.editorParamZindex()
+        this.dragresizeInit()
+      },
+      editorParamZindex: function () {
+        var self = this;
+        var zindexMax = 1;
+        self.info.tpl_content.forEach(function (value) {
+          if (+value.zIndex > zindexMax) {
+            zindexMax = +value.zIndex;
+          }
+        })
+        self.zIndexMax = zindexMax;
+      },
+
+      //添加变量元素
+      addParam: function (param) {
+        var self = this
+        var content = ''
+        var type = param.type
+        if (param.type === 'custom-text') {
+          content = '自定义内容'
+        } else {
+          var text = param.name
+          if (text !== '') {
+            text += '：'
+          }
+          content = text + '' + '<a contenteditable="false">'+param.show+'</a>'//param.value
+        }
+        var left = '150px'
+        var top = '80px'
+        if (self.checkedDragKeyArr.length > 0) {
+          left = (+(self.info.tpl_content[self.checkedDragKeyArr[0]].left.replace('px', '')) + 20) + 'px'
+          top = (+(self.info.tpl_content[self.checkedDragKeyArr[0]].top.replace('px', '')) + 20) + 'px'
+        }
+        var dragArr = {
+          type: type,
+          left: left,
+          top: top,
+          width: type === 'ORDER_QR_CODE' ? '60px' : '150px',
+          height: type === 'ORDER_QR_CODE' ? '60px' : '16px',
+          zIndex: self.zIndexMax++,
+          isFontBold: '0', //字体是否加粗0/1
+          isFontSlant: '0',//字体是否倾斜0/1
+          isFontUnderline: '0',//字体是否加下划线0/1
+          textAlign: 'left', //left-居左,center-居中，right-居右
+          fontFamily: 'arial, helvetica, sans-serif', //字体
+          fontSize: '12px', //字体大小
+          color: null, //颜色，默认空。系统颜色
+          lineHeight: '100%', //行距
+          content: content, // 内容文字，图片路径
+          contentImg: type === 'ORDER_QR_CODE' ? '/Public/pc/imgs/QRcode.jpg' : ''//二维码参考图
+        }
+        self.info.tpl_content.push(dragArr)
+        self.checkedDragKeyArr = [self.info.tpl_content.length - 1]
+      },
+      /**region 编辑工具栏*/
+      // btn_type=select时自定义显示的select项style
+      optionSelectStyle: function (item, option) {
+        return {
+          [item.style_type]: option.style_val
+        }
+      },
+      // 点击编辑器工具栏按钮
+      editorTool: function (item, option) {
+        var self = this
+        if (item.style_type === 'alignType') {
+          if (self.checkedDragKeyArr.length > 0) {
+            self.editToolAlignType(item, option)
+          }
+        } else {
+          for (var i = 0; i < self.checkedDragKeyArr.length; i++) {
+            var value = self.checkedDragKeyArr[i]
+            switch (item.btn_type) {
+              case "checkbox":
+                switch (option.style_type) {
+                  case 'fontWeight':
+                    self.info.tpl_content[+value].isFontBold = +self.info.tpl_content[+value].isFontBold === 1 ? 0 : 1
+                    break
+                  case 'fontStyle':
+                    self.info.tpl_content[+value].isFontSlant = +self.info.tpl_content[+value].isFontSlant === 1 ? 0 : 1
+                    break
+                  case 'textDecoration':
+                    self.info.tpl_content[+value].isFontUnderline = +self.info.tpl_content[+value].isFontUnderline === 1 ? 0 : 1
+                    break
+                  default:
+                    break
+                }
+                break
+              case 'radio':
+                self.info.tpl_content[+value][item.style_type] = option.style_val
+                break
+              case "click":
+                switch (option.style_type) {
+                  case 'move-right':
+                    self.info.tpl_content[+value].left = (+(self.info.tpl_content[+value].left.replace('px', '')) + 5) + 'px'
+                    break
+                  case 'move-left':
+                    self.info.tpl_content[+value].left = (+(self.info.tpl_content[+value].left.replace('px', '')) - 5) + 'px'
+                    break
+                  case 'move-up':
+                    self.info.tpl_content[+value].top = (+(self.info.tpl_content[+value].top.replace('px', '')) - 5) + 'px'
+                    break
+                  case 'move-down':
+                    self.info.tpl_content[+value].top = (+(self.info.tpl_content[+value].top.replace('px', '')) + 5) + 'px'
+                    break
+                  default:
+                    break
+                }
+                break
+              default:
+                break
+            }
+          }
+        }
+      },
+      editToolAlignType: function (item, option) {
+        var self = this
+        var topMin = 0
+        var leftMin = 0
+        var rightMax = 0
+        var bottomMax = 0
+        for (var i = 0; i < self.checkedDragKeyArr.length; i++) {
+          var value = self.checkedDragKeyArr[i]
+          var width = +(self.info.tpl_content[+value].width.replace('px', ''))
+          var height = +(self.info.tpl_content[+value].height.replace('px', ''))
+          var top = +(self.info.tpl_content[+value].top.replace('px', ''))
+          var left = +(self.info.tpl_content[+value].left.replace('px', ''))
+          var right = left + width
+          var bottom = top + height
+          if (i === 0) {
+            topMin = top
+            leftMin = left
+            rightMax = right
+            bottomMax = bottom
+          }
+          if (top < topMin) topMin = top
+          if (left < leftMin) leftMin = left
+          if (right > rightMax) rightMax = right
+          if (bottom > bottomMax) bottomMax = bottom
+        }
+        for (var j = 0; j < self.checkedDragKeyArr.length; j++) {
+          var value = self.checkedDragKeyArr[j]
+          var width = +(self.info.tpl_content[+value].width.replace('px', ''))
+          var height = +(self.info.tpl_content[+value].height.replace('px', ''))
+
+          var levelCenterDiff = topMin + ((bottomMax - topMin) - height) / 2 // 水平上下居中对齐
+          var verticalCenterDiff = leftMin + ((rightMax - leftMin) - width) / 2 // 垂直左右居中对齐
+          switch (option.style_val) {
+            case 'top':
+              self.info.tpl_content[+value].top = topMin + 'px'
+              break
+            case 'level-center':
+              self.info.tpl_content[+value].top = levelCenterDiff + 'px'
+              break
+            case 'down':
+              self.info.tpl_content[+value].top = (bottomMax - height) + 'px'
+              break
+            case 'level-average':
+              break
+            case 'left':
+              self.info.tpl_content[+value].left = leftMin + 'px'
+              break
+            case 'vertical-center':
+              self.info.tpl_content[+value].left = verticalCenterDiff + 'px'
+              break
+            case 'right':
+              self.info.tpl_content[+value].left = (rightMax - width) + 'px'
+              break
+            case 'vertical-average':
+              break
+            default:
+              break
+          }
+        }
+      },
+      // 编辑器工具栏按钮是否选中
+      toolIconActive: function (item, option) {
+        var self = this
+        var isActive = false
+        if (self.checkedDragKeyArr.length > 0 && self.info.tpl_content.length > 0) {
+          var value = self.checkedDragKeyArr[0]
+          switch (item.btn_type) {
+            case "checkbox":
+              switch (option.style_type) {
+                case 'fontWeight':
+                  isActive = +self.info.tpl_content[+value].isFontBold === 1
+                  break
+                case 'fontStyle':
+                  isActive = +self.info.tpl_content[+value].isFontSlant === 1
+                  break
+                case 'textDecoration':
+                  isActive = +self.info.tpl_content[+value].isFontUnderline === 1
+                  break
+                default:
+                  break
+              }
+              break
+            case 'radio':
+              if (item.style_type !== 'alignType') {
+                isActive = self.info.tpl_content[+value][item.style_type] === option.style_val
+              }
+              break
+            default:
+              break
+          }
+        }
+        return isActive ? 'active' : ''
+      },
+
+      //编辑器工具栏输入框
+      toolInput: function (tool) {
+        if (this.checkedDragKeyArr.length === 1 && this.info.tpl_content.length > 0) {
+          return this.info.tpl_content[this.checkedDragKeyArr[0]][tool.style_val].replace('px', '')
+        } else {
+          return ''
+        }
+      },
+      // 同步工具栏输入框数据,可批量操作
+      blurToolInput: function (event, tool) {
+        var self = this
+        var el = event.currentTarget
+        self.$nextTick(function () {
+          var inputVal = $(el).val()
+          for (var i = 0; i < self.checkedDragKeyArr.length; i++) {
+            var value = self.checkedDragKeyArr[i]
+            self.$set(self.info.tpl_content[value], [tool.style_val], inputVal + 'px')
+          }
+        })
+      },
+      //上传图片
+      uploadCustomImg: function (event) {
+        var self = this
+        var el = event.currentTarget;//event.target || event.dataTransfer;
+        var form = new FormData();
+        var file = el.files[0];
+        form.append('file', file);
+        AppUtil.upload({
+          el: el,
+          type: AppUtil.TYPE_ADV
+        }, function (url, img_info) {
+          self.$nextTick(function () {
+            $(el).val('')
+            self.addCustomImg(url, img_info)
+          })
+        });
+      },
+      //添加图片
+      addCustomImg: function (url, img_info) {
+        var self = this
+        var imgWidth = 60;
+        var imgHeight = (img_info[1] * imgWidth) / img_info[0];
+        var dragArr = {
+          type: 'custom-img',
+          left: '150px',
+          top: '280px',
+          width: imgWidth + 'px',
+          height: imgHeight + 'px',
+          zIndex: self.zIndexMax++,
+          isFontBold: '0', //字体是否加粗0/1
+          isFontSlant: '0',//字体是否倾斜0/1
+          isFontUnderline: '0',//字体是否加下划线0/1
+          textAlign: 'left', //left-居左,center-居中，right-居右
+          fontFamily: 'arial, helvetica, sans-serif', //字体
+          fontSize: '12px', //字体大小
+          color: null, //颜色，默认空。系统颜色
+          content: '图片', // 内容文字
+          contentImg: url // 图片路径
+        }
+        self.info.tpl_content.push(dragArr)
+        self.checkedDragKeyArr = [self.info.tpl_content.length - 1]
+      },
+      //移除当前元素【可移除自定义添加的文本和图片，表格不可移除】
+      deleteParam: function () {
+        var self = this
+        if (self.info.tpl_content[self.checkedDragKeyArr[0]].type !== 'order-table') {
+          self.info.tpl_content.splice(self.checkedDragKeyArr[0], 1)
+          self.checkedDragKeyArr[0]--
+        }
+      },
+      //左侧选择移除后更新checkedDragKeyArr
+      resetCheckedItem: function () {
+        this.checkedDragKeyArr = [this.info.tpl_content.length - 1]
+      },
+      /**endregion*/
+
+      /**region dragsize 拖拽拉伸*/
+      //拖动拉伸初始化
+      dragresizeInit: function () {
+        var self = this
+        self.$nextTick(function () {
+          var dragresize = new DragResize('dragresize', {
+            /*minWidth: 50,
+            minHeight: 50,
+            minLeft: 20,
+            minTop: 20,
+            maxLeft: 600,
+            maxTop: 600*/
+            zIndex: self.zIndexMax
+          });
+          dragresize.isElement = function(elm) {
+            if (elm.className && elm.className.indexOf('drsElement') > -1) return true;
+          };
+          dragresize.isHandle = function(elm) {
+            if (elm.className && elm.className.indexOf('drsMoveHandle') > -1) return true;
+          };
+          dragresize.apply(document);
+        })
+      },
+      // 元素块样式style
+      drsElementStyle: function (item) {
+        var style = {
+          left: item.left,
+          top: item.top,
+          width: item.width,
+          zIndex: item.zIndex,
+        }
+        if (item.type !== 'order-table') {
+          style.height = item.height
+        }
+        return style
+      },
+      //元素块内容样式style,
+      drsContentStyle: function (item) {
+        return diyPrintTpl.drsContentStyle(item, 'edit')
+      },
+      // 元素块内容为自定义图片显示的样式style
+      customImgStyle: function (item) {
+        return {
+          backgroundImage: 'url(' + item.contentImg + ')'
+        }
+      },
+      //同步拖动的数据
+      resetDragResizeStyle: function (styleData) {
+        var self = this
+        self.$nextTick(function () {
+          if (styleData.isMove) {
+            // 多个一起拖动
+            for (var i = 0; i < self.checkedDragKeyArr.length; i++) {
+              var value = self.checkedDragKeyArr[i]
+              var left1 = self.info.tpl_content[+value].left.replace('px', '')
+              var left = +left1  + styleData.diffX
+              var top1 = self.info.tpl_content[+value].top.replace('px', '')
+              var top = +top1 + styleData.diffY
+              self.info.tpl_content[+value].left = left + 'px'
+              self.info.tpl_content[+value].top = top + 'px'
+            }
+          } else {
+            var value = self.checkedDragKeyArr[0]
+            self.info.tpl_content[+value].left = styleData.left + 'px'
+            self.info.tpl_content[+value].width = styleData.width + 'px'
+            self.info.tpl_content[+value].top = styleData.top + 'px'
+            self.info.tpl_content[+value].height = styleData.height + 'px'
+            self.info.tpl_content[+value].zIndex = styleData.zIndex
+          }
+          self.zIndexMax = styleData.zIndex
+        })
+      },
+      //点击其他区域，清空当前选中项
+      clearCheckedItem: function () {
+        this.checkedDragKeyArr = []
+      },
+      //切换操作的元素块
+      changeDragItem: function (event, item, index) {
+        var self = this
+        if (event.shiftKey) {
+          if (self.checkedDragKeyArr.indexOf(index) < 0) {
+            self.checkedDragKeyArr.push(index)
+          }
+        } else {
+          self.checkedDragKeyArr = [index]
+        }
+      },
+      //当前模块是否被选中
+      isItemActive: function (index) {
+        return this.checkedDragKeyArr.indexOf(index) > -1
+      },
+      /**endregion*/
+
+      /**region type='order-table'，表格*/
+      //添加||移除表格项
+      tableTrAction: function (type) {
+        var self = this
+        switch (type) {
+          case 'add':
+            self.info.tpl_content[0].otherTableItem.push({})
+            break
+          case 'reduce':
+            if (typeof self.info.tpl_content[0].otherTableItem !== 'undefined') {
+              if (self.info.tpl_content[0].otherTableItem.length > 0) {
+                self.info.tpl_content[0].otherTableItem.splice(self.info.tpl_content[0].otherTableItem.length - 1)
+              }
+            }
+            break
+          case 'setting':
+            self.$refs.tplTableSettingLayer.init()
+            break
+          default:
+            break
+        }
+      },
+      // 显示的表格项个数
+      tableCheckedItemLen: function (item) {
+        var len = 0
+        item.checkedItem.forEach(function (value) {
+          if (+value.is_checked === 1) {
+            len++
+          }
+        })
+        return len
+      },
+      /**endregion*/
+
+    },
+    directives: {}
+  }
+  function syncDragResizeStyle (styleData) {
+    vm.resetDragResizeStyle(styleData)
+  }
+</script>
+
+<style>
+  .drag-edit-box {
+    height: 100%;
+  }
+</style>

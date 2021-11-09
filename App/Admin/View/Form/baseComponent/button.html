@@ -1,0 +1,76 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form has-sub" id="app" v-cloak="">
+    <div class="color-orange mb-10 font-14">
+      主要样式：class="xxbtn-"
+    </div>
+    <div class="border-box-list" v-for="list in btnList">
+      <div class="title">{{ list.title }}</div>
+      <div class="list-item">
+        <a v-for="item in list.list">
+          <button :class="item.class_value">{{ item.class_name }}</button>
+          <font>{{ item.class_value }}</font>
+        </a>
+      </div>
+    </div>
+    <div class="border-box-list">
+      <div class="title">右上角删除按钮【针对class="del-hover"区域】</div>
+      <div class="list-item">
+        <a>
+          <button class="del-hover xxbtn-white">
+            <span>悬浮显示</span>
+            <i class="xxicon-del-circle el-icon-error"></i>
+          </button>
+        </a>
+        <a>
+          <button class="del-hover xxbtn-white">
+            <span>一直显示</span>
+            <i class="xxicon-del-circle el-icon-error show"></i>
+          </button>
+        </a>
+      </div>
+    </div>
+    <div class="border-box-list">
+      <div class="title">置底提交按钮栏【<span class="color-red">顶部admin-main需要加上class="has-sub"，防止页面内容被遮挡</span>】</div>
+      <div class="form-submit">
+        <a class="xxbtn-primary">保存</a>
+        <a class="xxbtn-white">取消</a>
+      </div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {},
+      data: function () {
+        return {
+          btnList: [
+            {
+              title: '通用按钮颜色',
+              list: [
+                {class_name: '主色按钮', class_value: 'xxbtn-primary'},
+                {class_name: '朴素按钮', class_value: 'xxbtn-plain'},
+                {class_name: '红色按钮', class_value: 'xxbtn-red'},
+                {class_name: '白色按钮', class_value: 'xxbtn-white'},
+                {class_name: '灰色按钮', class_value: 'xxbtn-gray'},
+                {class_name: '灰色2按钮', class_value: 'xxbtn-gray2'},
+                {class_name: '灰色3按钮', class_value: 'xxbtn-gray3'},
+              ]
+            },
+            {
+              title: '通用按钮大小【默认height=30px】',
+              list: [
+                {class_name: '默认30px', class_value: 'xxbtn-primary'},
+                {class_name: '小号按钮22px', class_value: 'xxbtn-primary small'},
+                {class_name: '大号按钮36px', class_value: 'xxbtn-primary medium', tip: '主要用于表单提交的使用'},
+              ]
+            },
+          ],
+          value1: '',
+        }
+      },
+      methods: {
+      }
+    })
+  </script>
+</block>

@@ -1,0 +1,87 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <div class="table-eldiy">
+      <div class="el-table-diy">
+        <table class="table-default">
+          <tr>
+            <th>序号</th>
+            <th>排序</th>
+            <th>商品名称</th>
+            <th>规格</th>
+            <th>单位</th>
+          </tr>
+          <tr v-for="(list, index) in tableData.list">
+            <td>{{ index + 1 }}</td>
+            <td><input type="text" class="input-inner width-100"></td>
+            <td>很不错的商品哦</td>
+            <td>蓝色</td>
+            <td>箱</td>
+          </tr>
+        </table>
+        <table-load-empty :query="query" :table-data="tableData"></table-load-empty>
+      </div>
+      <div class="table-bottom">
+        <pagination ref="pagination" v-show="+tableData.total > 0"
+                    :query="query"
+                    :table-total="tableData.total"
+                    @temp-page-event="getTableData"></pagination>
+      </div>
+    </div>
+  </div>
+  <include file="Public/components/diy_table/table_load_empty"/>
+  <include file="Public/components/diy_table/pagination"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'table-load-empty': AppUtil.COMPONENTS.TABLE_LOAD_EMPTY,
+        'pagination': AppUtil.COMPONENTS.TEMP_PAGINATION,
+      },
+      data: function () {
+        return {
+          query: {
+            page: 1,
+            limit: 20,
+            load: false
+          },
+          tableData: {
+            total: 0,
+            list: []
+          },
+        }
+      },
+      mounted: function () {
+        this.getTableData();
+      },
+      methods: {
+        getTableData:function (current) {
+          var self = this;
+          self.query.load = true;
+          self.tableData.list = [];
+          self.tableData.total = 0;
+          if (typeof current !== "undefined") {
+            if (typeof current.page !== 'undefined') {
+              self.query.page = current.page;
+            }
+            if (typeof current.limit !== 'undefined') {
+              self.query.limit = current.limit;
+            }
+          }
+          AppUtil.ajaxRequest({
+            url: '/Public/json/common/goodsList.json',
+            data: self.query
+          }).then(function (result) {
+            self.tableData = result.data;
+            self.query.load = false;
+            self.$nextTick(function () {
+              self.$refs.pagination.paginationTop(); // 底部分页栏悬浮置底
+            })
+          }).catch(function () {
+            self.query.load = false
+          })
+        },
+      }
+    })
+  </script>
+</block>

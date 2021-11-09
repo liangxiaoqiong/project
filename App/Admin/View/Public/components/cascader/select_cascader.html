@@ -1,0 +1,252 @@
+<!--联动选择-->
+
+<!-- template -->
+<script type="x-template" id="select_cascader_component">
+<!--region 模版-->
+<el-cascader
+    v-bind="$attrs"
+    :value="valueArr"
+    @change="changeValue"
+    :options="select_tree"
+    :props="options"
+    :filterable="filterable"
+    :clearable="filterable">
+</el-cascader>
+<!--endregion-->
+</script>
+<!-- JS -->
+<script>
+  var allLang = '全部';
+AppUtil.COMPONENTS.SELECT_CASCADER_COMPONENT = {
+  template: '#select_cascader_component',
+  model: {
+    prop: 'value',
+    event: 'change',
+  },
+  props: {
+    // 绑定值
+    value: Array,
+    list: Array, // 联动数据
+    // 配置
+    config: {
+      type: Object,
+      default: null,
+    },
+    hasAll: {
+      type: Number,
+      default: 0,
+    }, // 是否显示全部
+    childAll: {
+      type: Number,
+      default: 1,
+    }, // 是否显示子级全部
+    propsItem: {
+      type: Object,
+      default: function () {
+        return {
+          value: 'id',
+          label: 'name',
+          children: 'child',
+        }
+      },
+    },
+    // 可通过 props.checkStrictly = true 来设置父子节点取消选中关联，从而达到选择任意一级选项的目的。
+    cascaderProps: {
+      type: Object,
+      default: function () {
+        return {
+          checkStrictly: false,
+        }
+      }
+    },
+    filterable: {
+      type: Boolean,
+      default: true
+    }, // 是否可搜索选项[true时，支持清空选项]
+  },
+  computed: {
+    // 值为字符串：1,2,3
+    valueArr: function () {
+      var arr = this.value.join(',');
+      return arr.split(',') + '';
+    },
+    options: function () {
+      var result = this.propsItem
+      result.expandTrigger = 'hover'
+      result = Object.assign(result, this.cascaderProps);
+      return result
+    },
+    select_tree: function () {
+      var self = this;
+      if (this.list) {
+        var list = JSON.parse(JSON.stringify(this.list));
+        if (list.length > 0) {
+          var valueParam = 'value';
+          var labelParam = 'label';
+          var childParam = 'label';
+          if (typeof self.propsItem.value !== 'undefined') {
+            valueParam = self.propsItem.value;
+          }
+          if (typeof self.propsItem.label !== 'undefined') {
+            labelParam = self.propsItem.label;
+          }
+          if (typeof self.propsItem.children !== 'undefined') {
+            childParam = self.propsItem.children;
+          }
+          if (+self.hasAll === 1) {
+            list.splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+          }
+          list.forEach(function (val1) {
+            val1[[valueParam]] = val1[[valueParam]] + '';
+            if (typeof val1[childParam] !== 'undefined') {
+              if (val1[childParam].length <= 0) {
+                delete val1[childParam]
+              } else {
+                if (+self.hasAll === 1 && +self.childAll === 1) {
+                  val1[childParam].splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+                }
+                val1[childParam].forEach(function (val2) {
+                  val2[[valueParam]] = val2[[valueParam]] + '';
+                  if (typeof val2[childParam] !== 'undefined') {
+                    if (val2[childParam].length <= 0) {
+                      delete val2[childParam]
+                    } else {
+                      if (+self.hasAll === 1 && +self.childAll === 1) {
+                        val2[childParam].splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+                      }
+                      val2[childParam].forEach(function (val3) {
+                        val3[[valueParam]] = val3[[valueParam]] + '';
+                        if (typeof val3[childParam] !== 'undefined') {
+                          if (val3[childParam].length <= 0) {
+                            delete val3[childParam]
+                          } else {
+                            if (+self.hasAll === 1 && +self.childAll === 1) {
+                              val3[childParam].splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+                            }
+                          }
+                        }
+                      })
+                    }
+                  }
+                })
+              }
+            }
+          })
+        }
+        return list;
+      }
+    }
+  },
+  watch: {
+   /* list: function (nVal) {
+      var self = this;
+      var list = JSON.parse(JSON.stringify(nVal));
+      if (list.length > 0) {
+        var valueParam = 'value';
+        var labelParam = 'label';
+        var childParam = 'label';
+        if (typeof self.propsItem.value !== 'undefined') {
+          valueParam = self.propsItem.value;
+        }
+        if (typeof self.propsItem.label !== 'undefined') {
+          labelParam = self.propsItem.label;
+        }
+        if (typeof self.propsItem.children !== 'undefined') {
+          childParam = self.propsItem.children;
+        }
+        if (+self.hasAll === 1) {
+          list.splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+        }
+        list.forEach(function (val1) {
+          if (typeof val1[childParam] !== 'undefined') {
+            if (val1[childParam].length <= 0) {
+              delete val1[childParam]
+            } else {
+              val1[[valueParam]] = val1[[valueParam]] + '';
+              if (+self.hasAll === 1 && +self.childAll === 1) {
+                val1[childParam].splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+              }
+              val1[childParam].forEach(function (val2) {
+                if (typeof val2[childParam] !== 'undefined') {
+                  if (val2[childParam].length <= 0) {
+                    delete val2[childParam]
+                  } else {
+                    val2[[valueParam]] = val2[[valueParam]] + '';
+                    if (+self.hasAll === 1 && +self.childAll === 1) {
+                      val2[childParam].splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+                    }
+                    val2[childParam].forEach(function (val3) {
+                      if (typeof val3[childParam] !== 'undefined') {
+                        if (val3[childParam].length <= 0) {
+                          delete val3[childParam]
+                        } else {
+                          val3[[valueParam]] = val3[[valueParam]] + '';
+                          if (+self.hasAll === 1 && +self.childAll === 1) {
+                            val3[childParam].splice(0, 0, {[valueParam]: '', [labelParam]: allLang})// 全部
+                          }
+                        }
+                      }
+                    })
+                  }
+                }
+              })
+            }
+          }
+        })
+      }
+      this.select_tree = list;
+    },*/
+  },
+  mounted: function () {
+  },
+  updated: function () {
+  },
+  data: function () {
+    return {
+     // select_tree: [],
+    }
+  },
+  methods: {
+    initOptions: function () {
+      if (typeof this.config !== "undefined") {
+        this.options = Object.assign(this.options, this.config);
+      }
+    },
+
+    changeValue: function (val) {
+      var that = this;
+      this.select_value = val;
+      var i, j, item, childFind;
+      var items = [];
+      for (i = 0; i < that.select_tree.length; i++) {
+        item = that.select_tree[i];
+        if (val[0] === item[that.options.value]) {
+          items.push(item);
+          break;
+        }
+      }
+      if (val[1] !== undefined) {
+        childFind = false;
+        for (i = 0; i < that.select_tree.length; i++) {
+          if (childFind) {
+            break;
+          }
+          item = that.select_tree[i];
+          if (item.child && item.child.length > 0) {
+            for (j = 0; j < item.child.length; j++) {
+              if (val[1] === item.child[j][that.options.value]) {
+                items.push(item.child[j]);
+                childFind = true;
+                break;
+              }
+            }
+          }
+        }
+      }
+      this.$emit('change', val);
+      this.$emit('change-items', items);
+    },
+  },
+  directives: {}
+}
+</script>

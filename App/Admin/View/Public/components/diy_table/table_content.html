@@ -1,0 +1,459 @@
+<!--diy表格，可滑动，可拖动设置表格宽度，可悬浮-->
+<!-- template -->
+<script type="x-template" id="diy_table_component">
+  <!--region 模版-->
+  <div class="table-eldiy">
+    <div class="el-table-diy">
+      <div style="position: relative;" :class="{'table-loading': query.load}">
+        <el-table
+            :ref="'elTable'+tableType"
+            :data="tableData.list"
+            border
+            v-bind="tableHeightStyle"
+            :show-summary="+is_show_total === 1"
+            :summary-method="getSummaries"
+            :row-class-name="tableRowClassName"
+            :empty-text="query.load ? '{:L('LOADING2')}' : '{:L('EMPTY2')}'">
+
+          <!--多选，设置显示隐藏弹框按钮-->
+          <template v-if="+is_show_checkbox === 1 || +is_show_menu === 1">
+            <el-table-column
+                :width="+is_show_checkbox === 1 && +is_show_menu === 1 ? '76' : '60'"
+                :align="+is_show_checkbox === 1 && +is_show_menu === 1 ? 'left' : 'center'"
+                fixed="left"
+                class-name="row-menu">
+
+              <template slot="header" slot-scope="scope">
+                <template v-if="+is_show_checkbox === 1">
+                  <label class="diy-checkbox display-align">
+                    <input type="checkbox" lay-ignore  @click="checkAllChange"
+                           :checked="isCheckAll" />
+                  </label>
+                </template>
+                <template v-if="+is_show_menu === 1">
+                  <i class="imgicon-table-setting" @click="tableSettingLayer"></i>
+                </template>
+              </template>
+
+              <template slot-scope="scope">
+                <template v-if="+is_show_checkbox === 1">
+                  <label class="diy-checkbox display-align"
+                         v-if="noCheckList && noCheckList.indexOf(scope.row[checkedParam]) === -1">
+                    <input type="checkbox" lay-ignore :value="scope.row[checkedParam]" v-model="query.checkedIds"/>
+                  </label>
+                </template>
+
+                <template v-if="+is_show_menu === 1">
+                  <div class="display-align">
+                    <template v-if="+is_diy_menu === 1">
+                      <slot :name="'menu-val'+tableType" :item="scope.row" :index="scope.$index"></slot>
+                    </template>
+                    <template v-else>
+                      {{ menuValue(scope) }}
+                    </template>
+                  </div>
+                </template>
+              </template>
+
+            </el-table-column>
+          </template>
+
+          <template v-for="th in tableFiled">
+            <el-table-column
+                v-if="isShowRow(th)"
+                :prop="th.th_val[0]"
+                :label="th.th_name"
+                :show-overflow-tooltip="showOverflowTooltip(th)"
+                :align="th.filed_val === 'action' ? 'right' : 'left'"
+                :fixed="isFixed(th)"
+                :width="tableRowWidth(th)">
+              <template slot="header" slot-scope="scope">
+                <div @click="changeSort(th)" :style="isSortable(th) ? 'cursor: pointer;' : ''">
+                  <template v-if="th.is_th_slot && +th.is_th_slot === 1">
+                    <slot :name="'th-val'+tableType" :th="th"></slot>
+                  </template>
+                  <template v-else><span v-html="th.th_name"></span></template>
+                  <span class="sort-box" :class="'sort-'+th.sort.sort_type" v-if="isSortable(th)">
+                      <i class="sort-t"></i>
+                      <i class="sort-b"></i>
+                  </span>
+  
+                  <el-popover placement="top" trigger="hover" v-if="th.tip_text">
+                    <div v-html="th.tip_text"></div>
+                    <a slot="reference" class="xxicon-warning-tip el-icon-warning" style="margin-left: -3px"></a>
+                  </el-popover>
+                </div>
+              </template>
+              <template slot-scope="scope">
+                <slot :name="'td-val'+tableType" :th="th" :item="scope.row" :index="scope.$index"></slot>
+              </template>
+            </el-table-column>
+
+          </template>
+        </el-table>
+
+        <table-setting ref="settingLayer" :query="query" :table-filed="tableFiled"
+                       @sync-table-auto="init"></table-setting>
+      </div>
+    </div>
+    <div class="table-bottom flex-between">
+      <!--左下角批量操作键-->
+      <div class="table-bottom-left" v-if="+is_show_checkbox === 1 && tableData.list.length > 0">
+        <label class="diy-checkbox display-align" style="margin-bottom: 5px;">
+          <input type="checkbox" lay-ignore  @click="checkAllChange" :checked="isCheckAll" />
+          <font v-if="isShowCheckAllText">{:L('SELECT_ALL')}<!--全选--></font>
+        </label>
+        <div class="table-batch-action">
+          <slot name="table-batch-action"></slot>
+        </div>
+      </div>
+
+      <!--region 分页-->
+      <pagination v-if="+is_show_page === 1 && tableData.list.length > 0"
+                  :is-show-page-sizes="isShowPageSizes"
+                  :query="query"
+                  :table-total="tableData.total"
+                  @temp-page-event="getTableData"></pagination>
+      <!--endregion-->
+    </div>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.DIY_TABLE_COMPONENT = {
+    template: '#diy_table_component',
+    components: {
+      'table-setting': AppUtil.COMPONENTS.TABLE_SETTING_COMPONENT,
+      'pagination': AppUtil.COMPONENTS.TEMP_PAGINATION
+    },
+    props: {
+      tableType: {
+        type: [Number, String],
+        default: ''
+      },
+      isShowCheckAllText: {
+        type: Boolean,
+        default: true
+      }, // 是否显示左下角全选文字
+      /**
+       query:{
+        page: 1,
+        limit: 20,
+        field_val_arr: '',//显示的表格项json串：'filed_val, filed_val,...',   ''||undefined默认全部
+        checkedIds: [], //选择得表格项，checkedParam值
+        load: false, // 数据是否加载中
+      }*/
+      query: Object,
+      checkedParam: {
+        type: String,
+        default: 'id'
+      },//checkbox的key，默认id
+      pageOtherH: {
+        type: [String, Number],
+        default: 140
+      },//除去表格外的界面高度
+      isHeightAuto: {
+        type: [String, Number],
+        default: 1
+      },// 表格高度是否自适应
+      is_show_total: {
+        type: [String, Number],
+        default: 0
+      }, //是否显示统计行
+      is_show_checkbox: {
+        type: [String, Number],
+        default: 0
+      }, //是否显示多选
+      noCheckList: {
+        type: Array,
+        default: function () {
+          return []
+        }
+      }, // 不可选数组，值为[checkedParam]对应的数据
+      is_show_menu: {
+        type: [String, Number],
+        default: 1
+      }, //是否显示表头列表筛选
+      is_diy_menu: {
+        type: [String, Number],
+        default: 0
+      },//首列表项index是否用slot
+      is_show_page: {
+        type: [String, Number],
+        default: 1,
+      }, // 是否显示表格右下角分页
+      isShowPageSizes: {
+        type: Boolean,
+        default: true
+      }, // 是否显示分页切换条数【assign的表格数据不显示】
+      menuParam: {
+        type: String,
+        default: 'index'
+      }, //列表筛选字段，默认递增
+      tableFiled: {
+        type: Array,
+        default: function () {
+          return [
+            /*{
+                filed_val: 'id', // 当前表格项filed唯一性 val，类似id，判断唯一性
+                // menu-编辑字段顺序，checkbox-全选，action-操作，
+                th_val: ['id'], // 当前表格显示的字段内容,数组，默认数组长度=1
+                th_name: '序号', // 当前表格项th名称
+                is_th_slot: 0, // 当前表格项th是否使用slot赋值，默认0
+                is_fixed_left: 1,//是否固定在左侧0/1
+                is_fixed_right: 0,//是否固定在右侧0/1
+                t_width: 60, //列宽初始值
+                is_setting_show: 1, //是否可设置显示或不显示，1[undefined]-显示；0-不显示；2-一直显示，不可再切换成0
+                drag: {
+                  is_drag: 0, //是否可拖拽字段顺序,0-不可拖拽，一直显示
+                  drag_sort: 1, //拖拽字段顺序,数值越大越靠后
+                },
+                sort: {
+                  is_sort: 0,  //该字段是否可排序
+                  sort_type: 'desc' //该字段排序值，desc/asc
+                  sort_param: '' //该字段对应query的参数
+                }, //该字段是否有排序
+               tip_text: '',//该字段的提示
+               show_overflow_tooltip: 1,//当内容过长被隐藏时显示 tooltip[默认1]
+              },*/
+          ]
+        }
+      },
+      tableTotalFiled: {
+        type: Array,
+        default: function () {
+          return  [
+            /*{
+              property: 'total_num',//el-table里的prop
+              meta_param: 'total_num'//tableData.meta对应的参数
+            },*/
+          ]
+        }
+      },//统计的计算规则
+      tableData: {
+        type: Object,
+        default: function () {
+          return {
+            total: 0,
+            list: [],
+            meta: {}
+          }
+        }
+      },
+      tableRowClass: {
+        type: Array,
+        default: function () {
+          return [
+            /*{
+              rowIndex: 1,//表格key
+              rowName: '' //.class名称
+            }*/
+          ]
+        }
+      }
+    },
+    computed: {
+      isCheckAll: function () {
+        if (this.tableData.list.length > 0) {
+          if (this.query.checkedIds && this.tableData.list && this.noCheckList) {
+            var len = this.query.checkedIds.length + this.noCheckList.length
+            return len >= this.tableData.list.length
+          }
+        }
+      },
+      tableHeightStyle: function () {
+        if (+this.isHeightAuto === 1) {
+          return {}
+        } else {
+          return {maxHeight: this.tableHeight}
+        }
+      }
+    },
+    mounted: function () {
+      var self = this
+      self.$nextTick(function () {
+        self.syncTableAuto()
+        window.onresize = function () {
+          self.syncTableAuto()
+        }
+      })
+    },
+    data: function () {
+      return {
+        tableHeight: 500,
+        isInit: true
+      }
+    },
+    methods: {
+      init: function () {
+        var self = this
+        self.$nextTick(function () {
+          if (self.isInit) {
+            self.tableHeight = self.tableHeight + 1
+            self.isInit = false;
+          }
+          var el = self.$refs['elTable'+self.tableType].$el;
+          el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+          self.paginationTop();
+        })
+      },
+      tableHeightLess: function () {
+        var self = this
+        self.$nextTick(function () {
+          if (self.isInit) {
+            self.tableHeight = self.tableHeight - 1
+            self.isInit = false;
+          }
+        })
+      },
+      //同步表格高度
+      syncTableAuto: function () {
+        var self = this
+        self.$nextTick(function () {
+          var screenH = document.body.clientHeight
+          self.tableHeight = screenH - (+self.pageOtherH) - 50 - 50
+          self.paginationTop();
+        })
+      },
+      //是否悬浮
+      isFixed: function (th) {
+        if (typeof th.is_fixed_left !== 'undefined' && +th.is_fixed_left === 1) {
+          return 'left'
+        }
+        if (typeof th.is_fixed_right !== 'undefined' && +th.is_fixed_right === 1) {
+          return 'right'
+        }
+      },
+      //是否显示表格列
+      isShowRow: function (item) {
+        return (typeof item.is_setting_show === 'undefined') ||
+          (typeof item.is_setting_show !== 'undefined' &&
+            (+item.is_setting_show === 1 || +item.is_setting_show === 2))
+      },
+      //是否可排序
+      isSortable: function (item) {
+        if (typeof item.sort !== 'undefined') {
+          return typeof item.sort.is_sort !== 'undefined' && +item.sort.is_sort === 1
+        }
+      },
+      //表格列宽度,当tableFiled的全部子项都设置了width才有横向滚动条，否则自适应100%撑开
+      tableRowWidth: function (th) {
+        if (typeof th.t_width !== 'undefined') {
+          return th.t_width
+        }
+      },
+      //
+      menuValue: function (scope) {
+        if (this.menuParam !== 'index' && typeof scope.row[this.menuParam] !== 'undefined') {
+          return scope.row[this.menuParam]
+        } else {
+          return (this.query.page - 1) * this.query.limit + (scope.$index + 1)
+        }
+      },
+      /**region 全选*/
+      checkAllChange() {
+        var self = this
+        var allIds = []
+        if (!self.isCheckAll) {
+          self.tableData.list.forEach(function (value) {
+            if (self.noCheckList.indexOf(value[self.checkedParam]) === -1) {
+              allIds.push(value[self.checkedParam])
+            }
+          })
+        }
+        this.query.checkedIds = allIds
+      },
+      /**endregion*/
+      //统计规则
+      getSummaries: function (param) {
+        var self = this
+        var sums = []
+        param.columns.forEach(function (value, index) {
+          sums[index] = ''
+          if (+index === 0) {
+            sums[index] = '合计'
+            return
+          }
+          if (+self.is_show_total === 1) {
+            if (self.tableTotalFiled.length > 0 && typeof self.tableData.meta !== "undefined") {
+              self.tableTotalFiled.forEach(function (val) {
+                if (value.property === val.property) {
+                  sums[index] = self.tableData.meta[val.meta_param]
+                }
+              })
+            }
+          }
+        })
+        return sums
+      },
+      getTableData: function () {
+        this.$emit('get-table-data')
+      },
+      //显示表头弹框
+      tableSettingLayer: function () {
+        this.$refs.settingLayer.showLayer()
+      },
+      //带状态表格，每行显示其他提示背景色
+      tableRowClassName: function ({row, rowIndex}) {
+        var self = this
+        var className = ''
+        if (self.tableRowClass.length > 0) {
+          self.tableRowClass.forEach(function (value) {
+            if (+value.rowIndex === +rowIndex) {
+              className = value.rowName
+            }
+          })
+        }
+        return className
+      },
+      //点击切换排序
+      changeSort: function (th) {
+        var self = this
+        if (self.isSortable(th)) {
+          self.query.page = 1
+          var sort_result = th.sort.sort_type === 'desc' ? 'asc' : (th.sort.sort_type === 'asc' ? '' : 'desc')
+          th.sort.sort_type = sort_result
+          if (typeof self.query.sort_field !== 'undefined') {
+            var i = 0;
+            var json = {};
+            self.query.sort_field.forEach(function (val, index) {
+              if (th.sort.sort_param === val.label) {
+                val.value = th.sort.sort_type
+                i = index;
+                json = val;
+              }
+            })
+            var arr = JSON.parse(JSON.stringify(self.query.sort_field));
+            arr.splice(i , 1);
+            arr.push(json);
+            self.query.sort_field = arr;
+          } else {
+            self.query[th.sort.sort_param] = th.sort.sort_type
+          }
+          self.getTableData()
+        }
+      },
+      //当内容过长被隐藏时显示 tooltip
+      showOverflowTooltip: function (th) {
+        return (typeof th.show_overflow_tooltip === 'undefined' && th.filed_val !== 'action')
+          || (typeof th.show_overflow_tooltip !== 'undefined' && th.show_overflow_tooltip === 1);
+      },
+      // 表格底部全选、分页是否置底,
+      paginationTop: function () {
+        var self = this;
+        self.$nextTick(function () {
+          var availHeight  = window.screen.availHeight ;
+          var scrollHeight = document.body.scrollHeight;
+          if (scrollHeight > (availHeight - 60)) {
+            $('.table-eldiy').addClass('fixed-bottom');
+          } else {
+            $('.table-eldiy').removeClass('fixed-bottom');
+          }
+        })
+      }
+    },
+    directives: {}
+  }
+</script>

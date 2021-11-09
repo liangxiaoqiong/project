@@ -1,0 +1,40 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      过滤器：filters
+    </div>
+    <div>
+      <div class="mt-10">
+        <p>时间戳转日期格式【精确到时分秒】</p>
+        <div>{{ time | formatTimeString }}</div>
+      </div>
+      <div class="mt-10">
+        <p>时间戳转日期格式</p>
+        <div>{{ time | formatDateString }}</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          time: 1626257262, // 秒
+        }
+      },
+      filters:{
+        // 秒转日期格式
+        formatTimeString: function (value) {
+          if (+value === 0) return '';
+          return publicWap.dateTime_Str(new Date(value*1000));
+        },
+        // 秒转日期格式
+        formatDateString: function (value) {
+          if (+value === 0) return '';
+          return publicWap.dateTime_Str(new Date(value*1000), 'date');
+        }
+      },
+    })
+  </script>
+</block>

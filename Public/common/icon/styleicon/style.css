@@ -1,0 +1,289 @@
+@font-face {
+  font-family: 'styleicon';
+  src:  url('fonts/styleicon.eot?6rzrz2');
+  src:  url('fonts/styleicon.eot?6rzrz2#iefix') format('embedded-opentype'),
+  url('fonts/styleicon.ttf?6rzrz2') format('truetype'),
+  url('fonts/styleicon.woff?6rzrz2') format('woff'),
+  url('fonts/styleicon.svg?6rzrz2#styleicon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="styleicon-"], [class*=" styleicon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'styleicon' !important;
+  speak: none;
+  font-style: normal!important;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  vertical-align: middle;
+  font-size: 15px;
+  /*color: #ffffff;*/
+}
+
+.styleicon-pickup-card2:before {
+  content: "\e93d";
+}
+.styleicon-receipt:before {
+  content: "\e93e";
+}
+.styleicon-info:before {
+  content: "\e940";
+}
+.styleicon-pickup-card:before {
+  content: "\e93f";
+}
+.styleicon-tel:before {
+  content: "\e93a";
+}
+.styleicon-home:before {
+  content: "\e93b";
+}
+.styleicon-phone:before {
+  content: "\e93c";
+}
+.styleicon-add2:before {
+  content: "\e939";
+}
+.styleicon-share:before {
+  content: "\e937";
+}
+.styleicon-user-pickstore:before {
+  content: "\e903";
+}
+.styleicon-user-huodongdingdan:before {
+  content: "\e902";
+}
+.styleicon-user-youhuiquan:before {
+  content: "\e900";
+}
+.styleicon-order-all .path1:before {
+  content: "\e906";
+  color: rgb(227, 80, 101);
+}
+.styleicon-order-all .path2:before {
+  content: "\e907";
+  margin-left: -1em;
+  color: rgb(227, 80, 101);
+  opacity: 0.31;
+}
+.styleicon-order-all .path3:before {
+  content: "\e908";
+  margin-left: -1em;
+  color: rgb(227, 80, 101);
+}
+.styleicon-order-all .path4:before {
+  content: "\e909";
+  margin-left: -1em;
+  color: rgb(227, 80, 101);
+}
+.styleicon-order-all .path5:before {
+  content: "\e901";
+  margin-left: -1em;
+  color: rgb(227, 80, 101);
+}
+.styleicon-foot-cart:before {
+  content: "\e90c";
+}
+.styleicon-foot-home:before {
+  content: "\e90d";
+}
+.styleicon-foot-classify:before {
+  content: "\e90e";
+}
+.styleicon-foot-user:before {
+  content: "\e90f";
+}
+.styleicon-user-zhyaq:before {
+  content: "\e910";
+}
+.styleicon-user-dizhi:before {
+  content: "\e911";
+}
+.styleicon-user-yue:before {
+  content: "\e912";
+}
+.styleicon-user-biaodan:before {
+  content: "\e913";
+}
+.styleicon-user-shoucang:before {
+  content: "\e914";
+}
+.styleicon-foot-find:before {
+  content: "\e915";
+}
+.styleicon-user-hehuoren:before {
+  content: "\e916";
+}
+.styleicon-user-lipinka:before {
+  content: "\e917";
+}
+.styleicon-user-pingjia:before {
+  content: "\e918";
+}
+.styleicon-user-jianglipin:before {
+  content: "\e91c";
+}
+.styleicon-user-tuangou:before {
+  content: "\e91d";
+}
+.styleicon-user-bdstk:before {
+  content: "\e91e";
+}
+.styleicon-user-tuiguang:before {
+  content: "\e91f";
+}
+.styleicon-user-yeji:before {
+  content: "\e920";
+}
+.styleicon-user-xiazai:before {
+  content: "\e922";
+}
+.styleicon-user-gonggao:before {
+  content: "\e923";
+}
+.styleicon-user-tgewm:before {
+  content: "\e924";
+}
+.styleicon-user-zxcz:before {
+  content: "\e925";
+}
+
+
+
+.styleicon-check:before {
+  content: "\e905";
+}
+.styleicon-check_active:before {
+  content: "\e905";
+}
+
+.styleicon-sort_normal .path1:before {
+  content: "\e90a";
+  color: #999999;
+}
+.styleicon-sort_normal  .path2:before {
+  content: "\e90b";
+  margin-left: -1em;
+  color: #999999;
+}
+.styleicon-sort_desc .path1:before {
+  content: "\e90a";
+  color: #999;
+}
+.styleicon-sort_desc .path2:before {
+  content: "\e90b";
+  margin-left: -1em;
+}
+
+.styleicon-sort_asc .path1:before {
+  content: "\e90a";
+}
+.styleicon-sort_asc .path2:before {
+  content: "\e90b";
+  margin-left: -1em;
+  color: #999;
+}
+
+.styleicon-tip:before {
+  content: "\e904";
+  color: #999999;
+}
+.styleicon-tip__red:before {
+  content: "\e904";
+  color: rgb(248, 46, 46);
+}
+
+.styleicon-screen:before {
+  content: "\e919";
+  color: #999;
+}
+.styleicon-screen_active:before {
+  content: "\e919";
+}
+
+.styleicon-selected2:before {
+  content: "\e926";
+}
+.styleicon-minus:before {
+  content: "\e91a";
+}
+.styleicon-add:before {
+  content: "\e91b";
+}
+.styleicon-selected:before {
+  content: "\e921";
+}
+.styleicon-circle {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 100%;
+  border: 1px solid #B6B6B6;
+  background-color: #F3F3F3;
+}
+
+.styleicon-minus.disabled:before,
+.styleicon-add.disabled:before{
+  color: #C9C9C9;
+}
+
+.styleicon-right:before {
+  content: "\e927";
+}
+.styleicon-info-groupgoods:before {
+  content: "\e928";
+}
+
+.styleicon-btn-buy:before {
+  content: "\e92a";
+}
+.styleicon-dm-coupon:before {
+  content: "\e92c";
+}
+.styleicon-dm-like:before {
+  content: "\e92d";
+}
+.styleicon-dm-share:before {
+  content: "\e92e";
+}
+.styleicon-dm-comment:before {
+  content: "\e92f";
+}
+.styleicon-dm-sign:before {
+  content: "\e930";
+}
+.styleicon-dm-goods:before {
+  content: "\e931";
+}
+.styleicon-dm-none:before {
+  content: "\e932";
+}
+.styleicon-dm-all:before {
+  content: "\e933";
+}
+
+.styleicon-time:before {
+  content: "\e936";
+}
+.styleicon-address1:before {
+  content: "\e92b";
+}
+.styleicon-chain-store:before {
+  content: "\e934";
+}
+
+.styleicon-collection:before {
+  content: "\e938";
+}
+
+.styleicon-plus:before {
+  content: "\e929";
+}

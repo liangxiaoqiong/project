@@ -1,0 +1,22 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：input-inner
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>默认</div>
+        <textarea type="text" class="input-inner"></textarea>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {}
+      }
+    })
+  </script>
+</block>

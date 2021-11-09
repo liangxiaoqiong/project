@@ -1,0 +1,340 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": {
+    "id": "331",
+    "store_id": "138",
+    "type": "0",
+    "tpl_name": "测试小票二维码",
+    "tpl_type": "4",
+    "status": "1",
+    "tpl_content": [
+      {
+        "type": "order-table",
+        "id": "1",
+        "left": "0px",
+        "top": "139px",
+        "width": "182px",
+        "height": "155px",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "tableBorderWidth": "1",
+        "zIndex": "24",
+        "checkedItem": [
+          {
+            "type": "goods_name",
+            "value": "{column_goods_name}",
+            "default_name": "品名",
+            "diy_name": "品名",
+            "is_checked": "1",
+            "sort": "1"
+          },
+          {
+            "type": "num",
+            "value": "{column_num}",
+            "default_name": "数量",
+            "diy_name": "数量",
+            "is_checked": "1",
+            "sort": "2"
+          },
+          {
+            "type": "goods_price",
+            "value": "{column_goods_price}",
+            "default_name": "单价",
+            "diy_name": "单价",
+            "is_checked": "1",
+            "sort": "3"
+          },
+          {
+            "type": "total_price",
+            "value": "{column_total_price}",
+            "default_name": "金额",
+            "diy_name": "金额",
+            "is_checked": "1",
+            "sort": "4"
+          },
+          {
+            "type": "goods_barcode",
+            "value": "{column_goods_barcode}",
+            "default_name": "商品条码",
+            "diy_name": "商品条码",
+            "is_checked": "1",
+            "sort": "5"
+          }
+        ],
+        "otherTableItem": [],
+        "content": ""
+      },
+      {
+        "type": "CUSTOMER_NAME",
+        "left": "0px",
+        "top": "8px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "2",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "content": "客户名：<a contenteditable=\"false\">{客户名}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "CUSTOMER_PHONE",
+        "left": "0px",
+        "top": "32px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "3",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "content": "客户电话：<a contenteditable=\"false\">{客户电话}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "CUSTOMER_ADDRESS",
+        "left": "0px",
+        "top": "56px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "4",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "content": "客户地址：<a contenteditable=\"false\">{客户地址}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "DELIVERY_METHOD",
+        "left": "0px",
+        "top": "79px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "6",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "content": "配送方式：<a contenteditable=\"false\">{配送方式}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "PICKUP_NAME",
+        "left": "0px",
+        "top": "104px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "7",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "content": "门店名称：<a contenteditable=\"false\">{门店名称}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "ORDER_QR_CODE",
+        "left": "68px",
+        "top": "341px",
+        "width": "60px",
+        "height": "60px",
+        "zIndex": "8",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "content": "订单二维码：<a contenteditable=\"false\">{订单二维码}<\/a>",
+        "contentImg": "\/Public\/pc\/imgs\/QRcode.jpg"
+      },
+      {
+        "type": "GOODS_TOTAL",
+        "left": "23px",
+        "top": "298px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "14",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "100%",
+        "content": "商品总额：<a contenteditable=\"false\">{商品总额}<\/a>",
+        "contentImg": ""
+      }
+    ],
+    "tpl_config": {
+      "tableOtherData": [
+        {
+          "default_name": "空白列1",
+          "diy_name": "空白列1",
+          "is_checked": "0",
+          "type": "other_1",
+          "value": "{column_other_1}",
+          "value_data": {
+            "value_type": "1",
+            "default_value": ""
+          },
+          "sort": "5"
+        },
+        {
+          "default_name": "空白列2",
+          "diy_name": "空白列2",
+          "is_checked": "0",
+          "type": "other_2",
+          "value": "{column_other_2}",
+          "value_data": {
+            "value_type": "1",
+            "default_value": ""
+          },
+          "sort": "2"
+        },
+        {
+          "default_name": "空白列3",
+          "diy_name": "空白列3",
+          "is_checked": "0",
+          "type": "other_3",
+          "value": "{column_other_3}",
+          "value_data": {
+            "value_type": "1",
+            "default_value": ""
+          },
+          "sort": "3"
+        }
+      ],
+      "base_data": [
+        {
+          "type": "goods_name",
+          "value": "{column_goods_name}",
+          "default_name": "品名",
+          "diy_name": "品名",
+          "is_checked": "1",
+          "sort": "1"
+        },
+        {
+          "type": "goods_barcode",
+          "value": "{column_goods_barcode}",
+          "default_name": "商品条码",
+          "diy_name": "商品条码",
+          "is_checked": "1",
+          "sort": "5"
+        },
+        {
+          "type": "goods_number",
+          "value": "{column_goods_number}",
+          "default_name": "商品货号",
+          "diy_name": "商品货号",
+          "is_checked": "0",
+          "sort": "5"
+        },
+        {
+          "type": "num",
+          "value": "{column_num}",
+          "default_name": "数量",
+          "diy_name": "数量",
+          "is_checked": "1",
+          "sort": "2"
+        },
+        {
+          "type": "goods_units_name",
+          "value": "{column_goods_units_name}",
+          "default_name": "单位",
+          "diy_name": "单位",
+          "is_checked": "0"
+        },
+        {
+          "type": "goods_price",
+          "value": "{column_goods_price}",
+          "default_name": "单价",
+          "diy_name": "单价",
+          "is_checked": "1",
+          "sort": "3"
+        },
+        {
+          "type": "total_price",
+          "value": "{column_total_price}",
+          "default_name": "金额",
+          "diy_name": "金额",
+          "is_checked": "1",
+          "sort": "4"
+        },
+        {
+          "type": "sale_price",
+          "value": "{column_sale_price}",
+          "default_name": "零售价",
+          "diy_name": "零售价",
+          "is_checked": "0"
+        },
+        {
+          "type": "sale_tax_rate",
+          "value": "{column_sale_tax_rate}",
+          "default_name": "税率(%)",
+          "diy_name": "税率(%)",
+          "is_checked": "0",
+          "sort": "5"
+        },
+        {
+          "type": "goods_tag_text",
+          "value": "{column_goods_tag_text}",
+          "default_name": "商品标签",
+          "diy_name": "商品标签",
+          "is_checked": "0",
+          "sort": "5"
+        }
+      ],
+      "params_tpl": [],
+      "dragSizeBoxHeight": "401",
+      "is_show_subtotal": "0",
+      "pre_page_row": "",
+      "page_width": "180px",
+      "tableTrHeight": "15.2"
+    },
+    "link_data": {
+      "type_2_id": "",
+      "type_3_id": "",
+      "type_9_id": "",
+      "type_10_id": "",
+      "type_13_id": "",
+      "type_14_id": ""
+    },
+    "is_system": "0",
+    "create_time": "1626080295",
+    "is_delete": "0"
+  },
+  "time": "0.0466s"
+}

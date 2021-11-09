@@ -1,0 +1,136 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/7/9
+  -->
+<!-- template 打印模板编辑器表格、非热敏打印的通用表格-->
+<script type="x-template" id="print_table_default">
+  <!--region 模版-->
+  <table class="editor-order-table"
+         :class="'print-table__'+tplOrder.tpl.tpl_content[0].tableBorderWidth" id="editor-order-table">
+    <!--region 表头-->
+    <thead>
+    <tr>
+      <td v-for="table in tplOrder.tpl.tpl_content[0].checkedItem"
+          :width="tableTdWidth(tplOrder.tpl.tpl_content[0], table)"
+          v-if="+table.is_checked === 1">
+        {{ table.diy_name !== '' ? table.diy_name : table.default_name }}
+      </td>
+    </tr>
+    </thead>
+    <!--endregion-->
+    <tbody>
+    <template v-for="(goods, gIndex) in depot.goodsList" v-if="isShowGoods(pIndex, gIndex)">
+      <tr>
+        <td v-for="table in tplOrder.tpl.tpl_content[0].checkedItem" v-if="+table.is_checked === 1">
+          <!--备注不显示，用于打印后手写内容-->
+          <template v-if="table.type === 'remark'"></template>
+          <!--空白列1、空白列2、空白列3-->
+          <template v-else-if="table.type === 'other_1' || table.type === 'other_2' || table.type === 'other_3'">
+            <template v-if="table.value_data">
+              <template v-if="+table.value_data.value_type === 1"><!--空白列项--></template>
+              <template v-else-if="+table.value_data.value_type === 2">
+                <!--固定列值-->
+                {{ table.value_data.default_value }}
+              </template>
+              <template v-else>
+                <!--关联其他基础数据值-->
+                {{ goods[table.value_data.value_type] }}
+              </template>
+            </template>
+          </template>
+          <template v-else>
+            {{ goods[table.type] }}
+          </template>
+        </td>
+      </tr>
+      <!--region 赠品-->
+      <template v-if="goods.send_goods && goods.send_goods.length > 0">
+        <tr v-for="sendGoods in goods.send_goods">
+          <td v-for="table in tplOrder.tpl.tpl_content[0].checkedItem" v-if="+table.is_checked === 1">
+            <template v-if="table.type === 'id'"></template>
+            <template v-else>
+              {{ sendGoods[table.type] }}
+            </template>
+          </td>
+        </tr>
+      </template>
+      <!--endregion-->
+    </template>
+
+    <!--小计-->
+    <tr v-if="+tplOrder.tpl.tpl_config.is_show_subtotal === 1">
+      <template v-for="(table, index) in tplOrder.tpl.tpl_content[0].checkedItem" v-if="+table.is_checked === 1">
+        <td v-if="index === 0">小计</td>
+        <td v-else>
+          <template v-if="table.type === 'num'">{{ tableGoodsSubTotal(depot, pIndex).num }}</template>
+          <template v-if="table.type === 'total_price'">{{ tableGoodsSubTotal(depot, pIndex).price }}</template>
+        </td>
+      </template>
+    </tr>
+    <!--分页打印，最后一页显示；-->
+    <template v-if="(isPrintPage && pIndex === +pageLen(order, depot) - 1) || !isPrintPage">
+      <!--合计-->
+      <default-table-total :checked-item="tplOrder.tpl.tpl_content[0].checkedItem" :depot="depot"></default-table-total>
+      <!--region 额外新增的空白行【该功能暂隐藏】-->
+      <tr v-for="tr in tplOrder.tpl.tpl_content[0].otherTableItem" v-if="false">
+        <td :colspan="tableCheckedItemLen(tplOrder.tpl.tpl_content[0])">&nbsp;</td>
+      </tr>
+      <!--endregion-->
+    </template>
+    </tbody>
+  </table>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.PRINT_TABLE_DEFAULT = {
+    template: '#print_table_default',
+    components: {
+      'default-table-total': AppUtil.COMPONENTS.DEFAULT_TABLE_TOTAL
+    },
+    props: {
+      tplOrder: Object,
+      depot: Object,
+      order: Object,
+      pIndex: [String, Number],
+    },
+    data: function () {
+      return {}
+    },
+    computed: {
+      // 是否是分页打印
+      isPrintPage: function () {
+        return this.tplOrder.tpl.tpl_config.pre_page_row !== '';
+      }
+    },
+    mounted: function () {
+    },
+    methods: {
+      //有分页时商品表格个数
+      pageLen: function () {
+        return Math.ceil(+this.depot.goodsList.length/+this.tplOrder.tpl.tpl_config.pre_page_row)
+      },
+      isShowGoods: function (pIndex, gIndex) {
+        var self = this
+        if (!self.isPrintPage) return true;
+        // 分页打印
+        var arr = []
+        for (var i = 0; i < self.tplOrder.tpl.tpl_config.pre_page_row; i++) {
+          arr.push(pIndex * self.tplOrder.tpl.tpl_config.pre_page_row + i)
+        }
+        return arr.indexOf(gIndex) > -1
+      },
+      tableCheckedItemLen: function (item) {
+        return diyPrintTpl.tableCheckedItemLen(item)
+      },
+      tableTdWidth: function (item, table) {
+        return diyPrintTpl.tableTdWidth(this.tplOrder.tpl, item, table)
+      },
+      tableGoodsSubTotal: function (depot, pIndex) {
+        return diyPrintTpl.tableGoodsSubTotal(depot, pIndex, this.tplOrder.tpl)
+      },
+    }
+  }
+</script>

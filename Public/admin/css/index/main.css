@@ -1,0 +1,67 @@
+/**
+ * @author   liangxiaoqiong
+ * @version  1.0
+ * @date 2021/2/25
+ */
+@charset "UTF-8";
+.index-container {
+  align-items: flex-start;
+  padding-bottom: 60px;
+}
+.page-left {
+  width: calc(100% - 230px);
+}
+.package-renewal-tip {
+  margin-bottom: 10px;
+  padding: 20px 8px 20px 30px;
+}
+.renewal-content .renewal-text {
+  padding: 0 40px 0 20px;
+}
+.renewal-content .renewal-text h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.renewal-close {
+  padding: 10px;
+}
+.renewal-close i {
+  font-size: 15px;
+  font-weight: bold;
+}
+.tool-goods-order .list-row-box {
+  width: calc(50% - 5px);
+}
+.tool-goods-order .list-row-box:nth-child(odd) {
+  margin-right: 5px;
+}
+.tool-goods-order .list-row-box:nth-child(even) {
+  margin-left: 5px;
+}
+.tool-common .tool-list {
+  width: 100%;
+  display: inline-block;
+  padding: 20px;
+}
+.tool-common .tool-list a {
+  height: 50px;
+  line-height: 48px;
+  width: 25%;
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 60px;
+  float: left;
+}
+.tool-common .tool-list a img {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.tool-common .tool-list a span {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 24px;
+}

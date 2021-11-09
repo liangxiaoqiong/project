@@ -1,0 +1,52 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/3/5
+  -->
+<!-- template 图片hover显示大图-->
+<script type="x-template" id="img_popover">
+  <!--region 模版-->
+  <el-popover placement="right" trigger="hover">
+    <div class="popover-content">
+      <img :src="url" class="popover-content-img">
+    </div>
+    <div slot="reference" :style="thumbStyle" class="display-align">
+      <img :src="url" :style="thumbStyle" style="cursor: pointer;">
+    </div>
+  </el-popover>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.IMG_POPOVER = {
+    template: '#img_popover',
+    props: {
+      url: String, // 图片路径
+      thumbStyle: {
+        type: Object,
+        default: function () {
+          return {
+            width: '70px',
+            height: '70px',
+            borderRadius: '4px'
+          }
+        }
+      }, // 原图style样式
+    },
+    data: function () {
+      return {}
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {}
+  }
+</script>
+<style>
+  .popover-content .popover-content-img {
+    width: 200px;
+    height: auto;
+    max-height: 400px;
+  }
+</style>

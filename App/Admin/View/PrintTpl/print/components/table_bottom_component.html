@@ -1,0 +1,62 @@
+<!-- template 表格下方的统计信息，分仓显示tplOrder.show_bottom === 1
+分仓打印默认show_bottom=1，
+分仓针式打印，用户可选择show_bottom
+-->
+<script type="x-template" id="table_bottom_component">
+  <!--region 模版-->
+  <div class="table-bottom">
+    <template v-if="+tplOrder.tpl.tpl_type === 1 || +tplOrder.tpl.tpl_type === 2">
+      <template v-if="+tplOrder.show_bottom === 1">
+        <div class="flex-between">
+          <span>总商品数(件)：{{ getParamData('GOODS_TOTAL_NUM') }}</span>
+          <span>运费({$currencyUnit})：{{ getParamData('POSTAGE') }}</span>
+        </div>
+        <div class="flex-between">
+          <span>优惠券抵扣({$currencyUnit})：{{ getParamData('COUPON_MONEY') }}</span>
+          <span>满减({$currencyUnit})：{{ getParamData('MJ_PRICE') }}</span>
+          <span v-if="+getParamData('HEADER_REDUCE_PRICE') > 0">
+            团长优惠价({$currencyUnit})：{{ getParamData('HEADER_REDUCE_PRICE') }}
+          </span>
+        </div>
+        <div class="flex-between">
+          <span>商品总额({$currencyUnit})：{{ getParamData('GOODS_TOTAL') }}</span>
+          <span>实际支付({$currencyUnit})：{{ getParamData('TOTAL_PRICE') }}</span>
+        </div>
+      </template>
+    </template>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.TABLE_BOTTOM_COMPONENT = {
+    template: '#table_bottom_component',
+    props: {
+      tplOrder: Object,
+      depot: Object
+    },
+    data: function () {
+      return {}
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      getParamData: function (type) {
+        var self = this
+        var result = ''
+        try {
+          for (var key in self.depot.params_data) {
+            if (key == type) {
+              result = self.depot.params_data[key]
+              throw Error();
+            }
+          }
+        }catch (e) {}
+        return result
+      }
+    },
+    directives: {}
+  }
+</script>

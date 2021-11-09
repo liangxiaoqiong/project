@@ -1,0 +1,264 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": {
+    "id": "295",
+    "store_id": "138",
+    "type": "0",
+    "tpl_name": "热敏商品条码",
+    "tpl_type": "4",
+    "status": "1",
+    "tpl_content": [
+      {
+        "type": "order-table",
+        "id": "1",
+        "left": "2px",
+        "top": "175px",
+        "width": "180px",
+        "height": "146px",
+        "zIndex": "2",
+        "checkedItem": [
+          {
+            "type": "goods_name",
+            "value": "{column_goods_name}",
+            "default_name": "品名",
+            "diy_name": "品名",
+            "is_checked": "1"
+          },
+          {
+            "type": "goods_barcode",
+            "value": "{column_goods_barcode}",
+            "default_name": "商品条码",
+            "diy_name": "商品条码",
+            "is_checked": "1"
+          },
+          {
+            "type": "num",
+            "value": "{column_num}",
+            "default_name": "数量",
+            "diy_name": "数量",
+            "is_checked": "1"
+          },
+          {
+            "type": "goods_price",
+            "value": "{column_goods_price}",
+            "default_name": "单价",
+            "diy_name": "单价",
+            "is_checked": "1"
+          },
+          {
+            "type": "total_price",
+            "value": "{column_total_price}",
+            "default_name": "金额",
+            "diy_name": "金额",
+            "is_checked": "1"
+          }
+        ],
+        "otherTableItem": [],
+        "content": ""
+      },
+      {
+        "type": "CUSTOMER_NAME",
+        "left": "0px",
+        "top": "11px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "2",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "客户名：<a contenteditable=\"false\">{客户名}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "CUSTOMER_OTHER_NAME",
+        "left": "0px",
+        "top": "44px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "3",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "客户备注名：<a contenteditable=\"false\">{客户备注名}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "MEMBER_TAG_TEXT",
+        "left": "2px",
+        "top": "74px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "4",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "会员标签：<a contenteditable=\"false\">{会员标签}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "CUSTOMER_PHONE",
+        "left": "6px",
+        "top": "102px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "5",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "客户电话：<a contenteditable=\"false\">{客户电话}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "PICKUP_NAME",
+        "left": "0px",
+        "top": "131px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "3",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "门店名称：<a contenteditable=\"false\">{门店名称}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "COUPON_NAME",
+        "left": "14px",
+        "top": "456px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "5",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "优惠券名称：<a contenteditable=\"false\">{优惠券名称}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "TOTAL_PRICE",
+        "left": "16px",
+        "top": "483px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "6",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "实际支付金额：<a contenteditable=\"false\">{实际支付金额}<\/a>",
+        "contentImg": ""
+      }
+    ],
+    "tpl_config": {
+      "base_data": [
+        {
+          "type": "goods_name",
+          "value": "{column_goods_name}",
+          "default_name": "品名",
+          "diy_name": "品名",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_barcode",
+          "value": "{column_goods_barcode}",
+          "default_name": "商品条码",
+          "diy_name": "商品条码",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_number",
+          "value": "{column_goods_number}",
+          "default_name": "商品货号",
+          "diy_name": "商品货号",
+          "is_checked": "0"
+        },
+        {
+          "type": "num",
+          "value": "{column_num}",
+          "default_name": "数量",
+          "diy_name": "数量",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_units_name",
+          "value": "{column_goods_units_name}",
+          "default_name": "单位",
+          "diy_name": "单位",
+          "is_checked": "0"
+        },
+        {
+          "type": "goods_price",
+          "value": "{column_goods_price}",
+          "default_name": "单价",
+          "diy_name": "单价",
+          "is_checked": "1"
+        },
+        {
+          "type": "total_price",
+          "value": "{column_total_price}",
+          "default_name": "金额",
+          "diy_name": "金额",
+          "is_checked": "1"
+        },
+        {
+          "type": "sale_price",
+          "value": "{column_sale_price}",
+          "default_name": "零售价",
+          "diy_name": "零售价",
+          "is_checked": "0"
+        },
+        {
+          "type": "sale_tax_rate",
+          "value": "{column_sale_tax_rate}",
+          "default_name": "税率(%)",
+          "diy_name": "税率(%)",
+          "is_checked": "0"
+        },
+        {
+          "type": "goods_tag_text",
+          "value": "{column_goods_tag_text}",
+          "default_name": "商品标签",
+          "diy_name": "商品标签",
+          "is_checked": "0"
+        }
+      ],
+      "params_tpl": [],
+      "dragSizeBoxHeight": "499",
+      "is_show_subtotal": "0",
+      "pre_page_row": ""
+    },
+    "link_data": {},
+    "is_system": "0",
+    "create_time": "1612506831",
+    "is_delete": "0"
+  },
+  "time": "0.0454s"
+}

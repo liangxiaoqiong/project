@@ -1,0 +1,176 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/2/25
+  -->
+<!-- template 首页右侧咨询栏-->
+<script type="x-template" id="index_right_component">
+  <!--region 模版-->
+  <div class="index-right-component">
+    <div class="sms-warning mb-10">
+      <div class="mall-title">商城后台</div>
+      <div class="mall-warn-info">
+        <div class="flex-between"><span>有效期至：2028-12-25</span><a @click="toRenewalPackage">续费</a></div>
+        <div class="flex-between"><span>短信剩余：100条</span>
+          <a @click="viewSmsInfo">查看</a></div>
+      </div>
+    </div>
+    <a class="advisory-item mb-10" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=3124922832&site=qq&menu=yes">
+      <img src="http://wpa.qq.com/pa?p=2:3124922832:52" alt="点击这里给我发消息" title="点击这里给我发消息" style="display: none">
+      <div class="advisory-icon">
+        <img src="__ADMIN_IMG__/index/right_component/customer_service.png">
+      </div>
+      <div class="advisory-text">
+        <h4>有问题找我</h4>
+        <p>客服QQ：3124922832</p>
+      </div>
+    </a>
+    <div class="mb-10">
+      <el-popover placement="left" trigger="hover">
+        <div class="advisory-qrcode-layer">
+          <div class="advisory-icon">
+            <img src="__COMMON_IMG__/cs_img/QRcode.jpg">
+          </div>
+          <div>下载商家版APP</div>
+        </div>
+        <a class="advisory-item" slot="reference">
+          <div class="advisory-icon">
+            <img src="__ADMIN_IMG__/index/right_component/sjb.png">
+          </div>
+          <div class="advisory-text">
+            <h4>商家版手机端</h4>
+            <p>用手机随时随地管理店铺</p>
+          </div>
+        </a>
+      </el-popover>
+      <el-popover placement="left" trigger="hover">
+        <div class="advisory-qrcode-layer">
+          <div class="advisory-icon">
+            <img src="__COMMON_IMG__/cs_img/QRcode.jpg">
+          </div>
+          <div>下载买家版APP</div>
+        </div>
+        <a class="advisory-item" slot="reference">
+          <div class="advisory-icon">
+            <img src="__ADMIN_IMG__/index/right_component/mjb.png">
+          </div>
+          <div class="advisory-text">
+            <h4>买家版手机端</h4>
+            <p>买家完美体验</p>
+          </div>
+        </a>
+      </el-popover>
+      <el-popover placement="left" trigger="hover">
+        <div class="advisory-qrcode-layer">
+          <div class="advisory-icon">
+            <img src="__COMMON_IMG__/cs_img/QRcode.jpg">
+          </div>
+          <div>进入买家微信端</div>
+        </div>
+        <a class="advisory-item" slot="reference">
+          <div class="advisory-icon">
+            <img src="__ADMIN_IMG__/index/right_component/wapwxd.png">
+          </div>
+          <div class="advisory-text">
+            <h4>买家wap微信端</h4>
+            <p>用微信就可以分享做生意</p>
+          </div>
+        </a>
+      </el-popover>
+    </div>
+
+    <a class="advisory-item" href="//www.duinin.com/FAQs.html" target="_blank">
+      <div class="advisory-icon">
+        <img src="__ADMIN_IMG__/index/right_component/sybz.png">
+      </div>
+      <div class="advisory-text">
+        <h4>使用帮助</h4>
+        <p>更多使用帮助请进入查看</p>
+      </div>
+    </a>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.INDEX_RIGHT_COMPONENT = {
+    template: '#index_right_component',
+    props: {},
+    data: function () {
+      return {}
+    },
+    computed: {
+    },
+    mounted: function () {
+    },
+    methods: {
+      toRenewalPackage: function () {
+        this.$emit('renewal-package')
+      },
+      // 跳转查看短信
+      viewSmsInfo: function () {
+        parent.$('[title="message_config"]').click()
+      }
+    }
+  }
+</script>
+<style>
+  .index-right-component {
+    width: 220px;
+  }
+  .index-right-component .sms-warning {
+    padding: 5px 16px;
+    background-color: #FFFFff;
+  }
+  .index-right-component .sms-warning .mall-title {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 0 20px 0;
+  }
+  .index-right-component .sms-warning .mall-warn-info>div {
+    margin-bottom: 9px;
+  }
+  .index-right-component .sms-warning .mall-warn-info>div>a {
+    width: 38px;
+    height: 20px;
+    background: rgba(0, 60, 255, .1);
+    border-radius: 4px;
+    color: #003CFF;
+    line-height: 20px;
+    display: inline-block;
+    text-align: center;
+  }
+  .advisory-item {
+    min-height: 73px;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    background-color: #FFFFff;
+    padding: 0 16px;
+  }
+  .advisory-item .advisory-icon {
+    display: inline-block;
+    width: 26px;
+  }
+  .advisory-item .advisory-text {
+    padding-left: 10px;
+  }
+  .advisory-item .advisory-text h4 {
+    font-size: 14px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  .advisory-qrcode-layer {
+    text-align: center;
+    font-size: 12px;
+  }
+  .advisory-qrcode-layer img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 5px;
+  }
+  .el-popover {
+    border-radius: 8px;
+  }
+</style>

@@ -1,0 +1,185 @@
+<!--表格列表项筛选组件-->
+<style>
+  .table-setting-layer {
+    position: absolute;
+    z-index: 5;
+    top: 42px;
+    left: 0;
+    background-color: #FFFFff;
+    border-radius:0 0 4px 4px;
+    max-width: 700px;
+    box-shadow:0px 10px 8px rgba(0,0,0,0.16);
+    width: -webkit-fill-available;
+    border-left: 1px solid #eff0f4;
+  }
+  .table-setting-layer .set-layer-title {
+    display: -webkit-flex;
+    display: flex;
+    height: 60px;
+    align-items: center;
+    padding: 0 30px;
+    border-bottom: 1px solid #F2F2F2;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .set-layer-main {
+    display: inline-block;
+    padding: 10px 0 10px 30px;
+    max-height: 350px;
+    overflow-y: auto;
+    width: 99.99%;
+    box-sizing: border-box;
+  }
+  .set-layer-main .el-checkbox {
+    display: inline-block;
+    margin: 8px 15px 8px 0;
+  }
+  .set-layer-foot {
+    padding: 20px 30px 40px 30px;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .shade {
+    opacity: 0.5;
+    z-index: 4;
+    background: black;
+    position: absolute;
+    left: 0;
+    top: 42px;
+    width: 100%;
+    height: calc(100% + 20px);
+  }
+</style>
+<script type="x-template" id="table_setting_component">
+  <!--region 设置列表项 弹框-->
+  <div v-show="isShowLayer">
+    <div class="shade"></div>
+    <div class="table-setting-layer" id="table-setting-layer">
+      <div class="set-layer-title">设置列表项</div>
+      <div class="set-layer-main">
+        <el-checkbox v-for="(item, index) in tableFiled" :label="item.filed_val" :key="index" disabled checked v-if="!isSetting(item)">
+          {{ item.th_name }}
+        </el-checkbox>
+        <el-checkbox-group style="display: contents;" v-model="checkFieldIds">
+          <el-checkbox v-for="(item, index) in tableFiled" :label="item.filed_val" :key="index" v-if="isSetting(item)">
+            {{ item.th_name }}
+          </el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <div class="set-layer-foot">
+        <button type="button" class="xxbtn-white" @click.stop="clickAllField">
+          {{ isCheckAllField ? '全部取消' : '全部选中' }}
+        </button>
+        <button type="button" class="xxbtn-primary ml-10" @click.stop="submitSet" style="min-width: 82px">{:L('OK')}<!--确定--></button>
+      </div>
+    </div>
+  </div>
+  <!--endregion 设置列表项 弹框-->
+</script>
+<script>
+  AppUtil.COMPONENTS.TABLE_SETTING_COMPONENT = {
+    template: '#table_setting_component',
+    props: {
+      query: Object,
+      tableFiled: Array,
+    },
+    data: function () {
+      return {
+        isShowLayer: false,
+        checkFieldIds: [] //显示的表格项数组is_setting_show=1，[filed_val, filed_val, ...]
+      }
+    },
+    mounted: function () {
+      this.init()
+    },
+    computed: {
+      //是否全选
+      isCheckAllField: function () {
+        var self = this
+        if (self.tableFiled) {
+          var len = 0
+          self.tableFiled.forEach(function (value) {
+            if (self.isSetting(value)) {
+              len++
+            }
+          })
+          return self.checkFieldIds.length === len
+        }
+      }
+    },
+    methods: {
+      //判断是否可设置显示||不显示
+      isSetting: function (item) {
+        return typeof item.is_setting_show ==='undefined' ||
+          (typeof item.is_setting_show !== 'undefined' && (+item.is_setting_show === 1 || +item.is_setting_show === 0))
+      },
+      isSettingShow: function (item) {
+        return typeof item.is_setting_show ==='undefined' ||
+          (typeof item.is_setting_show !== 'undefined' && +item.is_setting_show === 1)
+      },
+      init: function () {
+        var self = this
+        var field = []
+        if (typeof self.query.field_val_arr !== 'undefined' && self.query.field_val_arr !== '') {
+          self.checkFieldIds = self.query.field_val_arr.split(',')
+          self.setTableFieldShow()
+        } else {
+          //为空时默认全选中
+          if (self.tableFiled) {
+            self.tableFiled.forEach(function (value) {
+              if (self.isSettingShow(value)) {
+                field.push(value.filed_val)
+              }
+            })
+            self.checkFieldIds = field
+            self.query.field_val_arr = self.checkFieldIds.join(',')
+          }
+        }
+      },
+      showLayer: function () {
+        this.isShowLayer = !this.isShowLayer
+      },
+      hideLayer: function () {
+        this.isShowLayer = false
+      },
+      //全选表头
+      clickAllField: function () {
+        var self = this
+        if (self.isCheckAllField) {
+          self.checkFieldIds = []
+          return false
+        } else {
+          var ids = []
+          self.tableFiled.forEach(function (value) {
+            if (self.isSetting(value)) {
+              ids.push(value.filed_val)
+            }
+          })
+          self.checkFieldIds = ids
+        }
+      },
+      setTableFieldShow: function () {
+        var self = this
+        self.tableFiled.forEach(function (value) {
+          if (+value.is_setting_show !== 2) {
+            if (self.checkFieldIds.indexOf(value.filed_val) > -1) {
+              self.$set(value, 'is_setting_show', 1)
+            } else {
+              self.$set(value, 'is_setting_show', 0)
+            }
+          }
+        })
+      },
+      submitSet: function () {
+        var self = this
+        self.query.field_val_arr = self.checkFieldIds.join(',')
+        self.setTableFieldShow()
+        this.$emit('sync-table-auto')
+        self.hideLayer()
+      }
+    }
+  }
+</script>
+

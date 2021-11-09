@@ -1,0 +1,21 @@
+{
+  "state": "SUCCESS",
+  "url": "http:\/\/hdev.product.com\/uploads\/file1\/20200924\/5f6c046b1feae.png",
+  "name": "",
+  "original": "",
+  "fid": "11",
+  "info": [
+    {
+      "name": "14fde4ceda0acdb0.png",
+      "type": "image\/png",
+      "size": 66317,
+      "key": "gardenLogo",
+      "ext": "png",
+      "md5": "ce9f48ad94cf9ca4afec5952e4e958b1",
+      "sha1": "4a013f666212ab080a4dee18ee3ff8f3a623ea50",
+      "savename": "5f6c046b1feae.png",
+      "savepath": "file1\/20200924\/",
+      "url": "\/uploads\/file1\/20200924\/5f6c046b1feae.png"
+    }
+  ]
+}

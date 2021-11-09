@@ -1,0 +1,116 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/4/23
+  -->
+<!-- template diy打印-->
+<script type="x-template" id="print_diy">
+  <!--region 模版-->
+  <div>
+    <diy-print-default
+        ref="diyPrintDefault"
+        v-show="tplOrder.tpl.tpl_config.pre_page_row === ''"
+        :tpl-order="tplOrder"
+        :order-table-style="orderTableStyle"
+        :diy-print-id="diyPrintId"
+        @print="printHtml"></diy-print-default>
+    <diy-print-page
+        ref="diyPrintPage"
+        v-show="tplOrder.tpl.tpl_config.pre_page_row !== ''"
+        :tpl-order="tplOrder"
+        :order-table-style="orderTableStyle"
+        :diy-print-id="diyPrintId"
+        @print="printHtml"></diy-print-page>
+  </div>
+  <!--endregion-->
+</script>
+
+<script type="text/javascript" src="__PUBLIC_WAP__"></script>
+<script src="__ROOT__/Public/admin/js/PrintTpl/preview_tpl.js?v={$V}"></script>
+<include file="PrintTpl/components/default_table_total" />
+<include file="PrintTpl/print/components/print_table_mini" />
+<include file="PrintTpl/print/components/print_table_default" />
+<include file="PrintTpl/print/components/print_item" />
+<include file="PrintTpl/print/components/table_bottom_component" />
+<include file="PrintTpl/print/components/print_default" />
+<include file="PrintTpl/print/components/print_page" />
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.PRINT_DIY = {
+    template: '#print_diy',
+    components: {
+      'diy-print-default': AppUtil.COMPONENTS.DIY_PRINT_DEFAULT,
+      'diy-print-page': AppUtil.COMPONENTS.DIY_PRINT_PAGE,
+    },
+    props: {
+      tplOrder: Object,
+      diyPrintId: {
+        type: [String, Number],
+        default: ''
+      }, // diy打印模板标识,主要用于区分一个页面打印多个diy模板,用于赋打印的html内容
+    },
+    data: function () {
+      return {}
+    },
+    computed: {
+      // 订单表格宽度
+      orderTableStyle: function () {
+        return {width: this.tplOrder.tpl.tpl_content[0].width}
+      }
+    },
+    mounted: function () {
+      if (this.tplOrder.tpl.tpl_config.pre_page_row === '') {
+        this.$refs.diyPrintDefault.init()
+      } else {
+        this.$refs.diyPrintPage.init()
+      }
+    },
+    methods: {
+      // 下载需要打印的图片文件[下载了图片才能打印，否则打印预览会丢失]
+      downLoadPrintImg: function () {
+        var self = this;
+        var imgList = [];
+        self.tplOrder.tpl.tpl_content.forEach(function (value, index) {
+          if (value.type === 'ORDER_QR_CODE' || value.type === 'custom-img') {
+            imgList.push(index);
+          }
+        })
+        var flag = 0;
+        if (imgList.length > 0) {
+          imgList.forEach(function (imgKey) {
+            self.tplOrder.orderList.forEach(function (order) {
+              var qrcodeUrl = self.tplOrder.tpl.tpl_content[imgKey].contentImg;
+              if (self.tplOrder.tpl.tpl_content[imgKey].type === 'ORDER_QR_CODE') {
+                // qrcodeUrl = diyPrintTpl.paramReplace(order.depotList[0].params_data, self.tplOrder.tpl.tpl_content[imgKey]);
+                qrcodeUrl = '/Public/pc/imgs/QRcode.jpg'
+              }
+              var qrcodeImg = new Image();
+              qrcodeImg.src = qrcodeUrl;
+              qrcodeImg.onload = function () {
+                flag++;
+                if (flag === imgList.length) {
+                  self.confirmPrint();
+                }
+              }
+            })
+          })
+        } else {
+          self.confirmPrint();
+        }
+      },
+      //js判断是否加了二维码图片、自定义图片
+
+      printHtml: function () {
+        var self = this
+        self.$nextTick(function () {
+          var printHtml = $('#print-content' + this.diyPrintId).html()
+          $('#print-content-html' + this.diyPrintId).html(printHtml)
+          self.downLoadPrintImg();
+        })
+      },
+      confirmPrint: function () {
+        this.$emit('submit-print');
+      }
+    }
+  }
+</script>

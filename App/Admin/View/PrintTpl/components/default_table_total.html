@@ -1,0 +1,135 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/7/8
+  -->
+<!-- template diy打印，订单表格底部的合计行【获取某一段空白列最多的显示大写合计金额】-->
+<script type="x-template" id="default_table_total">
+  <!--region 模版-->
+  <tr>
+    <td>合计</td>
+    <td v-for="(item, index) in getEmptyTd.tdList" :colspan="item.len">
+      <template v-if="item.keyType === 'num'">
+        <template v-if="type === 'print'">{{ tableGoodsTotal(depot).num }}</template>
+        <template v-else>xxxx</template>
+      </template>
+      <template v-if="item.keyType === 'total_price'">
+        <template v-if="type === 'print'">{{ tableGoodsTotal(depot).price }}</template>
+        <template v-else>xxxx</template>
+      </template>
+      <template v-if="isShowChinesePrice(index)">
+        <template v-if="type === 'print'">{{ chineseAmount }}</template>
+        <template v-else>大写金额</template>
+      </template>
+    </td>
+  </tr>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.DEFAULT_TABLE_TOTAL = {
+    template: '#default_table_total',
+    components: {},
+    props: {
+      checkedItem: Array,
+      depot: Object,
+      type: {
+        type: String,
+        default: 'print'
+      }, // 页面类型：'edit'-编辑，'print'-打印
+    },
+    data: function () {
+      return {}
+    },
+    computed: {
+      getEmptyTd: function () {
+        var self = this;
+        var numKey = -1;
+        var totalPriceKey = -1;
+        var goodsNameKey = -1;
+        var checkedItemArr = [];
+        self.checkedItem.forEach(function (value, index) {
+          if (+value.is_checked === 1) {
+            checkedItemArr.push(value);
+          }
+        })
+        checkedItemArr.forEach(function (value, index) {
+          if (value.type === 'num') {
+            numKey = index - 1;
+          }
+          if (value.type === 'total_price') {
+            totalPriceKey = index - 1;
+          }
+          if (value.type === 'goods_name') {
+            goodsNameKey = index - 1;
+          }
+        })
+        var keySort = [numKey, totalPriceKey];
+        var numFirst = numKey < totalPriceKey;
+        var tdList = [];
+        var chinesePriceKey = -1;
+        var itemMaxKey = checkedItemArr.length - 2;
+        keySort.sort(function (a, b) {return a - b});
+        var keyDiff = keySort[1] - keySort[0] - 1;
+        console.log(keySort)
+        if(keySort[0] === 0) {
+          tdList.push({len: 1, keyType: numFirst ? 'num' : 'total_price'});
+        } else if (keySort[0] > 0) {
+          var keyType = '';
+          if (goodsNameKey < keySort[0]) {
+            keyType = 'goods_name';
+          }
+          tdList.push({len: keySort[0], keyType: keyType});
+          tdList.push({len: 1, keyType: numFirst ? 'num' : 'total_price'});
+        }
+        if (keyDiff > 0) {
+          var keyType = '';
+          if (keySort[0]< goodsNameKey && goodsNameKey < keySort[1]) {
+            keyType = 'goods_name';
+          }
+          tdList.push({len: keyDiff, keyType: keyType});
+        }
+        if(keySort[1] < itemMaxKey) {
+          tdList.push({len: 1, keyType: numFirst ? 'total_price' : 'num'});
+          var keyType = '';
+          if (goodsNameKey < keySort[1]) {
+            keyType = 'goods_name';
+          }
+          tdList.push({len: itemMaxKey - keySort[1], keyType})
+        } else if(keySort[1] === itemMaxKey) {
+          tdList.push({len: 1, keyType: numFirst ? 'total_price' : 'num'});
+        }
+        var lenMax = 0;
+        try {
+          tdList.forEach(function (td, ti) {
+            if (td.keyType === 'goods_name') {
+              chinesePriceKey = ti;
+              throw Error;
+            } else {
+              if (td.keyType !== 'num' && td.keyType !== 'total_price') {
+                if (lenMax < td.len) {
+                  chinesePriceKey = ti;
+                }
+              }
+            }
+          })
+        } catch (e) {}
+        return {tdList: tdList, chinesePriceKey: chinesePriceKey}
+      },
+      chineseAmount: function () {
+        return publicWap.digitalAmountToChinese(this.tableGoodsTotal(this.depot).price);
+      }
+    },
+    mounted: function () {
+    },
+    methods: {
+      isShowChinesePrice: function (index) {
+        return this.getEmptyTd.chinesePriceKey > -1 && index === this.getEmptyTd.chinesePriceKey;
+      },
+      tableGoodsTotal: function (depot) {
+        return diyPrintTpl.tableGoodsTotal(depot)
+      },
+    }
+  }
+</script>

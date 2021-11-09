@@ -1,0 +1,216 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/6/21
+  -->
+<!-- template 编辑表格弹框-->
+<script type="x-template" id="tpl_table_setting_layer">
+  <!--region 模版-->
+  <el-dialog
+    title="编辑表格弹框"
+    :close-on-click-modal="false"
+    width="700px"
+    :visible.sync="isShowLayer">
+    <div class="dialog-scroll">
+      <div class="mb-10">
+        表格边框：
+        <el-select v-model="tableBorderWidth">
+          <el-option v-for="(item, i) in 5" :key="i" :value="item+''" :label="item+'px'"></el-option>
+        </el-select>
+      </div>
+      <div class="table-diy-ul tpl-table-set">
+        <div class="table-thead">
+          <div class="th-1">列项</div>
+          <div class="th-2">排序</div>
+          <div class="th-3">
+            列宽(总宽度 {{ info.tpl_content[0].width }}/
+            <font class="color-orange">当前宽度 {{ currentTableWidth }}</font>)
+          </div>
+        </div>
+        <ul class="table-tbody sortable-item">
+          <li v-for="(item, index) in checkedItem" :id="index">
+            <div class="td-1">{{ item.diy_name }}</div>
+            <div class="td-2"><input type="text" class="input-inner" v-model="item.sort" @blur="changeSort"></div>
+            <div class="td-3"><input type="text" class="input-inner" v-model="item.width"></div>
+          </li>
+        </ul>
+      </div>
+      <div class="flex-between pt-10">
+        <div class="color-gray">注：您可以上下拖动列项排序</div>
+      </div>
+    </div>
+    <div slot="footer" class="dialog-footer">
+      <a class="xxbtn-white" @click="isShowLayer = false">取消</a>
+      <a class="xxbtn-primary" @click="submit">确定</a>
+      <a class="xxbtn-plain" @click="reset">重置</a>
+    </div>
+  </el-dialog>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.TPL_TABLE_SETTING_LAYER = {
+    template: '#tpl_table_setting_layer',
+    components: {},
+    props: {
+      info: Object,
+    },
+    data: function () {
+      return {
+        isShowLayer: false,
+        checkedItem: []
+      }
+    },
+    computed: {
+      // 当前表格总宽度
+      currentTableWidth: function () {
+        var self = this;
+        var widthLen = 0;
+        var widthTotal = 0;
+        self.checkedItem.forEach(function (value) {
+          if (typeof value.width !== 'undefined' && value.width !== '') {
+            widthLen++;
+            widthTotal += +value.width;
+          }
+        })
+        if (widthLen === self.checkedItem.length) {
+          return widthTotal + 'px';
+        } else {
+          return self.info.tpl_content[0].width;
+        }
+      },
+      tableBorderWidth: {
+        set: function (val) {
+          this.$set(this.info.tpl_content[0], 'tableBorderWidth', val);
+        },
+        get: function () {
+          return this.info.tpl_content[0].tableBorderWidth ? (this.info.tpl_content[0].tableBorderWidth + '') : '1';
+        }
+      }
+    },
+    mounted: function () {
+    },
+    methods: {
+      init: function () {
+        var self = this;
+        var checkedItem = JSON.parse(JSON.stringify(self.info.tpl_content[0].checkedItem));
+        checkedItem.forEach(function (value, index) {
+          self.$set(value, 'sort', index + 1);
+        })
+        self.checkedItem = checkedItem;
+        self.showLayer();
+        self.$nextTick(function () {
+          self.initSortable();
+        })
+      },
+
+      showLayer: function () {
+        this.isShowLayer = true;
+      },
+      initSortable: function () {
+        var self = this
+        $(".sortable-item").sortable({
+          axis: 'y',
+          update: function (event, ui) {
+          },
+          stop: function (event, ui) {
+            self.$nextTick(function () {
+              var a = JSON.stringify(self.checkedItem);
+              a = JSON.parse(a);
+              a.sort(publicWap.compare('sort_index'));//排序
+              self.checkedItem = a;
+              event.preventDefault();
+              window.optionchanged = true;
+            })
+          },
+          deactivate: function (event) {
+            self.getSortableData();
+            event.preventDefault();
+            return false;
+          }
+        });
+      },
+      /*获取 拖拽数据*/
+      getSortableData: function () {
+        var self = this;
+        var updateArr = $(".sortable-item").sortable("toArray");
+        var newArr = JSON.stringify(updateArr);
+        newArr = JSON.parse(newArr);
+        var imgList = self.checkedItem;
+        for (var j = 0; j < newArr.length; j++) {
+          for (var i = 0; i < imgList.length; i++) {
+            if (+i === +newArr[j]) {
+              imgList[i].sort_index = j + 1;
+            }
+          }
+        }
+      },
+      changeSort: function () {
+        var self = this;
+        var a = JSON.stringify(self.checkedItem);
+        a = JSON.parse(a);
+        a.sort(publicWap.compare('sort'));//排序
+        self.checkedItem = a;
+      },
+      submit: function () {
+        this.info.tpl_content[0].checkedItem = JSON.parse(JSON.stringify(this.checkedItem));
+        this.isShowLayer = false;
+      },
+      reset: function () {
+        var self = this
+        self.$confirm('', {
+          title: '确定重置表格设置吗？',
+          customClass: 'dialog-confirm'
+        }).then(function () {
+          // 初始化
+          var checkedItemParam = []
+          self.info.tpl_config.params_tpl.forEach(function (val_param) {
+            val_param.tpl_params.forEach(function (val_item, index) {
+              self.$set(val_item, 'sort', index + 1);
+              if (typeof val_item.is_checked !== 'undefined' && +val_item.is_checked === 1) {
+                checkedItemParam.push(val_item)
+              }
+            })
+          })
+          var checkedItem = []
+          self.info.tpl_config.base_data.forEach(function (value, index) {
+            self.$set(value, 'sort', index + 1);
+            if (value.type === 'goods_spec') {
+              if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+                checkedItem.push(value)
+              }
+              checkedItem = checkedItem.concat(checkedItemParam)
+            } else {
+              if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+                checkedItem.push(value)
+              }
+            }
+          })
+          var checkedOther = [];
+          self.info.tpl_config.tableOtherData.forEach(function (value, index) {
+            self.$set(value, 'sort', index + 1);
+            if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+              checkedOther.push(value)
+            }
+          })
+          checkedItem = checkedItem.concat(checkedOther);
+          self.checkedItem = checkedItem
+        }).catch(function () {
+
+        })
+      }
+    }
+  }
+</script>
+<style>
+  .tpl-table-set.table-diy-ul .table-thead .th-2,
+  .tpl-table-set.table-diy-ul .table-tbody .td-2 {
+    width: 180px;
+  }
+  .tpl-table-set.table-diy-ul .table-thead .th-3,
+  .tpl-table-set.table-diy-ul .table-tbody .td-3 {
+    width: calc(100% - 360px);
+  }
+
+</style>

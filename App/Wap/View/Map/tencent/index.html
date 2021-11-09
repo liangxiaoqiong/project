@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="format-detect" content="telephone=no"/>
+  <title>腾讯地图-多点标记，多文本标记，定位</title>
+  <link rel="stylesheet" type="text/css" href="/Public/wap/css/common/map.css?v={$V}">
+  <style>
+    #pickup-map {
+      width: 100%;
+      height: 800px;
+    }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="" v-if="loadCompleted">
+  <div id="pickup-map"></div>
+  <div class="current-btn icon-current-location" @click="setMapCenter(currentPoint)" style="z-index: 1001"><!--定位到当前位置--></div>
+  <div class="map-bottom" style="z-index: 1001">
+    <div class="map-info">
+      <div>
+        <span><i class="styleicon-home"></i><font>{{ currentPick.pick_name }}</font></span>
+        <a style="display: inline-block;" :href="'tel:'+currentPick.link_tel">
+          <i class="styleicon-tel"></i><font>{{ currentPick.link_name }} {{ currentPick.link_tel }}</font>
+        </a>
+      </div>
+      <div>
+        <span @click="mapLink(currentPick)">
+          <i class="styleicon-user-dizhi"></i>距离{{ currentPick.distance }}  {{ currentPick.pick_address }}
+        </span>
+      </div>
+    </div>
+    <div class="map-href">
+      <a class="bg-diy flex-row" @click="changePick(currentPick)">切换{$pickup_name}</a>
+    </div>
+  </div>
+</div>
+</body>
+<include file="Public:base"/>
+<!--引入Javascript API GL，参数说明参见下文-->
+<script src="https://map.qq.com/api/gljs?v=1.exp&key=TU6BZ-JJWC3-W3E3N-3UGEZ-2JM4H-ERBCG"></script>
+<script type="text/javascript" src="https://mapapi.qq.com/web/mapComponents/geoLocation/v/geolocation.min.js">/*腾讯地图定位用户位置*/</script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        loadCompleted: false,
+        currentPoint: {lng: '', lat: ''},//当前定位的经纬度
+        mapEl: '',//地图元素
+        markerLayer: '',//地图点标记图层元素
+        makerList: [],
+        pickAddressData: {
+          pickup_list: [] // 自提门店列表
+        },
+      }
+    },
+    computed: {
+      currentPick: function () {
+        if (!this.pickAddressData.default_pickup > 0) {
+          return this.pickAddressData.pickup_list[0];
+        }
+        for (var i = 0; i < this.pickAddressData.pickup_list.length; i++) {
+          var pick = this.pickAddressData.pickup_list[i]
+          if (this.pickAddressData.default_pickup == pick.id) {
+            return pick;
+          }
+        }
+        return {};
+      },
+    },
+    mounted: function () {
+      var self = this
+      self.getPickupList().then(function (result) {
+        result.data.pickup_list.forEach(function (value) {
+          value.lng = value.longitude
+          value.lat = value.latitude
+          if (value.head_url === '') {
+            value.head_url = '/Public/common/img/icon_img/map_point2.png'
+          }
+        })
+        self.pickAddressData = result.data
+        self.loadCompleted = true;
+        self.$nextTick(function () {
+          self.createMap()
+          self.getLocateCurrent()
+        })
+      });
+    },
+    methods: {
+      getPickupList: function () {
+        var self = this
+        return AppUtil.ajaxRequest({
+          url: '/Public/json/wap/map/map_marker_list.json',
+        })
+      },
+      //创建地图
+      createMap: function () {
+        var self = this
+        //定义地图中心点坐标
+        var longitude = "";
+        var latitude = "";
+        self.pickAddressData.pickup_list.forEach(function (value, index) {
+          if (+value.id === +self.currentPick.id) {
+            longitude = value.lng
+            latitude = value.lat
+          }
+        })
+        var center = new TMap.LatLng(latitude, longitude)
+        //定义map变量，调用 TMap.Map() 构造函数创建地图
+        self.mapEl = new TMap.Map('pickup-map', {
+          center: center,//设置地图中心点坐标
+          zoom: 15,   //设置地图缩放级别
+         // pitch: 43.5,  //设置俯仰角
+         // rotation: 45    //设置地图旋转角度
+        });
+        self.mapMarker();
+        self.mapLabel();
+      },
+      //标记点
+      mapMarker: function () {
+        var self = this
+        var geometriesMarkerList = [];
+        self.pickAddressData.pickup_list.forEach(function (value, index) {
+          var styleId = 'marker';
+          if (+value.id === +self.currentPick.id) {
+            styleId = 'marker-select';
+          }
+          geometriesMarkerList.push({
+            "id": "marker_" + value.id,
+            "styleId": styleId,
+            "position": new TMap.LatLng(+value.lat, +value.lng),
+            "properties": {
+              id: value.id,
+              pick_name: value.pick_name,
+              lat: value.lat,
+              lng: value.lng,
+            },
+            rank: index
+          });
+        })
+        //初始化marker
+        self.markerLayer = new TMap.MultiMarker({
+          id: 'marker-layer',
+          map: self.mapEl,
+          styles: {
+            "marker": new TMap.MarkerStyle({
+              "width": 25,
+              "height": 25,
+              "anchor": { x: 14, y: 22 },
+              "src": '/Public/common/img/icon_img/map_point2.png'
+            }),
+            "marker-select": new TMap.MarkerStyle({
+              "width": 30,
+              "height": 40,
+              "anchor": { x: 14, y: 32 },
+              //"src": '/Public/common/img/icon_img/map_point2.png'
+            })
+          },
+          geometries: geometriesMarkerList
+        });
+        self.markerLayer.on("click", self.changeThisPickup)
+      },
+      // 标记文本
+      mapLabel: function () {
+        var self = this
+        var geometriesLabelList = [];
+        self.pickAddressData.pickup_list.forEach(function (value, index) {
+          geometriesLabelList.push({
+            'id': 'label'+index, //点图形数据的标志信息
+            'styleId': 'label', //样式id
+            'position': new TMap.LatLng(+value.lat, +value.lng), //标注点位置
+            'content': value.pick_name, //标注文本
+            'properties': { //标注点的属性数据
+              'title': 'label'
+            },
+            rank: index //文本碰撞时的优先级，值越大优先级越高
+          })
+        })
+
+        new TMap.MultiLabel({
+          id: 'label-layer',
+          map: self.mapEl,
+          enableCollision:true, //是否开启图层内部的文本标注碰撞
+          styles: {
+            'label': new TMap.LabelStyle({
+              //'color': '#ff0000', //颜色属性
+              'size': 12, //文字大小属性
+              'offset': { x: 0, y: 10 }, //文字偏移属性单位为像素
+              'angle': 0, //文字旋转属性
+              'alignment': 'center', //文字水平对齐属性
+              'verticalAlignment': 'middle' //文字垂直对齐属性
+            })
+          },
+          geometries: geometriesLabelList
+        });
+      },
+
+      //切换当前门店地址
+      changeThisPickup: function (options) {
+        var self = this;
+        var oldPick = self.currentPick;
+        var newPick = {
+          id: options.geometry.properties.id,
+          pick_name: options.geometry.properties.pick_name,
+          lat: options.geometry.properties.lat,
+          lng: options.geometry.properties.lng,
+        };
+        if (+oldPick.id === +newPick.id) return false
+        // 清空标记点，重新标记
+        self.markerLayer.setMap(null)
+        self.markerLayer = null
+        self.pickAddressData.default_pickup = newPick.id;
+        self.mapMarker();
+      },
+
+      /**region 当前位置定位标记*/
+      //定位用户当前位置
+      getLocateCurrent: function () {
+        var self = this;
+        var geolocation = new qq.maps.Geolocation('TU6BZ-JJWC3-W3E3N-3UGEZ-2JM4H-ERBCG', 'xx');
+        geolocation.getLocation(function (position) {
+          self.currentPoint = position
+          self.locationMarker();
+        }, function () {
+          alert('Error：定位失败！');
+        }, {enableHighAccuracy: true});
+      },
+      // 定位位置标记
+      locationMarker: function () {
+        var self = this;
+        //初始化marker
+        var marker = new TMap.MultiMarker({
+          id: 'marker-layer_location',
+          map: self.mapEl,
+          styles: {
+            "marker": new TMap.MarkerStyle({
+              "width": 30,
+              "height": 65,
+              "anchor": { x: 16, y: 32 },
+              "src": '/Public/common/img/icon_img/current.png'
+            })
+          },
+          geometries: [{
+            "id": 'location',
+            "styleId": 'marker',
+            "position": new TMap.LatLng(self.currentPoint.lat, self.currentPoint.lng),
+            "properties": {
+              "title": "marker"
+            }
+          }]
+        });
+      },
+      /**endregion*/
+
+      //设置地图中心点
+      setMapCenter: function (point) {
+        this.mapEl.setCenter(new TMap.LatLng(point.lat,point.lng)); // 设置地图中心点
+      },
+      mapLink: function () {
+
+      }
+    }
+  })
+</script>
+</html>

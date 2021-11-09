@@ -1,0 +1,145 @@
+<!-- template 表格下分页-->
+<style>
+  .table-page {
+    display: inline-block;
+    float: right;
+  }
+
+  .none-table-data {
+    text-align: center;
+    color: #999999;
+    padding: 10px;
+  }
+  .el-pagination button,
+  .el-pagination span:not([class*=suffix]) {
+    font-size: 12px;
+    color: #999999;
+    height: 30px;
+    line-height: 28px;
+    margin-right: 5px;
+    margin-left: 10px!important;
+  }
+  .el-pagination .el-pager {
+    display: inline-block;
+  }
+  .el-pagination .el-input__inner,
+  .el-pagination .btn-next,
+  .el-pagination .btn-prev,
+  .el-pagination .el-pager li {
+    margin: 0!important;
+    background-color: #FFFFff!important;
+    min-width: 40px!important;
+    font-weight: normal;
+    padding: 0 8px;
+    height: 30px;
+    line-height: 28px;
+    border: 1px solid #E1E1E1;
+    display: inline-block;
+    font-size: 12px!important;
+    border-radius: 2px!important;
+  }
+  .el-pagination .el-select .el-input {
+    margin: 0 9px;
+  }
+  .el-pagination__jump {
+    margin-left: 0!important;
+  }
+  .el-pagination__jump .el-pagination__editor {
+    margin: 0 9px;
+    width: 57px!important;
+  }
+  .el-pagination__jump .el-pagination__editor .el-input__inner {
+    width: 57px;
+    height: 30px!important;
+    line-height: 28px!important;
+  }
+  .el-pagination.is-background .el-pager li:not(.disabled).active {
+    background: #003CFF!important;
+    border: 1px solid #003CFF;
+    color: #FFFFff;
+  }
+</style>
+<script type="x-template" id="temp_pagination">
+  <div class="table-page" v-if="!isNaN(tableTotal)">
+    <template v-if="isShowPage">
+      <div v-if="+tableTotal > 0">
+        <el-pagination
+            background
+            :page-size="+query.limit"
+            :layout="pageLayout"
+            :page-sizes="[5, 10, 15,  20, 30, 40, 50, 100]"
+            :total="+tableTotal"
+            :current-page="+query.page"
+            @current-change="pageChange" @size-change="limitChange">
+        </el-pagination>
+      </div>
+      <div class="none-table-data" v-else>
+        {:L('NULL_TABLE_DATA')}<!--暂无数据-->
+      </div>
+    </template>
+  </div>
+</script>
+<script>
+  AppUtil.COMPONENTS.TEMP_PAGINATION = {
+    template: '#temp_pagination',
+    components: {},
+    props: {
+      query: {
+        type: Object,
+        default: function () {
+          return {
+            page: 1, //分页
+            limit: 20 //每页显示的条数
+          }
+        }
+      },
+      tableTotal: [Number, String],//表格总数
+      isShowPageSizes: {
+        type: Boolean,
+        default: true
+      }, // 是否显示分页切换条数【assign的表格数据不显示】
+    },//接收父级组件参数
+    computed: {
+      isShowPage: function () {
+        var result = true
+        if (typeof this.query.load !== 'undefined' && this.query.load) {
+          result = false
+        }
+        return result
+      },
+      pageLayout: function () {
+        var layout = 'total, prev, pager, next, jumper';
+        if (this.isShowPageSizes) {
+          layout = 'total, sizes, prev, pager, next, jumper';
+        }
+        return layout
+      }
+    },
+    data: function () {
+      return {}
+    },
+    methods: {
+      pageChange: function (page) {
+        this.query.page = page
+        this.$emit('temp-page-event');//调用父组件方法，并传参
+      },
+      limitChange: function (limit) {
+        this.query.limit = limit
+        this.$emit('temp-page-event');//调用父组件方法，并传参
+      },
+      // 表格底部全选、分页是否置底,【未使用diy-table组件时调用】
+      paginationTop: function () {
+        var self = this;
+        self.$nextTick(function () {
+          var availHeight  = window.screen.availHeight ;
+          var scrollHeight = document.body.scrollHeight;
+          if (scrollHeight > (availHeight - 60)) {
+            $('.table-eldiy').addClass('fixed-bottom');
+          } else {
+            $('.table-eldiy').removeClass('fixed-bottom');
+          }
+        })
+      }
+    }
+  }
+</script>

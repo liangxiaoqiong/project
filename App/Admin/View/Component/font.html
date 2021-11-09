@@ -1,0 +1,48 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10"></div>
+    <div>
+      <div class="border-box-list" v-for="list in fontSizeList">
+        <div class="title">{{ list.title }}</div>
+        <div class="list-item">
+          <a v-for="item in list.list">
+            <span :class="item.color_class" style="width: 100%;">{{ item.class_name }}</span>
+            <font>{{ item.color_class }}</font>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          fontSizeList: [
+            {
+              title: '文字大小',
+              list: [
+                {class_name: '12px', color_class: 'font-12'},
+                {class_name: '14px', color_class: 'font-14'},
+                {class_name: '16px', color_class: 'font-16'},
+                {class_name: '19px', color_class: 'font-19'},
+                {class_name: '文字加粗', color_class: 'font-bold'},
+              ]
+            },
+            {
+              title: '文字显示行数',
+              list: [
+                {class_name: '1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行1行', color_class: 'line-one'},
+                {class_name: '2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行2行', color_class: 'line-two'},
+                {class_name: '3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行3行', color_class: 'line-three'},
+              ]
+            }
+          ]
+        }
+      },
+      methods: {
+      }
+    })
+  </script>
+</block>

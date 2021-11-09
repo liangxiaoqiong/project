@@ -1,0 +1,303 @@
+<!--时间搜索组件，快捷搜索-->
+<style>
+  .search-time-box .time-result {
+    height: 1.75rem;
+    padding: 0 .75rem;
+    background-color: #ffffff;
+    margin-bottom: .5rem;
+  }
+  .search-time-box .time-result .time-title,
+  .search-time-box .time-result .time-text {
+    color: #999999;
+    font-size: .65rem;
+    height: 100%;
+    position: relative;
+  }
+  .search-time-box .time-result .time-title {
+    padding-right: .5rem;
+    margin-right: .5rem;
+  }
+  .search-time-box .time-result .time-title:after {
+    position: absolute;
+    z-index: 2;
+    width: 1px;
+    height: .25rem;
+    display: inline-block;
+    background-color: #999999;
+    content: '';
+    top: calc(50% - .125rem);
+    right: 0;
+  }
+  .search-time-box .time-result .time-text {
+    padding-right: .5rem;
+  }
+  .search-time-box .time-result .time-text:after {
+    position: absolute;
+    z-index: 2;
+    width: 0;
+    height: 0;
+    border-width: .2rem;
+    border-style: solid;
+    border-color: #999999 transparent transparent transparent;
+    display: inline-block;
+    content: '';
+    top: calc(50% - .08rem);
+    right: 0;
+  }
+  .search-time-box.show-layer .time-result .time-text:after {
+    border-color: transparent transparent #999999 transparent;
+    top: calc(50% - .28rem);
+  }
+  .time-layer .layer-shade {
+    top: 2.25rem;
+  }
+  .time-layer .layer-body-fixed {
+    bottom: initial;
+    top: 2.25rem;
+  }
+  .search-time-box .layer-main {
+    padding: .75rem;
+    min-height: 7.75rem;
+    max-height: 12rem;
+    overflow-y: auto;
+  }
+  .time-layer .time-list {
+    display: inline-block;
+    width: 100%;
+  }
+  .time-layer .time-list a {
+    border: 1px solid #E0E0E0;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    display: inline-block;
+    border-radius: .15rem;
+    font-size: .65rem;
+    padding: 0 .75rem;
+    margin-right: .65rem;
+    float: left;
+    margin-bottom: .75rem;
+    vertical-align: middle;
+  }
+  .time-layer .time-list a:last-child {
+    margin-right: 0;
+  }
+  .time-layer .time-range-box {
+    position: relative;
+    vertical-align: middle;
+    height: 1.5rem;
+    border: 1px solid #E0E0E0;
+    border-radius: .15rem;
+    display: inline-block;
+  }
+  .time-layer .time-range-box .mobiscroll-input div {
+    font-size: .65rem;
+    height: 100%;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+  }
+  .time-layer .time-range-box em {
+    display: inline-block;
+    width: .5rem;
+    height: 100%;
+    background-color: #F0F0F0;
+    font-style: normal;
+    position: relative;
+      float: left;
+  }
+  .time-layer .time-range-box em:after {
+    position: absolute;
+    z-index: 1;
+    content: '';
+    width: .34rem;
+    height: 1px;
+    background-color: #000000;
+    display: inline-block;
+    left: calc(50% - .167rem);
+    top: calc(50% - .5px);
+  }
+  .time-layer .layer-btn {
+    border-top: 1px solid #E0E0E0;
+  }
+  .time-layer .layer-btn a {
+    width: 50%;
+    height: 2.25rem;
+    font-size: .65rem;
+  }
+  .time-layer .layer-btn a.bg-diy {
+    color: #ffffff;
+  }
+</style>
+<!-- template -->
+<script type="x-template" id="search_time_box">
+  <!--region 模版-->
+  <div class="search-time-box">
+    <div class="time-result flex-left line-one" @click="changeLayer">
+      <span class="time-title flex-left">{{ infoTypeOld }}</span>
+      <span class="time-text flex-left">{{ timeResultText }}</span>
+    </div>
+    <div class="time-layer" v-show="isShowLayer">
+      <div class="layer-shade" @click="hideLayer"></div>
+      <div class="layer-body-fixed">
+        <div class="layer-main">
+          <div class="time-list">
+            <a v-for="btn in shortcutBtn"
+               :class="{'border-diy color-diy': +info.timeType === +btn.type}"
+               @click="changeTimeShortcut(btn)">{{ btn.type_name }}</a>
+          </div>
+          <div class="time-range-box" v-if="+info.timeType === -99">
+            <date-picker :info="info" :is-show-time="isShowTime"
+              popup-title="选择开始时间"></date-picker>
+            <em></em>
+            <date-picker :info="info" :is-show-time="isShowTime" param="end_time" time-type="end"
+                         popup-title="选择结束时间"></date-picker>
+          </div>
+        </div>
+        <div class="layer-btn flex-between">
+          <a class="flex-row" @click="hideLayer">取消</a>
+          <a class="flex-row bg-diy" @click="submitTime">确定</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<include file="Public/components/date/date_picker" />
+<script>
+  AppUtil.COMPONENTS.SEARCH_TIME_BOX = {
+    template: '#search_time_box',
+    components: {
+      'date-picker': AppUtil.COMPONENTS.DATE_PICKER,
+    },
+    props: {
+      query: Object,
+      queryParam: {
+        type: Array,
+        default: function () {
+          return ['start_time', 'end_time']
+        }
+      },
+      isShowTime: {
+        type: Boolean,
+        default: false
+      }, // 是否显示时间时分秒
+    },
+    computed: {
+      infoTypeOld: function () {
+        if (this.infoBack !== '') {
+          var infoBack = JSON.parse(this.infoBack);
+          return infoBack.timeTypeName;
+        }
+      },
+      timeResultText: function () {
+        var reg = new RegExp( '-' , "g" )
+        var start_time = this.query[this.queryParam[0]].replace(reg, '/')
+        var end_time = this.query[this.queryParam[1]].replace(reg, '/')
+        var timeText = '';
+        var infoBackObj = this.infoBack !== '' ? JSON.parse(this.infoBack) : {timeType: 1};
+        switch (+infoBackObj.timeType) {
+          case 1:
+          case -1:
+            timeText = start_time.split(' ')[0];
+            break
+          case 0:
+            timeText = '全部';
+            break
+          default:
+            if (this.isShowTime) {
+              timeText = start_time.substr(0, start_time.length - 3) + '-' + end_time.substr(0, end_time.length - 3)
+            } else {
+              timeText = start_time.split(' ')[0] + '-' + end_time.split(' ')[0];
+            }
+            break
+        }
+        return timeText;
+      },
+    },
+    data: function () {
+      return {
+        isShowLayer: false,
+        shortcutBtn: [
+          {type: 0, type_name: '不限'},
+          {type: 1, type_name: '今天'},
+          {type: -1, type_name: '昨天'},
+          {type: 1001, type_name: '本月'},
+          {type: 7, type_name: '近7日'},
+          {type: 30, type_name: '近30日'},
+          {type: -99, type_name: '自定义时间'},
+        ],
+        infoBack: '', //
+        info: {
+          timeType: 1, // 快捷时间类型=shortcutBtn[key].type
+          timeTypeName : '今天',
+          start_time: this.query.start_time, // 开始时间
+          end_time: this.query.end_time, // 结束时间
+        },
+      }
+    },
+    mounted: function () {
+      this.init()
+    },
+    methods: {
+      init: function () {
+        var self = this;
+        self.changeTimeShortcut(self.shortcutBtn[1])
+        self.query.start_time = self.info.start_time;
+        self.query.end_time = self.info.end_time;
+        self.infoBack = JSON.stringify(self.info)
+      },
+      changeLayer: function () {
+        if (!this.isShowLayer) {
+          this.showLayer()
+        } else {
+          this.hideLayer()
+        }
+      },
+      showLayer: function () {
+        this.info = JSON.parse(this.infoBack)
+        this.isShowLayer = true
+      },
+      hideLayer: function () {
+        this.isShowLayer = false
+      },
+      changeTimeShortcut: function (item) {
+        this.info.timeType = item.type
+        this.info.timeTypeName = item.type_name
+        if (+this.info.timeType !== 0 && +this.info.timeType !== -99) {
+          var time = publicWap.dayToTime(item.type)
+          this.info.start_time = time[0]
+          this.info.end_time = time[1]
+        } else {
+          this.info.start_time = ''
+          this.info.end_time = ''
+        }
+      },
+      submitTime: function () {
+        var self = this;
+        if (self.info.timeType === -99) {
+          if (self.info.start_time === '') {
+            publicWap.layerMsg('请选择开始时间！')
+            return false
+          }
+          if (self.info.end_time === '') {
+            publicWap.layerMsg('请选择结束时间！')
+            return false
+          }
+        }
+        var startTimeStamp =  new Date(self.info.start_time).getTime() / 1000
+        var endTimeStamp = new Date(self.info.end_time).getTime() / 1000
+        if (startTimeStamp >= endTimeStamp){
+          publicWap.layerMsg('开始时间不能大于结束时间！')
+          return false
+        }
+        self.query.start_time = self.info.start_time;
+        self.query.end_time = self.info.end_time;
+        self.infoBack = JSON.stringify(self.info);
+        self.$emit('submit')
+        self.hideLayer()
+      }
+    }
+  }
+</script>

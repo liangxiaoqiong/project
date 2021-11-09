@@ -1,0 +1,206 @@
+<!--打印模板列表-->
+<extend name="Public:base"/>
+<block name="content">
+  <php>$isErp = 1;</php>
+  <php>$isAdminOrder = 1;</php>
+  <style>
+    .tpl-collapse-list li {
+      margin-bottom: 10px;
+      transition: all 3s;
+    }
+    .tpl-collapse-list li .collapse-title {
+      height: 40px;
+      background-color: #FAFAFA;
+      padding: 0 10px;
+    }
+    .tpl-collapse-list li .collapse-title a {
+      margin-left: 10px;
+    }
+    .tpl-collapse-list li .collapse-btn {
+      width: 26px;
+      height: 26px;
+      display: inline-block;
+      border: 1px solid #E0E0E0;
+      position: relative;
+    }
+    .tpl-collapse-list li .collapse-btn:before {
+      position: absolute;
+      z-index: 1;
+      width: 12px;
+      height: 7px;
+      background: url("/Public/common/img/icon_img/down_black_icon.png")center center no-repeat;
+      background-size: 12px 7px;
+      content: '';
+      left: calc(50% - 6px);
+      top: calc(50% - 3.5px);
+      display: inline-block;
+      opacity: .8;
+      transform: rotate(180deg);
+    }
+    .tpl-collapse-list li.hide-collapse .collapse-btn:before {
+      transform: rotate(0deg);
+    }
+  </style>
+  <div class="admin-main" id="app" v-cloak="">
+    <div class="el-table-diy bg-white">
+      <ul class="tpl-collapse-list">
+        <li v-for="list in tplOrderTypeList" v-if="+list.ctrl === 1" :class="{'hide-collapse': +list.is_show === 0}">
+          <div class="collapse-title flex-between">
+            <span>{{ list.title }}</span>
+            <div style="display: flex;display: -webkit-flex">
+              <a class="xxbtn-primary" @click="addPrintTpl(list)">添加模板</a>
+              <a class="collapse-btn" @click="toggleCollapse(list)"></a>
+            </div>
+          </div>
+          <el-collapse-transition>
+            <div class="toggle-box" v-if="loadCompleted && +list.is_show === 1">
+              <table class="table-default" name="table-list">
+                <tr>
+                  <th>序号</th>
+                  <th width="30%">模板名称</th>
+                  <th width="35%">模板类型</th>
+                  <th>状态</th>
+                  <th class="table-action">操作</th>
+                </tr>
+                <tr v-for="(tpl, index) in tableData.list" v-if="+tpl.type === +list.type">
+                  <td>{{ index+1 }}</td>
+                  <td>{{ tpl.tpl_name }}</td>
+                  <td>{{ getTplTypeText(tpl.tpl_type) }}</td>
+                  <td>
+                    <switch-default :info="tpl" param="status" @change-switch="changeStatus(tpl)"></switch-default>
+                  </td>
+                  <td class="table-action">
+                    <a @click="printTplInfo({item: tpl})">编辑</a>
+                    <a @click="delTpl(tpl)" v-if="+tpl.is_system !== 1">删除</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </el-collapse-transition>
+        </li>
+      </ul>
+
+
+      <!--选择打印模板类型弹框-->
+      <print-tpl-type-layer
+        ref="printTplTypeLayer"
+        :tpl-type-list="tplTypeList"
+        @submit-select="printTplInfo"></print-tpl-type-layer>
+    </div>
+  </div>
+  <include file="Public/components/switch/switch_default"/>
+  <include file="PrintTpl/components/print_tpl_type_layer" />
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'switch-default': AppUtil.COMPONENTS.SWITCH_DEFAULT,
+        'print-tpl-type-layer': AppUtil.COMPONENTS.PRINT_TPL_TYPE_LAYER,
+      },
+      data: function () {
+        return {
+          loadCompleted: false,
+          query: {
+            page: 1,
+            limit: 20
+          },
+          tableData: {
+            total: 0,
+            list: []
+          },
+          tplTypeList: [
+            {value: 0, label: 'A4打印', is_erp_show: 1},
+            {value: 1, label: '分仓打印', is_erp_show: 0},
+            {value: 2, label: '分仓针式打印', is_erp_show: 0},
+            {value: 3, label: '针式打印', is_erp_show: 1},
+            {value: 4, label: '热敏纸打印', is_erp_show: 0},
+          ],
+          tplOrderTypeList: [
+            {type: 0, title: '销售订单', is_show: 1, ctrl: 1},
+            {type: 18, title: '销售开单', is_show: 0, ctrl: "{$isAdminOrder}"},
+            {type: 1, title: '销售退货单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 2, title: '进货单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 3, title: '进货退货单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 4, title: '调拨单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 17, title: '盘点单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 5, title: '其他入库单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 6, title: '其他出库单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 7, title: '待入库单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 8, title: '待出库单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 9, title: '入库单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 10, title: '出库单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 11, title: '付款单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 12, title: '收款单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 13, title: '供应商付款单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 14, title: '供应商收款单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 15, title: '客户付款单', is_show: 0, ctrl: "{$isErp}"},
+            {type: 16, title: '客户收款单', is_show: 0, ctrl: "{$isErp}"},
+          ]
+        }
+      },
+      mounted: function () {
+        this.getTableData()
+      },
+      methods: {
+        getTableData: function () {
+          var self = this;
+          AppUtil.ajaxRequest({
+            url: '/Public/json/admin/PrintTpl/printTplList/query.json',
+            data: self.query,
+          }).then(function (result) {
+            self.tableData = result.data
+            self.loadCompleted = true
+          })
+        },
+        getTplTypeText: function (value) {
+          var self = this;
+          var text = '';
+          try {
+            self.tplTypeList.forEach(function (type) {
+              if (+value === +type.value) {
+                text = type.label;
+                throw Error;
+              }
+            })
+          } catch (e) {}
+          return text;
+        },
+        addPrintTpl: function (item) {
+          this.$refs.printTplTypeLayer.init(item);
+        },
+        //进入模板详情
+        printTplInfo: function (config) {
+          var url = adminObj.getAdminUrl('Index', 'printTplInfo');
+          var title_ = '新增打印模板';
+          var menu_type = 'print_tpl_add'
+          if (typeof config.item.id !== 'undefined') {
+            url += '&id=' + config.item.id;
+            title_ = '编辑打印模板<em>模板id:'+config.item.id+'</em>';
+            menu_type = 'print_tpl_edit_' + config.item.id;
+          }
+          adminObj.addLayuiTab({
+            title: title_,
+            url: url + '&tpl_type=' + config.item.tpl_type + "&order_type=" + config.item.type,
+            menu_type: menu_type,
+            parent_menu_type: 'print_tpl_list',
+          })
+        },
+        //删除模板
+        delTpl: function (tpl) {
+          var self = this;
+          self.$confirm('', {title: '确认删除该模板吗？', customClass: 'dialog-confirm'}).then(function () {
+            publicWap.layerMsg('删除成功！', 1);
+            self.getTableData()
+          })
+        },
+        //更改状态
+        changeStatus: function (tpl) {
+          var self = this
+        },
+        toggleCollapse: function (item) {
+          item.is_show = +item.is_show === 1 ? 0 : 1;
+        }
+      }
+    })
+  </script>
+</block>

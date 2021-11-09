@@ -1,0 +1,158 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <el-table
+      :data="tableData.list"
+      :span-method="arraySpanMethod"
+      border
+      style="width: 100%">
+      <el-table-column
+        width="65">
+        <template slot="header" slot-scope="scope">
+          <label class="diy-checkbox display-align">
+            <input type="checkbox" lay-ignore/>
+          </label>
+        </template>
+        <template slot-scope="scope">
+          <label class="diy-checkbox display-align">
+            <input type="checkbox" lay-ignore/>
+          </label>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="商品ID|商品名称"
+        width="180">
+        <template slot-scope="scope">
+          <el-popover placement="right" trigger="hover">
+            <div class="popover-content">
+              <img :src="scope.row.main_img" style="width: 120px;height: 120px">
+            </div>
+            <div slot="reference" class="display-align">
+              <a class="color-link">{{ scope.row.goods_id }}|{{ scope.row.goods_name }}</a>
+            </div>
+          </el-popover>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="title"
+        label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="amount1"
+        sortable
+        label="数值 1">
+      </el-table-column>
+      <el-table-column
+        prop="amount2"
+        sortable
+        label="数值 2">
+      </el-table-column>
+      <el-table-column
+        prop="amount3"
+        sortable
+        label="数值 3">
+      </el-table-column>
+    </el-table>
+
+    <el-table
+      :data="tableData"
+      :span-method="objectSpanMethod"
+      border
+      style="width: 100%; margin-top: 20px">
+      <el-table-column
+        prop="id"
+        label="ID"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名">
+      </el-table-column>
+      <el-table-column
+        prop="amount1"
+        label="数值 1（元）">
+      </el-table-column>
+      <el-table-column
+        prop="amount2"
+        label="数值 2（元）">
+      </el-table-column>
+      <el-table-column
+        prop="amount3"
+        label="数值 3（元）">
+      </el-table-column>
+    </el-table>
+  </div>
+  </template>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          tableData: {
+            list: [
+              {
+                goods_id: 1234,
+                goods_name: '商品1，单规格',
+                main_img: '',
+                goods_options: [
+                  {
+                    title: '',
+                    price: 123,
+                    stock: 12
+                  }
+                ],
+                gc_text: '分类名称1',
+                base_unit_name: '件'
+              },
+              {
+                goods_id: 1234,
+                goods_name: '商品2，2个规格',
+                main_img: '',
+                goods_options: [
+                  {
+                    title: '蓝色',
+                    price: 123,
+                    stock: 12
+                  },
+                  {
+                    title: '白色',
+                    price: 123,
+                    stock: 12
+                  }
+                ],
+                gc_text: '分类名称',
+                base_unit_name: '件'
+              },
+              {
+                goods_id: 1234,
+                goods_name: '商品3，3个规格',
+                main_img: '',
+                goods_options: [
+                  {
+                    title: '300ML',
+                    price: 123,
+                    stock: 12
+                  },
+                  {
+                    title: '500ML',
+                    price: 123,
+                    stock: 12
+                  },
+                  {
+                    title: '600ML',
+                    price: 123,
+                    stock: 12
+                  }
+                ],
+                gc_text: '分类名称',
+                base_unit_name: '件'
+              },
+            ],
+            total: 3
+          }
+        }
+      }
+    })
+  </script>
+</block>

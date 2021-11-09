@@ -1,0 +1,239 @@
+<php>$pickup_name = $storeConfig["diy_pickup_name"] != '' ? $storeConfig["diy_pickup_name"] : '门店';</php>
+<!DOCTYPE html>
+<html lang="en" class="html-font-20">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="format-detect" content="telephone=no"/>
+  <title>地图选店</title>
+  <link rel="stylesheet" type="text/css" href="/Public/wap/css/common/map.css?v={$V}">
+</head>
+<body>
+<div id="app" v-cloak="" v-if="loadCompleted">
+  <div id="map-box"></div>
+  <div class="current-btn icon-current-location" @click="setMapCenter(currentPoint)"><!--定位到当前位置--></div>
+  <div class="map-bottom">
+    <div class="map-info">
+      <div>
+        <span><i class="styleicon-home"></i><font>{{ currentPick.pick_name }}</font></span>
+        <a style="display: inline-block;" :href="'tel:'+currentPick.link_tel">
+          <i class="styleicon-tel"></i><font>{{ currentPick.link_name }} {{ currentPick.link_tel }}</font>
+        </a>
+      </div>
+      <div>
+        <span @click="mapLink(currentPick)">
+          <i class="styleicon-user-dizhi"></i>距离{{ currentPick.distance }}  {{ currentPick.pick_address }}
+        </span>
+      </div>
+    </div>
+    <div class="map-href">
+      <a class="bg-diy flex-row" @click="changePick(currentPick)">切换{$pickup_name}</a>
+    </div>
+  </div>
+</div>
+</body>
+<include file="Public:base"/>
+<script type="text/javascript" src="http://api.map.baidu.com/api?type=webgl&v=1.0&ak=s0m6uHv5Vwe1aHdWiUgz4W29WjoqlXVN"></script>
+<script>
+  var se = "{$se}";
+  var f = "{$f}";
+  ROOT = '__APP__';
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        loadCompleted: false,
+        currentPoint: {lng: '', lat: ''},//当前定位的经纬度
+        query: {
+          se: se,
+          f: f
+        },
+        pickAddressData: {
+          pickup_list: [] // 自提门店列表
+        },
+        mapEl: '',//地图元素
+        makerList: [],
+      }
+    },
+    computed: {
+      currentPick: function () {
+        if (!this.pickAddressData.default_pickup > 0) {
+          return this.pickAddressData.pickup_list[0];
+        }
+        for (var i = 0; i < this.pickAddressData.pickup_list.length; i++) {
+          var pick = this.pickAddressData.pickup_list[i]
+          if (this.pickAddressData.default_pickup == pick.id) {
+            return pick;
+          }
+        }
+        return {};
+      },
+    },
+    mounted: function () {
+      var self = this
+      self.getPickupList().then(function (result) {
+        result.data.pickup_list.forEach(function (value) {
+          value.lng = value.longitude
+          value.lat = value.latitude
+          if (value.head_url === '') {
+            value.head_url = 'http://dl.duinin.com/data/goods/20201029/06573008157755889.png'
+          }
+        })
+        self.pickAddressData = result.data
+        self.loadCompleted = true;
+        self.$nextTick(function () {
+          self.createMap()
+          self.mapPoint()
+        })
+      })
+    },
+    methods: {
+      getPickupList: function () {
+        var self = this
+        return AppUtil.ajaxRequest({
+          url: '/Public/json/wap/map/map_marker_list.json',
+          data: self.query,
+        })
+      },
+      //创建地图
+      createMap: function () {
+        var self = this
+        self.mapEl = new BMapGL.Map("map-box", {
+          enableMapClick:false //关闭底图可点功能
+        })
+        var longitude = "";
+        var latitude = "";
+        self.pickAddressData.pickup_list.forEach(function (value) {
+          if (+value.id === +self.currentPick.id) {
+            longitude = value.lng
+            latitude = value.lat
+          }
+        })
+        self.mapEl.centerAndZoom(new BMapGL.Point(longitude, latitude), 17.2); // 初始化地图,设置中心点坐标和地图级别
+        self.mapEl.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
+       // self.mapEl.panTo(pint);
+      },
+
+      /**region 当前位置定位标记*/
+      locateCurrent: function () {
+        var self = this
+        if (self.currentPoint.lng !== '' && self.currentPoint.lat !== '') {
+          self.resetCurrentMaker()
+        } else {
+          self.getLocateCurrent()
+        }
+
+      },
+      //定位用户当前位置
+      getLocateCurrent: function () {
+        var self = this
+        var geolocation = new BMapGL.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+          if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var myIcon3 = new BMapGL.Icon("/Public/common/img/icon_img/current.png", new BMapGL.Size(40, 87), {
+              imageOffset: new BMapGL.Size(0, -35)   // 设置图片偏移
+            });//当前用户定位
+            var marker3 = new BMapGL.Marker(r.point, {icon: myIcon3});
+            self.mapEl.addOverlay(marker3);
+            self.mapEl.panTo(r.point);
+            self.currentPoint = r.point
+            alert('您的位置：' + r.point.lng + ',' + r.point.lat);
+          }
+          else {
+            alert('failed' + this.getStatus());
+          }
+        });
+      },
+      //当前位置重新标记
+      resetCurrentMaker: function () {
+        var self = this
+        var myIcon3 = new BMapGL.Icon("/Public/common/img/icon_img/current.png", new BMapGL.Size(40, 87), {
+          imageOffset: new BMapGL.Size(0, -35)   // 设置图片偏移
+        });//当前用户定位
+        var marker3 = new BMapGL.Marker(self.currentPoint, {icon: myIcon3});
+        self.mapEl.addOverlay(marker3);
+      },
+      /**endregion*/
+
+      //将各个自提门店显示在地图中
+      mapPoint: function () {
+        var self = this
+        self.mapEl.clearOverlays() //  //清除地图上所有覆盖物
+        self.pickAddressData.pickup_list.forEach(function (value, index) {
+          var pint2 = new BMapGL.Point(value.lng, value.lat); // 创建点
+          var sizeWidth = 46
+          var sizeHeight = 54.5
+          if (+value.id === +self.currentPick.id) {
+            sizeWidth = 62
+            sizeHeight = 75.5
+          }
+          var icon_url = value.head_url
+          var myIcon2 = new BMapGL.Icon(icon_url, new BMapGL.Size(sizeWidth, sizeHeight), {
+            // 指定定位位置。
+            anchor: new BMapGL.Size(24, 70),
+            // 设置图片偏移。
+            imageOffset: new BMapGL.Size(0, 0 - 0)   // 设置图片偏移
+          })//店铺logo
+
+          var marker2 = new BMapGL.Marker(pint2, {icon: myIcon2});  // 创建标注
+          var label2 = new BMapGL.Label(value.pick_name, {offset: new BMapGL.Size(20, 0)});
+          marker2.setLabel(label2);
+          marker2.id = 'maker_'+value.id
+          self.mapEl.addOverlay(marker2)
+          self.$nextTick(function () {
+            marker2.addEventListener("click", function () {
+              self.changeThisPickup(value)
+            });
+          })
+        })
+        self.locateCurrent()
+      },
+      //切换当前门店地址
+      changeThisPickup: function (item) {
+        var self = this
+        if (+self.pickAddressData.default_pickup !== +item.id) {
+          self.pickAddressData.default_pickup  = item.id
+          var newList = []
+          newList[0] = self.currentPick
+          self.pickAddressData.pickup_list.forEach(function (value) {
+            if (+value.id !== +self.currentPick.id) {
+              newList.push(value)
+            }
+          })
+          self.pickAddressData.pickup_list = newList
+          self.mapPoint()
+        }
+      },
+      //设置地图中心点
+      setMapCenter: function (point) {
+        var point = new BMap.Point(point.lng, point.lat)
+        this.mapEl.setCenter(point); // 设置地图中心点
+      },
+      //切换自提门店
+      changePick: function (pick) {
+        var self = this
+        var load = layer.load()
+        $('.layui-layer-loading0').html('<div></div><div></div><div></div>')
+        AppUtil.ajaxRequest({
+          url: AppUtil.getTPUrl('Index', 'changePickup'),
+          data: {
+            se: self.query.se,
+            f: self.query.f,
+            pick_id: pick.id
+          },
+        }).then(function (result) {
+          self.pickAddressData.default_pickup = result.data
+          layer.close(load)
+          var url = "{:U('Index/store',array('se' => $se,'f' => $f))}"
+          window.location.href = url
+        })
+      },
+
+      //到这里去
+      mapLink: function (pick) {
+        publicWap.mapLink(pick)
+      }
+    }
+  })
+</script>
+</html>

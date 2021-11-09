@@ -1,0 +1,44 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <table-load-empty :query="query" :table-data="tableData"></table-load-empty>
+  </div>
+  <include file="Public/components/diy_table/table_load_empty"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'table-load-empty': AppUtil.COMPONENTS.TABLE_LOAD_EMPTY,
+      },
+      data: function () {
+        return {
+          query: {
+            page: 1,
+            limit: 20,
+            load: false,
+          },
+          tableData: {
+            total: 0,
+            list: []
+          },
+        }
+      },
+      mounted: function () {
+        this.getTableData();
+      },
+      methods: {
+        getTableData: function () {
+          var self = this;
+          self.query.load = true;
+          self.tableData.total = 0;
+          self.tableData.list = [];
+          setTimeout(function () {
+            self.tableData.total = 0;
+            self.tableData.list = [];
+            self.query.load = false;
+          }, 1000)
+        }
+      }
+    })
+  </script>
+</block>

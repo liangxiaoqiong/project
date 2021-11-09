@@ -1,0 +1,51 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-checkbox<br>
+      注意：v-model=绑定值，String和Number为2种类型【设置1=true时，'1'=false，点击'1'无反应】
+    </div>
+    <ul>
+      <li class="mt-10">
+        <div>el-checkbox</div>
+        <el-checkbox-group v-model="value2">
+          <el-checkbox label="1">'1'</el-checkbox>
+          <el-checkbox label="2">'2'</el-checkbox>
+          <el-checkbox label="3">'3'</el-checkbox>
+        </el-checkbox-group>
+      </li>
+      <li class="mt-10">
+        <div>el-checkbox</div>
+        <el-checkbox-group v-model="value1">
+          <el-checkbox :label="1">1</el-checkbox>
+          <el-checkbox label="1">'1'</el-checkbox>
+          <el-checkbox label="2">'2'</el-checkbox>
+        </el-checkbox-group>
+      </li>
+      <li class="mt-10">
+        <div>el-checkbox单个</div>
+        <el-checkbox true-label="1" false-lable="0" v-model="value4"></el-checkbox>
+      </li>
+      <li class="mt-10">
+        <div>自定义【class="diy-checkbox"】</div>
+        <label class="diy-checkbox" v-for="i in 5">
+          <input type="checkbox" lay-ignore :value="i" v-model="value3"/>
+          <font>{{ i }}</font>
+        </label>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          value1: ['1'],
+          value2: ['1', '2'],
+          value3: [1, 2, 5],
+          value4: '1'
+        }
+      }
+    })
+  </script>
+</block>

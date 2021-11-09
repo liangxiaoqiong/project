@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="format-detect" content="telephone=no"/>
+  <title>选择自提门店(xunxin项目)</title>
+  <style>
+    #pickup-map {
+      width: 100%;
+      height: 800px;
+    }
+    /**region */
+    #pickup-map .BMap_Marker>div{box-sizing: border-box;overflow: initial!important;
+      top: 0;
+      background: url('http://m.duinin.com/Public/wap/img/Store/map_bg.png')center center no-repeat;background-size:100% 100%;padding: 8.5px!important; width: 47px;height: 56.5px;}
+    #pickup-map .BMap_Marker>div:after{ display: inline-block;position: absolute;content:'';background: url("http://m.duinin.com/Public/wap/img/Store/map_point2.png")center center no-repeat;background-size: 22px 22px;width: 22px;height: 22px;z-index: -1;box-shadow: 2px 2px 5px 0px rgba(23, 0, 0, 0.14);border-radius: 100%;left: 12.5px;top: 46px;}
+    #pickup-map .BMap_Marker>div>img{width: 30px;height: 30px;border-radius: 100%;box-sizing: border-box;display: inline-block!important;border: 1px solid #e5e5e5!important;}
+    #pickup-map .BMap_Marker>.BMapLabel{font-size: 10px!important;text-align: center;padding: 0 5px!important;border: none!important;box-sizing: border-box;line-height: 19px!important;height: 18px;border-radius:0 5px 5px 0;color: #ffffff;box-shadow: none;background-color: rgba(0, 0, 0, 0.5)!important;margin-left: 18px;
+      top: 49px!important;
+    }
+    #pickup-map .BMap_Marker>.BMapLabel:before{content: '';position: absolute;border-top: 9px solid transparent;border-bottom: 9px solid transparent;left: -9px;top: 0; border-right: 9px solid rgba(0, 0, 0, 0.5);}
+    #pickup-map .BMap_Marker:first-child>div{
+      top: -15px;
+      left: -8px;
+      padding: 9.5px!important;width: 62px;height: 75.5px;}
+    #pickup-map .BMap_Marker:first-child>div:after{top: 62px;background: url("http://m.duinin.com/Public/wap/img/Store/map_point1.png")center center no-repeat;background-size: 22px 22px;left: 20px;}
+    #pickup-map .BMap_Marker:first-child>div>img{width: 43px;height: 43px;}
+    #pickup-map .BMap_Marker:first-child>.BMapLabel{color: #323232;box-shadow: 3px 3px 10px 0px rgba(31, 30, 27, 0.49);background-color: #FFFFff!important;border: 1px solid #dadada;margin-left: 26px;
+      top: 50px!important;
+      left: 13px!important;
+    }
+    #pickup-map .BMap_Marker:first-child>.BMapLabel:before{
+      border-right: 9px solid #FFFFFF;}
+
+    #pickup-map .BMap_Marker:last-child>div{
+      top: 0;border: none!important;box-shadow: none;background: none;
+      padding: 0!important;
+    }
+    #pickup-map .BMap_Marker:last-child>div:after{
+      display: none;}
+    #pickup-map .BMap_Marker:last-child>div img {
+      width: 40px;height: 87px;border: none!important;
+      border-radius: 0;
+    }
+    /*endregion*/
+    .to-location {
+      position: fixed;
+      z-index: 100;
+      bottom: 143px;
+      left: 8px;
+      width: 39px;
+      height: 39px;
+      display: inline-block;
+      background: url('http://m.duinin.com/Public/wap/img/Store/map_dingwei.png')center center no-repeat;
+      background-size: 100% 100%;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="">
+  <div id="pickup-map"></div><!--地图容器-->
+  <div class="to-location" @click="setMapCenter(currentPoint)"><!--定位到当前位置--></div>
+  <div class="map-bottom">
+    <div class="address-distance">
+      <div class="address-name">
+        <span>全球采购网上商城</span>
+        <span>张三 188986365</span>
+      </div>
+      <div class="distance-tel">
+        距离5.2km  厦门市湖里区金尚路122号
+      </div>
+    </div>
+    <div class="map-href"><a>切换门店</a></div>
+  </div>
+</div>
+</body>
+<include file="Public:base"/>
+<!--百度地图-->
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=Eg2jEs4qqyrkkGaFcW5z9aa6afUPy655"></script>
+<script type="text/javascript"
+        src="https://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        currentPoint: {lng: '', lat: ''},//当前定位的经纬度
+        pickUpList: [
+          {id: 32, lng: '118.09540604598858', lat: '24.490907716550858', pick_name: '光彩两岸创业园'},
+          {id: 34, lng: '118.108341645328', lat: '24.475846007616585', pick_name: '北京店2'},
+          {id: 33, lng: '118.11041907220151', lat: '24.48176771114867', pick_name: '店3'},
+          {id: 35, lng: '118.10981238548202', lat: '24.478515443221426', pick_name: '店4'},
+        ],//自提门店列表
+        thisPickUp: {}, //当前选中的自提门店id
+        mapEl: '',//地图元素
+        makerList: [],
+      }
+    },
+    mounted: function () {
+      var self = this
+      self.$nextTick(function () {
+        self.thisPickUp = self.pickUpList[0]
+        self.createMap()
+        self.mapPoint()
+      })
+    },
+    methods: {
+      //创建地图
+      createMap: function () {
+        var self = this
+        self.mapEl = new BMap.Map("pickup-map", {
+          enableMapClick:false //关闭底图可点功能【防止点击事件会新增maker点，导致.BMap_Marker:last-child样式错乱】
+        })
+        var longitude = "";
+        var latitude = "";
+        self.pickUpList.forEach(function (value) {
+          if (+value.id === +self.thisPickUp.id) {
+            longitude = value.lng
+            latitude = value.lat
+          }
+        })
+        var pint = new BMap.Point(longitude, latitude); //居中显示当前门店的地图
+        self.mapEl.centerAndZoom(new BMap.Point(pint), 15);
+        self.mapEl.enableScrollWheelZoom(true);
+        self.mapEl.panTo(pint);
+      },
+      /**region 当前位置定位标记*/
+      locateCurrent: function () {
+        var self = this
+        if (self.currentPoint.lng !== '' && self.currentPoint.lat !== '') {
+          self.resetCurrentMaker()
+        } else {
+          self.getLocateCurrent()
+        }
+
+      },
+      //定位用户当前位置
+      getLocateCurrent: function () {
+        var self = this
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r) {
+          if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+            var myIcon3 = new BMap.Icon("/Public/common/img/icon_img/current.png", new BMap.Size(40, 87), {
+              imageOffset: new BMap.Size(0, -35)   // 设置图片偏移
+            });//当前用户定位
+            var marker3 = new BMap.Marker(r.point, {icon: myIcon3});
+            self.mapEl.addOverlay(marker3);
+            self.currentPoint = r.point
+            //self.mapEl.panTo(r.point);
+            //alert('您的位置：'+r.point.lng+','+r.point.lat);
+          } else {
+            alert('failed' + this.getStatus());
+          }
+        }, {enableHighAccuracy: true})
+      },
+      //当前位置重新标记
+      resetCurrentMaker: function () {
+        var self = this
+        var myIcon3 = new BMap.Icon("/Public/common/img/icon_img/current.png", new BMap.Size(40, 87), {
+          imageOffset: new BMap.Size(0, -35)   // 设置图片偏移
+        });//当前用户定位
+        var marker3 = new BMap.Marker(self.currentPoint, {icon: myIcon3});
+        self.mapEl.addOverlay(marker3);
+      },
+      /**endregion*/
+      //将各个自提门店显示在地图中
+      mapPoint: function () {
+        var self = this
+        self.mapEl.clearOverlays() //  //清除地图上所有覆盖物,你有些不想清除的数据也会清除，不过是有解决的方法，清除你想清除的点
+        self.pickUpList.forEach(function (value, index) {
+          var pint2 = new BMap.Point(value.lng, value.lat); // 创建点
+          var sizeWidth = 46
+          var sizeHeight = 54.5
+          if (+value.id === +self.thisPickUp.id) {
+            sizeWidth = 62
+            sizeHeight = 75.5
+          }
+          var myIcon2 = new BMap.Icon('http://dl.duinin.com/data/goods/20201029/06573008157755889.png?_90x90x2', new BMap.Size(sizeWidth, sizeHeight), {
+            // 指定定位位置。
+            // 当标注显示在地图上时，其所指向的地理位置距离图标左上
+            // 角各偏移10像素和25像素。您可以看到在本例中该位置即是
+            // 图标中央下端的尖角位置。
+            anchor: new BMap.Size(24, 70),
+            // 设置图片偏移。
+            // 当您需要从一幅较大的图片中截取某部分作为标注图标时，您
+            // 需要指定大图的偏移位置，此做法与css sprites技术类似。
+            imageOffset: new BMap.Size(0, 0 - 0)   // 设置图片偏移
+          })//店铺logo
+
+          var marker2 = new BMap.Marker(pint2, {icon: myIcon2});  // 创建标注
+          var label2 = new BMap.Label(value.pick_name, {offset: new BMap.Size(20, 0)});
+          marker2.setLabel(label2);
+          marker2.id = 'maker_'+value.id
+          self.mapEl.addOverlay(marker2)
+          self.$nextTick(function () {
+            //self.setMapCenter() // 设置地图中心点
+            marker2.addEventListener("click", function () {
+              self.changeThisPickup(value)
+            });
+          })
+        })
+        self.locateCurrent()
+      },
+      //切换当前门店地址
+      changeThisPickup: function (item) {
+        var self = this
+        if (+self.thisPickUp.id !== +item.id) {
+          self.thisPickUp = item
+          var newList = []
+          newList[0] = self.thisPickUp
+          self.pickUpList.forEach(function (value) {
+            if (+value.id !== +self.thisPickUp.id) {
+              newList.push(value)
+            }
+          })
+          self.pickUpList = newList
+          self.mapPoint()
+        }
+      },
+
+      mapLoadComplete: function () {
+        var self = this
+        self.mapEl.addEventListener('tilesloaded', function () {
+          alert('地图加载完成！');
+        });
+      },
+      //设置地图中心点
+      setMapCenter: function (point) {
+        var point = new BMap.Point(point.lng, point.lat)
+        this.mapEl.setCenter(point); // 设置地图中心点
+      }
+    }
+  })
+</script>
+</html>

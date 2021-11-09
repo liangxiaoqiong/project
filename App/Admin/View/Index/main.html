@@ -1,0 +1,210 @@
+<extend name="Public:base"/>
+<block name="content">
+  <link rel="stylesheet" href="__ADMIN_CSS__/index/main.css?v={$V}" media="all"/>
+  <div class="admin-main" id="app" v-cloak>
+    <div class="index-container flex-between">
+      <div class="page-left">
+        <transition name="el-zoom-in-top">
+          <div class="package-renewal-tip flex-between bg-white" v-show="isShowRenewalInfo">
+            <div class="renewal-content flex-left">
+              <i class="imgicon-warn-red"></i>
+              <div class="renewal-text">
+                <h4>您的店铺将在{$due_time}到期，为了不影响正常交易，请在到期前续费。</h4>
+                <p>官方咨询电话 ：400-991-5998</p>
+              </div>
+              <a @click="toRenewalPackage" class="xxbtn-red">立即续费</a>
+            </div>
+            <a class="renewal-close" @click="hideRenewalInfo"><i class="el-icon-close"></i></a>
+          </div>
+        </transition>
+
+        <!--总体概况-->
+        <div class="list-row-box">
+          <div class="list-row-title"><b>总体概况</b></div>
+          <div class="list-row-ul4">
+            <a>
+              <p>待发货订单</p><h4>10</h4>
+            </a>
+            <a>
+              <p>昨日订单</p><h4>110</h4>
+            </a>
+            <a>
+              <p>昨日交易额</p>
+              <h4 class="color-primary">8</h4>
+            </a>
+            <a>
+              <p>累计交易额</p>
+              <h4>4</h4>
+            </a>
+            <a>
+              <p>可提现余额</p>
+              <h4>10.14</h4>
+            </a>
+            <a>
+              <p>可提现余额</p>
+              <h4>52</h4>
+            </a>
+          </div>
+        </div>
+        <div class="tool-goods-order flex-between">
+          <!--商品概况-->
+          <div class="list-row-box">
+            <div class="list-row-title">
+              <b class="display-align">商品概况</b>
+              <div class="display-align ml-10">
+                <span>有41件产品已达到警戒库存</span>
+                <a class="color-primary">查看</a>
+              </div>
+            </div>
+            <div class="list-row-ul2">
+              <a>
+                <p>出售中产品数</p>
+                <h4>25</h4>
+              </a>
+              <a>
+                <p>促销中产品数</p>
+                <h4>20</h4>
+              </a>
+            </div>
+            <div class="list-row-ul3">
+              <a>
+                <p>已下架产品数</p>
+                <h4>52</h4>
+              </a>
+              <a>
+                <p>已售罄产品数</p>
+                <h4>67</h4>
+              </a>
+              <a>
+                <p>回收站产品数</p>
+                <h4>52</h4>
+              </a>
+            </div>
+          </div>
+          <!--订单概况-->
+          <div class="list-row-box">
+            <div class="list-row-title">
+              <b>订单概况</b>
+            </div>
+            <div class="list-row-ul2">
+              <a>
+                <p>待支付未下单数</p>
+                <h4>74</h4>
+              </a>
+              <a>
+                <p>待接单订单数</p>
+                <h4>89</h4>
+              </a>
+            </div>
+            <div class="list-row-ul3">
+              <a>
+                <p>待发货订单数</p>
+                <h4>767</h4>
+              </a>
+
+              <a>
+                <p>待收货订单数</p>
+                <h4>90</h4>
+              </a>
+              <a>
+                <p>已完成订单数</p>
+                <h4>90</h4>
+              </a>
+            </div>
+          </div>
+        </div>
+        <!--常用功能-->
+        <div class="bg-white tool-common">
+          <div class="list-row-title"><b>常用功能</b></div>
+          <div class="tool-list">
+            <a href="{:U('goods/goods_add')}">
+              <img src="__ADMIN_IMG__/index/tool/add_goods.png"><span>发布商品</span>
+            </a>
+            <a href="{:U('News/news_info')}">
+              <img src="__ADMIN_IMG__/index/tool/add_information.png"><span>发布资讯</span>
+            </a>
+            <a href="{:U('Notice/notice_info')}">
+              <img src="__ADMIN_IMG__/index/tool/add_notice.png"><span>发布公告</span>
+            </a>
+            <a @click="liveAlert">
+              <img src="__ADMIN_IMG__/index/tool/add_video.png"><span>发布直播房间</span>
+            </a>
+            <a href="{:U('Coupons/coupons_info')}">
+              <img src="__ADMIN_IMG__/index/tool/add_coupon.png"><span>新增优惠券</span>
+            </a>
+            <a href="{:U('Otheractivity/activityInfo')}">
+              <img src="__ADMIN_IMG__/index/tool/add_activity.png"><span>新增活动</span>
+            </a>
+            <a href="{:U('AssetShop/myIncome')}">
+              <img src="__ADMIN_IMG__/index/tool/pay_record.png"><span>直接支付记录</span>
+            </a>
+            <a href="{:U('System/wechat_config')}">
+              <img src="__ADMIN_IMG__/index/tool/wx_setting.png"><span>微信配置</span>
+            </a>
+            <a href="{:U('Goods/goods_list')}">
+              <img src="__ADMIN_IMG__/index/tool/goods_list.png"><span>商品列表</span>
+            </a>
+            <a href="{:U('Member/member_list')}">
+              <img src="__ADMIN_IMG__/index/tool/member_list.png"><span>会员列表</span>
+            </a>
+            <a href="{:U('DataCalculation/flowAnalysis')}">
+              <img src="__ADMIN_IMG__/index/tool/flowAnalysis.png"><span>数据报表</span>
+            </a>
+            <a href="{:U('DataCalculation/memberConsumption')}">
+              <img src="__ADMIN_IMG__/index/tool/member_consumption.png"><span>消费统计</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!--右侧咨询栏-->
+      <index-right-component @renewal-package="toRenewalPackage"></index-right-component>
+    </div>
+    <footer-component></footer-component>
+
+  </div>
+  <include file="Index/components/index_right"/>
+  <include file="Index/components/footer"/>
+  <script>
+    /**
+     * @author   liangxiaoqiong
+     * @version  1.0
+     * @date 2021-01-25.
+     */
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'index-right-component': AppUtil.COMPONENTS.INDEX_RIGHT_COMPONENT,
+        'footer-component': AppUtil.COMPONENTS.FOOTER_COMPONENT,
+      },
+      data: function () {
+        return {
+          isShowRenewalInfo: true
+        }
+      },
+      methods: {
+        /*region 续费*/
+        //显示续费弹框
+        toRenewalPackage: function () {
+          var self = this;
+          adminObj.layerDialog({
+            type: 2,
+            area: ['700px', '400px'],
+            title: '商城续费(到期时间：2028-23-12)',
+            content: AppUtil.getTPUrl('Index', 'index_xf')
+          })
+        },
+        /*endregion*/
+
+        // 隐藏续费信息
+        hideRenewalInfo: function () {
+          this.isShowRenewalInfo = false
+        },
+        // 发布直播房间
+        liveAlert: function () {
+          publicWap.layerMsg("您未有直播权限!");
+        }
+      }
+    })
+  </script>
+</block>
+

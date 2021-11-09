@@ -1,0 +1,26 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      复制文本内容【兼容iOS、android、mac、window】
+    </div>
+    <ul>
+      <li class="mt-10">
+        <a class="xxbtn-white" @click="copy">复制</a>
+      </li>
+    </ul>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {}
+      },
+      methods: {
+        copy: function () {
+          publicWap.copyText('这个是复制的阿嘎哈哈！！');
+        },
+      }
+    })
+  </script>
+</block>

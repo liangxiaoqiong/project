@@ -1,0 +1,556 @@
+<!--
+ diy文本编辑器：
+ 【可拖拽组件随意摆放位置】
+ 【可设置各组件的宽高、字体样式】
+ 【可通过Ctrl+Shift+点击 选中多个进行统一设置位置等，，，】
+ 【可设置表格列表、表格列选项位置、表格字体、表格边框等样式】
+-->
+<extend name="Public:base"/>
+<block name="content">
+  <link type="text/css" rel="stylesheet" href="__ROOT__/Public/admin/css/PrintTpl/printTplInfo.css?v={$V}"/>
+  <div class="admin-main admin-main-form has-sub" id="app" v-cloak="" style="height: 100%;">
+    <div class="contract-tpl-main">
+      <div class="tpl-left custom-scrollbar">
+        <div class="tpl-basic flex-between">
+          <input type="text"
+                 class="input-inner" style="width: 230px;"
+                 placeholder="请输入打印模板名称" v-model="info.tpl_name">
+          <div style="padding-right: 20px">
+            <span>状态：</span>
+            <switch-default :info="info" param="status"></switch-default>
+          </div>
+        </div>
+        <div class="tpl-variable">
+          <!--region 变量词-->
+          <div class="toggle-parent tpl-variable-word-div" v-for="param in variableParams">
+            <div class="param-title">
+              <b>{{ param.title }}</b>
+              <span class="color-gray">(先在右侧模版容处点击加变量词的位置，再点击变量词即可插入)</span>
+              <i class="xxicon-circle-down" data-isshow="1" @click="toggleChild($event)"></i>
+            </div>
+            <div class="toggle-main word-list">
+              <a v-for="item in param.item" :title="item.tips" @click="insertContent(item)">
+                {{ item.name }}
+              </a>
+            </div>
+          </div>
+          <!--endregion-->
+
+          <!--region 其他设置-->
+          <div class="toggle-parent tpl-variable-word-div">
+            <div class="param-title">
+              <b>其他设置</b>
+            </div>
+            <div>
+              <span>每页列表行数:</span>
+              <el-select class="small" style="width: 100px" v-model="info.tpl_config.pre_page_row">
+                <el-option value="" label="默认"></el-option>
+                <el-option v-for="i in 100" :value="''+i" :label="i"></el-option>
+              </el-select>
+              <template v-if="info.tpl_config.pre_page_row !== '' && +info.tpl_type !== 4">
+                <span class="ml-10">每页小计:</span>
+                <el-select class="small" style="width: 100px" v-model="info.tpl_config.is_show_subtotal">
+                  <el-option value="1" label="显示"></el-option>
+                  <el-option value="0" label="不显示"></el-option>
+                </el-select>
+              </template>
+
+              <span class="ml-10">纸张宽度:</span>
+              <el-select class="small" style="width: 100px" v-model="info.tpl_config.page_width">
+                <el-option v-for="(item, i) in tplPageWidth" :key="i" :value="item.value" :label="item.label"
+                           v-if="item.tpl_type.indexOf(info.tpl_type) > -1"></el-option>
+              </el-select>
+            </div>
+          </div>
+          <!--endregion-->
+
+          <!--region 表头数据-->
+          <div class="toggle-parent">
+            <div class="param-title"><b class="display-align">表头数据</b></div>
+            <div class="toggle-main header-data">
+              <div>
+                <h3>1.基础数据</h3>
+                <ul class="check-input-list">
+                  <li v-for="basic in info.tpl_config.base_data">
+                    <el-checkbox true-label="1" false-label="0" v-model="basic.is_checked"
+                                 @change="syncTableData(basic, 'check')">
+                    </el-checkbox>
+                    <input type="text" class="input-inner small" :placeholder="basic.default_name" v-model="basic.diy_name"
+                           @input="syncTableData(basic, 'modify-diy-name')">
+                  </li>
+                  <li v-for="item in info.tpl_config.tableOtherData">
+                    <el-checkbox true-label="1" false-label="0" v-model="item.is_checked"
+                                 @change="syncTableData(item, 'check')">
+                    </el-checkbox>
+                    <input type="text" class="input-inner small" :placeholder="item.default_name" v-model="item.diy_name"
+                           @input="syncTableData(item, 'modify-diy-name')">
+                    <el-select class="small" v-model="item.value_data.value_type"
+                               @change="syncTableData(item, 'default-value')">
+                      <el-option value="1" label="空白列项"></el-option>
+                      <el-option value="2" label="固定列项"></el-option>
+                      <el-option v-for="(option, i) in info.tpl_config.base_data"
+                                 :key="i" :value="option.type" :label="'关联'+option.diy_name || option.default_name"></el-option>
+                    </el-select>
+                    <input type="text" class="input-inner small" placeholder="输入固定列项"
+                           v-if="+item.value_data.value_type === 2"
+                           v-model="item.value_data.default_value"
+                           @input="syncTableData(item, 'default-value')">
+                  </li>
+                </ul>
+              </div>
+              <div v-if="+info.tpl_type !== 4">
+                <h3>2.产品数据</h3>
+                <ul class="product-list">
+                  <li v-for="(product, index) in info.tpl_config.params_tpl">
+                    <h4>2.{{ index+1 }}{{ product.tpl_name }}</h4>
+
+                    <ul class="check-input-list">
+                      <li v-for="item in product.tpl_params">
+                        <el-checkbox true-label="1" false-label="0" v-model="item.is_checked"
+                                     @change="syncTableData(item, 'check')">
+                        </el-checkbox>
+                        <input type="text" class="input-inner small" :placeholder="item.default_name" v-model="item.diy_name"
+                               @input="syncTableData(item, 'modify-diy-name')">
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!--endregion-->
+        </div>
+      </div>
+      <div class="tpl-right">
+        <div class="contract-tpl-div">
+          <div style="height: 100%">
+            <diy-drag-editor ref="diyDragEditor" :info="info"></diy-drag-editor>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-submit">
+      <a class="xxbtn-primary" id="saveData" @click="save">保存模板</a>
+      <a class="xxbtn-white ml-10" @click="backToList">返回列表</a>
+      <a class="xxbtn-white ml-10" @click="print">打印</a>
+    </div>
+  </div>
+  <include file="Public/components/switch/switch_default"/>
+  <include file="Public/components/editor_div" />
+  <include file="PrintTpl/printTplInfo/components/diy_drag_editor" />
+  <script>
+    'use strict';
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'switch-default': AppUtil.COMPONENTS.SWITCH_DEFAULT,
+        'diy-drag-editor': AppUtil.COMPONENTS.DIY_DRAG_EDITOR
+      },
+      data: function () {
+        return {
+          tplTypeText: ['A4打印', '分仓打印', '分仓针式打印', '针式打印', '热敏纸打印'],
+          // 变量词
+          variableParams: [],
+          tplPageWidth: [
+            // region a4
+            {value: '595px', label: '595px(分辨率是72像素/英寸时)', tpl_type: [0]},
+            {value: '794px', label: '794px(分辨率是96像素/英寸时)', tpl_type: [0]},
+            // endregion
+            // region 针式
+            {value: '566px', label: '566px', tpl_type: [2]},
+            // endregion
+            // region 热敏
+            {value: '180px', label: '57mm', tpl_type: [4]},
+            {value: '250px', label: '80mm', tpl_type: [4]},
+            // endregion
+          ], // 纸张宽度
+          info: {
+            id: '{$req["id"]}' !== '' ? '{$req["id"]}' : 0,
+            tpl_name: '',
+            type: "{$req['order_type']}",
+            tpl_type: '{$req["tpl_type"]}',//打印类型：0-A4打印，3-针式打印，1-分仓打印，2-分仓针式打印，4-热敏打印
+            status: '0', //"string,状态。0-关闭；1-开启；"
+            tpl_content: [
+              {
+                type: 'order-table', //订单商品表格
+                id: 1,
+                left: '20px',
+                top: '100px',
+                width: '660px',
+                height: '109px',
+                isFontBold: '0', //字体是否加粗0/1
+                isFontSlant: '0',//字体是否倾斜0/1
+                isFontUnderline: '0',//字体是否加下划线0/1
+                textAlign: 'left', //left-居左,center-居中，right-居右
+                fontFamily: 'arial, helvetica, sans-serif', //字体
+                fontSize: '12px', //字体大小
+                color: null, //颜色，默认空。系统颜色
+                lineHeight: '100%', //行距
+                tableBorderWidth: '1',
+                zIndex: 2,
+                // 需要显示的各个商品表格项【tpl_config.base_data和tpl_config.params_tpl的{}内容】
+                checkedItem: [],
+                otherTableItem: [], // 额外新增的表格项
+                content: ''
+              }
+            ], //"string,模版列表(可拖动的元素列数据)，包含变量词，表格等"
+            tpl_config: {
+              tableOtherData: [
+                {
+                  default_name:"空白列1",
+                  diy_name:"空白列1",
+                  is_checked:"0",
+                  type:"other_1",
+                  value:"{column_other_1}",
+                  value_data: {
+                    value_type: '1', // 1-空白列项，2-固定列项，''-关联基础数据的type
+                    default_value: '', // 固定值
+                  }
+                },
+                {
+                  default_name:"空白列2",
+                  diy_name:"空白列2",
+                  is_checked:"0",
+                  type:"other_2",
+                  value:"{column_other_2}",
+                  value_data: {
+                    value_type: '1',
+                    default_value: '',
+                  }
+                },
+                {
+                  default_name:"空白列3",
+                  diy_name:"空白列3",
+                  is_checked:"0",
+                  type:"other_3",
+                  value:"{column_other_3}",
+                  value_data: {
+                    value_type: '1',
+                    default_value: '',
+                  }
+                }
+              ],
+              base_data: [],//表头数据
+              params_tpl: [], //产品数据
+              dragSizeBoxHeight: '', // 编辑器内容高度
+              is_show_subtotal: '0', //是否显示小计0/1，不分页不显示小计
+              pre_page_row: '',//每页显示的行数，''默认不设置
+              page_width: '794px',// 打印纸张宽度
+            },
+          },
+        }
+      },
+      computed: {},
+      watch: {
+        'info.tpl_config.pre_page_row': function () {
+          if (this.info.tpl_config.pre_page_row === '') {
+            this.info.tpl_config.is_show_subtotal = '0'
+          }
+        }
+      },
+      mounted: function () {
+        this.initLoad();
+      },
+      methods: {
+        initLoad: function () {
+          var self = this;
+          AppUtil.ajaxRequest({
+            url: '/Public/json/admin/PrintTpl/printTplInfo/getVariableWords.json',
+            type: 'get',
+            data: {
+              type: self.info.tpl_type,
+              order_type: self.info.type,
+            },
+          }).then(function (result) {
+            self.variableParams = result.data.variable_params;
+            if (+self.info.id > 0) {
+              self.getInfoData()
+            } else {
+              if (+self.info.tpl_type === 4) {
+                self.info.tpl_content[0].left = '0px'
+                self.info.tpl_content[0].width = '180px'
+                self.info.tpl_content[0].height = '125px'
+                self.info.tpl_config.page_width = '180px'
+              } else if (+self.info.tpl_type === 0) {
+                self.info.tpl_config.page_width = '794px'
+              }else if (+self.info.tpl_type === 2) {
+                self.info.tpl_config.page_width = '566px'
+              }
+              self.$nextTick(function () {
+                self.info.tpl_config.base_data = result.data.header_data.base_data
+                self.info.tpl_config.params_tpl = result.data.header_data.params_tpl
+                self.initBasicTable();
+                self.$refs.diyDragEditor.init()
+              })
+            }
+          })
+        },
+        //获取模板详情
+        getInfoData: function () {
+          var self = this
+          AppUtil.ajaxRequest({
+            type:'get',
+            url: '/Public/json/admin/PrintTpl/printTplInfo/getPrintTplData_'+self.info.id+'.json',
+            data: {
+              id: self.info.id,
+              is_update_variable: 1, // 实时更新变量词
+            },
+          }).then(function (result) {
+            if (typeof result.data.tpl_config.page_width === 'undefined' || result.data.tpl_config.page_width === '') {
+              if (+result.data.tpl_type === 0) {
+                result.data.tpl_config.page_width = '794px';
+              }
+              if (+result.data.tpl_type === 2) {
+                result.data.tpl_config.page_width = '566px';
+              }
+              if (+result.data.tpl_type === 4) {
+                result.data.tpl_config.page_width = '180px';
+              }
+            }
+            if (typeof result.data.tpl_config.tableOtherData === 'undefined') {
+              result.data.tpl_config.tableOtherData = [
+                {
+                  default_name:"空白列1",
+                  diy_name:"空白列1",
+                  is_checked:"0",
+                  type:"other_1",
+                  value:"{column_other_1}",
+                  value_data: {
+                    value_type: '1', // 1-空白列项，2-固定列项，''-关联基础数据的type
+                    default_value: '', // 固定值
+                  }
+                },
+                {
+                  default_name:"空白列2",
+                  diy_name:"空白列2",
+                  is_checked:"0",
+                  type:"other_2",
+                  value:"{column_other_2}",
+                  value_data: {
+                    value_type: '1',
+                    default_value: '',
+                  }
+                },
+                {
+                  default_name:"空白列3",
+                  diy_name:"空白列3",
+                  is_checked:"0",
+                  type:"other_3",
+                  value:"{column_other_3}",
+                  value_data: {
+                    value_type: '1',
+                    default_value: '',
+                  }
+                }
+              ];
+            }
+            var checkedItem = [];
+            result.data.tpl_content[0].checkedItem.forEach(function (value) {
+              if (+value.is_checked === 1) {
+                checkedItem.push(value);
+              }
+            })
+            checkedItem.forEach(function (value) {
+              result.data.tpl_config.tableOtherData.forEach(function (value2, index2) {
+                if (typeof value2.value_data === 'undefined') {
+                  self.$set(result.data.tpl_config.tableOtherData[index2], 'value_data', {
+                    value_type: '1',
+                    default_value: '',})
+                }
+                if (value.value === value2.value) {
+                  self.$set(result.data.tpl_config.tableOtherData, index2, value)
+                }
+              })
+            })
+            result.data.tpl_content[0].checkedItem = JSON.parse(JSON.stringify(checkedItem));
+            console.log(result.data);
+            self.info = result.data
+            self.$nextTick(function () {
+              self.$refs.diyDragEditor.init();
+            })
+          })
+        },
+        //添加变量
+        insertContent: function (item) {
+          var self = this
+          var type = item.value.replace('{', '')
+          type = type.replace('}', '')
+          item.type = type
+          self.$refs.diyDragEditor.addParam(item)
+        },
+        //实时更新表格
+        syncTableData: function (item, actionType) {
+          var self = this
+          var key = 0;
+          self.info.tpl_content[0].checkedItem.forEach(function (value, index) {
+            if (value.type === item.type) {
+              key = index;
+            }
+          })
+          switch (actionType) {
+            case 'check': // 是否显示
+              self.initBasicTable(actionType, item)
+              break
+            case 'modify-diy-name': // 更新表头项名称
+              var content = ''
+              var text = item.default_name
+              if (text !== '') {
+                text = item.diy_name;
+              }
+              self.info.tpl_content[0].checkedItem[key].diy_name = text;
+              break
+            case 'default-value': // 空白列 固定值
+              if (+item.value_data.value_type !== 2) {
+                item.value_data.default_value = '';
+              }
+              if (typeof self.info.tpl_content[0].checkedItem[key].value_data === 'undefined') {
+                self.$set(self.info.tpl_content[0].checkedItem[key], 'value_data', item.value_data)
+              }
+              break
+            default:
+              break
+          }
+        },
+        //基础通用表格初始化
+        initBasicTable: function (actionType, item) {
+          var self = this
+          if (typeof actionType !== 'undefined' && actionType === 'check') {
+            //
+            var key = -1;
+            self.info.tpl_content[0].checkedItem.forEach(function (value, index) {
+              if (item.value === value.value) {
+                key = index;
+              }
+            })
+            if (key > -1) {
+              self.info.tpl_content[0].checkedItem.splice(key, 1);
+            } else {
+              self.info.tpl_content[0].checkedItem.push(item);
+            }
+          } else {
+            // 初始化
+            var checkedItemParam = []
+            self.info.tpl_config.params_tpl.forEach(function (val_param) {
+              val_param.tpl_params.forEach(function (val_item, index) {
+                self.$set(val_item, 'sort', index + 1);
+                if (typeof val_item.is_checked !== 'undefined' && +val_item.is_checked === 1) {
+                  checkedItemParam.push(val_item)
+                }
+              })
+            })
+            var checkedItem = []
+            self.info.tpl_config.base_data.forEach(function (value, index) {
+              self.$set(value, 'sort', index + 1);
+              if (value.type === 'goods_spec') {
+                if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+                  checkedItem.push(value)
+                }
+                checkedItem = checkedItem.concat(checkedItemParam)
+              } else {
+                if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+                  checkedItem.push(value)
+                }
+              }
+            })
+            var checkedOther = [];
+            self.info.tpl_config.tableOtherData.forEach(function (value, index) {
+              self.$set(value, 'sort', index + 1);
+              if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+                checkedOther.push(value)
+              }
+            })
+            checkedItem = checkedItem.concat(checkedOther);
+            self.info.tpl_content[0].checkedItem = checkedItem
+          }
+        },
+        //保存
+        save: function () {
+          var self = this
+          self.$nextTick(function () {
+            var h0 = document.getElementById('dragresize-box').clientHeight
+            var h = document.getElementById('dragresize-box').scrollHeight
+            var tableTrH = $('#editor-order-table').find('thead tr:first-child').height()
+            self.info.tpl_config.tableTrHeight = tableTrH; // 编辑器中每行表格高度
+            if (h > h0) {
+              self.info.tpl_config.dragSizeBoxHeight = h
+            } else {
+              self.info.tpl_config.dragSizeBoxHeight = self.getDragBoxHeight()
+            }
+            if (self.info.tpl_name === '') {
+              publicWap.layerMsg('{:L("INPUT_TEMP_NAME")}')
+              return false
+            }
+            $("#saveData").attr('disabled', true);
+            var action = +self.info.id > 0 ? 'modify' : 'add'
+            var query = JSON.stringify(self.info)
+            AppUtil.ajaxRequest({
+              url: AppUtil.getTPUrl('PrintTpl', action),
+              data: query,
+              contentType: AppUtil.CONTENT_TYPE_JSON
+            }).then(function (result) {
+              publicWap.layerMsg('{:L("SAVE_TEMP_SUCCESS")}', 1) // 保存模板成功
+              $("#saveData").attr('disabled', false);
+              self.backToList();
+            })
+          })
+        },
+
+        //获取编辑器高度
+        getDragBoxHeight: function () {
+          var self = this
+          var bottomMax = 0
+          self.info.tpl_content.forEach(function (value, index) {
+            var height = +(value.height.replace('px', ''))
+            var top = +(value.top.replace('px', ''))
+            var bottom = top + height
+            if (index === 0) {
+              bottomMax = bottom
+            }
+            if (bottom > bottomMax) bottomMax = bottom
+          })
+          return bottomMax
+        },
+
+        //返回模板列表页
+        backToList: function () {
+          adminObj.infoTabSubmit({
+            title: '文本编辑器-diy',
+            menu_type: 'print_tpl_list',
+            c: 'PrintTpl',
+            a: 'printSetting',
+            old_menu_type: adminObj.getThisTabData().menu_type,
+          })
+        },
+
+        //同步子组件拖拽style数据
+        resetDragResizeStyle: function (styleData) {
+          this.$refs.diyDragEditor.resetDragResizeStyle(styleData)
+        },
+        
+        // 打印
+        print: function () {
+          var self = this;
+          var url = AppUtil.getTPUrl('Index', 'printTplPrint') +
+            "&order_id=22830" +
+            '&id=' + self.info.id
+          layer.load();
+          var lay = layer.open({
+            type: 2,
+            shade: 0,
+            skin: 'iframe-order-print',
+            content: url
+          });
+          setTimeout(function () {
+            layer.close(lay);
+          }, 5000);
+          
+        }
+      },
+    })
+  </script>
+  <style>
+    .iframe-order-print {
+      z-index: -9999!important;
+    }
+  </style>
+</block>

@@ -1,0 +1,419 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": {
+    "ad_img":{
+      "selected_img_module": 0,
+      "img_module": [
+        {
+          "btn_style": 0,
+          "btn_position": 0,
+          "btn_color": "#fe3434"
+        },
+        {
+          "img_gap":0
+        }
+      ],
+      "img_list":[]
+    },
+    "btn_nav":{
+      "bg_color":"#fefefe",
+      "text_color":"#323232",
+      "btn_list":[
+        {"img_url":"","btn_text":"按钮文字","action":"no_action","action_data":"","sort":0},
+        {"img_url":"","btn_text":"按钮文字","action":"no_action","action_data":"","sort":0},
+        {"img_url":"","btn_text":"按钮文字","action":"no_action","action_data":"","sort":0},
+        {"img_url":"","btn_text":"按钮文字","action":"no_action","action_data":"","sort":0},
+        {"img_url":"","btn_text":"按钮文字","action":"no_action","action_data":"","sort":0}
+      ]
+    },
+    "coupon":{"show":true},
+    "group_buying":{"show":true},
+    "limit_time":{"show":true},
+    "ad_center":{
+      "max_id":2,
+      "img_list":[
+        {
+          "id":1,
+          "advertise_name":"领券中心",
+          "img_url":"",
+          "show":true,
+          "action":"no_action","action_data":""
+        },
+        {
+          "id":2,
+          "advertise_name":"ces",
+          "img_url":"",
+          "show":true,
+          "action":"no_action","action_data":""
+        }
+      ]
+    },
+    "ad_theme":{
+      "max_id":2,
+      "theme_list": [
+        {
+          "theme_id":1,
+          "title":"-每日精选-",
+          "sort":1,
+          "show":true,
+          "max_id":77778,
+          "list_title": {
+            "module_id": "11111",
+            "module_type": "1",
+            "module_name": "",
+            "status": "1",
+            "sort": "1",
+            "content": {
+              "dataset": [
+                {
+                  "type": 0,
+                  "title": "",
+                  "img_url": "/Public/common/img/csImg/img1.png",
+                  "action_data": "",
+                  "action": "no_action"
+                }
+              ]
+            },
+            "dom_item": ""
+          },
+          "list_ad":
+          {
+            "module_id": "55555",
+            "module_type": "5",
+            "module_name": "",
+            "status": "1",
+            "sort": "8",
+            "content": {
+              "dataset": [
+                {
+                  "type": 0,
+                  "title": "",
+                  "img_url": "/Public/common/img/csImg/img3.png",
+                  "action_data": "",
+                  "action": "no_action"
+                },
+                {
+                  "type": 0,
+                  "title": "",
+                  "img_url": "/Public/common/img/csImg/img2.png",
+                  "action_data": "",
+                  "action": "no_action"
+                }
+              ]
+            },
+            "dom_item": ""
+          },
+          "list_content":[
+            {
+              "module_id": "66666",
+              "module_type": "6",
+              "module_name": "",
+              "status": "1",
+              "sort": "2",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "/Public/common/img/csImg/img2.png",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": ""
+            },
+            {
+              "module_id": "22222",
+              "module_type": "2",
+              "module_name": "",
+              "status": "1",
+              "sort": "3",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  },
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": ""
+            },
+            {
+              "module_id": "33333",
+              "module_type": "3",
+              "module_name": "",
+              "status": "1",
+              "sort": "4",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  },
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  },
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": ""
+            },
+            {
+              "module_id": "44444",
+              "module_type": "4",
+              "module_name": "",
+              "status": "1",
+              "sort": "5",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  },
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  },
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "",
+                    "action_data": "",
+                    "action": "no_action"
+                  },
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "/Public/common/img/default_img/C_userImg.png",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": ""
+            },
+            {
+              "module_id": "77777",
+              "module_type": "7",
+              "module_name": "",
+              "status": "1",
+              "sort": "6",
+              "goods_data": {
+                "goods_source": 0,
+                "source_id": "",
+                "tag_id": "",
+                "class_id": "12238|12252|12253",
+                "goods_id": [],
+                "goods_num": "6",
+                "list_style": "0",
+                "show_goods_name": 1,
+                "show_goods_price": 1
+              },
+              "content": [],
+              "dom_item": ""
+            },
+            {
+              "module_id": "77778",
+              "module_type": "6",
+              "module_name": "",
+              "status": "1",
+              "sort": "7",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "/Public/common/img/csImg/img1.png",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": "",
+              "goods_data": {
+                "goods_source": "0",
+                "source_id": "0",
+                "tag_id": "",
+                "class_id": "",
+                "goods_id": [],
+                "goods_num": "6",
+                "list_style": "0",
+                "show_goods_name": "1",
+                "show_goods_price": "1"
+              }
+            }
+          ]
+        },
+        {
+          "theme_id":2,
+          "title":"-品质时尚-",
+          "sort":2,
+          "show":true,
+          "max_id":66667,
+          "list_title": {
+            "module_id": "11112",
+            "module_type": "1",
+            "module_name": "",
+            "status": "1",
+            "sort": "1",
+            "content": {
+              "dataset": [
+                {
+                  "type": 0,
+                  "title": "",
+                  "img_url": "/Public/common/img/csImg/img4.png",
+                  "action_data": "",
+                  "action": "no_action"
+                }
+              ]
+            },
+            "dom_item": ""
+          },
+          "list_ad": {
+            "module_id": "55559",
+            "module_type": "5",
+            "module_name": "",
+            "status": "1",
+            "sort": "6",
+            "content": {
+              "dataset": [
+                {
+                  "type": 0,
+                  "title": "",
+                  "img_url": "/Public/common/img/csImg/img5.png",
+                  "action_data": "",
+                  "action": "no_action"
+                },
+                {
+                  "type": 0,
+                  "title": "",
+                  "img_url": "/Public/common/img/csImg/img7.png",
+                  "action_data": "",
+                  "action": "no_action"
+                }
+              ]
+            },
+            "dom_item": ""
+          },
+          "list_content": [
+            {
+              "module_id": "66667",
+              "module_type": "6",
+              "module_name": "",
+              "status": "1",
+              "sort": "2",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 1,
+                    "title": "",
+                    "img_url": "/Public/common/img/csImg/img4.jpg",
+                    "action_data": "http://dev.duinin.com/index.php?c=Form&a=formInfo&se=165&form_id=1",
+                    "action": "web_url"
+                  }
+                ]
+              },
+              "dom_item": ""
+            },
+            {
+              "module_id": "55557",
+              "module_type": "6",
+              "module_name": "",
+              "status": "1",
+              "sort": "3",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "/Public/common/img/csImg/img2.png",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": ""
+            },
+            {
+              "module_id": "55558",
+              "module_type": "2",
+              "module_name": "",
+              "status": "1",
+              "sort": "4",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "/Public/common/img/csImg/img1.png",
+                    "action_data": "",
+                    "action": "no_action"
+                  },
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "/Public/common/img/csImg/img3.png",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": ""
+            },
+            {
+              "module_id": "55556",
+              "module_type": "6",
+              "module_name": "",
+              "status": "1",
+              "sort": "5",
+              "content": {
+                "dataset": [
+                  {
+                    "type": 0,
+                    "title": "",
+                    "img_url": "/Public/common/img/csImg/img1.png",
+                    "action_data": "",
+                    "action": "no_action"
+                  }
+                ]
+              },
+              "dom_item": ""
+            }
+          ]
+        }
+      ]
+    },
+    "new_goods":{"show":true}
+  }
+}

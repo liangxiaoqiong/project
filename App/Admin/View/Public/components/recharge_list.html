@@ -1,0 +1,154 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/3/10
+  -->
+<!-- template 充值列表，swiper滚动-->
+<link rel="stylesheet" type="text/css" href="__SWIPERCSS__">
+<script type="x-template" id="recharge_list">
+  <!--region 模版-->
+  <div class="recharge-swiper-box" :class="list.length <= 3 ? 'list-default' : ''">
+    <div class="recharge-swiper" ref="swiper-div">
+      <ul class="swiper-wrapper">
+        <li v-for="(item, index) in list" :key="index"
+            class="swiper-slide"
+            :class="{'active': +query.rechargeType === +item.type}"
+            @click="changeItem(item)">
+          <div class="t"><b>{{ item.title }}</b><span class="price-desc" v-if="item.price_desc && item.price_desc !== ''">{{ item.price_desc }}</span></div>
+          <div class="price">{$currencySymbol}{{ item.price }}</div>
+        </li>
+      </ul>
+      <div class="swiper-button-prev"></div><!--左箭头-->
+      <div class="swiper-button-next"></div><!--右箭头-->
+    </div>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script type="text/javascript" src="__SWIPERJS__"></script>
+<script>
+  AppUtil.COMPONENTS.RECHARGE_LIST = {
+    template: '#recharge_list',
+    props: {
+      query: {
+        type: Object,
+        default: function () {
+          return {
+            rechargeType: 1
+          }
+        }
+      }
+    },
+    data: function () {
+      return {
+        list: []
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      init: function (option) {
+        var self = this;
+        self.list = option;
+        if (self.list.length > 3) {
+          self.$nextTick(function () {
+            new Swiper(self.$refs['swiper-div'], {
+              prevButton:'.swiper-button-prev',
+              nextButton:'.swiper-button-next',
+              speed: 350,//速度
+              slidesPerView: 3.4,
+              paginationClickable: true,
+              autoplay: false, //自动播放
+              spaceBetween: 20, //每个间隔的宽度（单位px）
+            });
+          });
+        }
+      },
+      changeItem: function (item) {
+        this.query.rechargeType = item.type;
+      }
+    }
+  }
+</script>
+<style>
+  .recharge-swiper-box {
+    padding: 0 30px;
+    position: relative;
+  }
+  .recharge-swiper-box .swiper-button-prev,
+  .recharge-swiper-box .swiper-button-next {
+    background-size: 12px 20px;
+    top: 53px;
+  }
+  .recharge-swiper-box .swiper-button-prev {
+    left: 0;
+  }
+  .recharge-swiper-box .swiper-button-next {
+    right: 0;
+  }
+  .recharge-swiper-box .swiper-button-next.swiper-button-disabled,
+  .recharge-swiper-box .swiper-button-prev.swiper-button-disabled {
+    opacity: 0;
+  }
+  .recharge-swiper {
+    overflow: hidden;
+    height: 110px;
+    border-radius: 10px;
+  }
+  .recharge-swiper ul {
+    width: 100%;
+  }
+  .recharge-swiper ul li {
+    background-color: #FAFAFA;
+    border-radius: 10px;
+    padding: 20px;
+    height: 110px;
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+    border: 1px solid #FAFAFA;
+    cursor: pointer;
+  }
+  .recharge-swiper ul li .t b {
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .recharge-swiper ul li .t .price-desc {
+    background-color: #FF533D;
+    border-radius: 4px;
+    color: #FFFFff;
+    padding: 2px 5px;
+    margin-left: 10px;
+  }
+  .recharge-swiper ul li .price {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 9px;
+  }
+  .recharge-swiper ul li.active {
+    border-color: #003CFF;
+    background-color: #F3F6FF;
+  }
+  .recharge-swiper ul li:hover {
+    background-color: #F3F6FF;
+  }
+  .recharge-swiper ul li.active .price {
+    color: #FF533D;
+  }
+  /*region 非轮播*/
+  .list-default .recharge-swiper ul {
+    width: calc(100% - 20px);
+    margin: 0 -10px;
+  }
+  .list-default .recharge-swiper ul li {
+    width: calc(33.33% - 10px);
+    margin: 0 10px;
+  }
+  .list-default .swiper-button-prev,
+  .list-default .swiper-button-next {
+    display: none;
+  }
+  /*endregion*/
+</style>

@@ -1,0 +1,202 @@
+@font-face {
+  font-family: 'xxicon';
+  src:  url('fonts/xxicon.eot?sa9bkf');
+  src:  url('fonts/xxicon.eot?sa9bkf#iefix') format('embedded-opentype'),
+    url('fonts/xxicon.ttf?sa9bkf') format('truetype'),
+    url('fonts/xxicon.woff?sa9bkf') format('woff'),
+    url('fonts/xxicon.svg?sa9bkf#xxicon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="xxicon-"], [class*=" xxicon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'xxicon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.xxicon-menu-hezuo:before {
+  content: "\e902";
+}
+.xxicon-menu-baobiao:before {
+  content: "\e90e";
+}
+.xxicon-menu-caiwu:before {
+  content: "\e90f";
+}
+.xxicon-menu-daili:before {
+  content: "\e910";
+}
+.xxicon-menu-dingdan:before {
+  content: "\e911";
+}
+.xxicon-menu-faxian:before {
+  content: "\e912";
+}
+.xxicon-menu-fenxiao:before {
+  content: "\e913";
+}
+.xxicon-menu-huiyuan:before {
+  content: "\e914";
+}
+.xxicon-menu-jinxiao:before {
+  content: "\e915";
+}
+.xxicon-menu-mendian:before {
+  content: "\e916";
+}
+.xxicon-menu-shangcheng:before {
+  content: "\e917";
+}
+.xxicon-menu-shangpin:before {
+  content: "\e918";
+}
+.xxicon-menu-shouyin:before {
+  content: "\e919";
+}
+.xxicon-menu-yingxiao:before {
+  content: "\e91a";
+}
+.xxicon-menu-yuangong:before {
+  content: "\e91b";
+}
+.xxicon-menu-zengzhi:before {
+  content: "\e91c";
+}
+.xxicon-bells:before {
+  content: "\e91d";
+}
+.xxicon-chuku:before {
+  content: "\e91e";
+  color: #003cff;
+}
+.xxicon-ruku:before {
+  content: "\e91f";
+  color: #003cff;
+}
+.xxicon-order-0:before {
+  content: "\e920";
+  color: #f75353;
+}
+.xxicon-msg-1:before {
+  content: "\e921";
+}
+.xxicon-chart .path1:before {
+  content: "\e901";
+  color: rgb(255, 255, 255);
+}
+.xxicon-chart .path2:before {
+  content: "\e922";
+  margin-left: -1em;
+  color: rgb(0, 60, 255);
+}
+.xxicon-chart .path3:before {
+  content: "\e923";
+  margin-left: -1em;
+  color: rgb(0, 60, 255);
+}
+.xxicon-star-0:before {
+  content: "\e924";
+  color: #999;
+}
+.xxicon-star-1:before {
+  content: "\e925";
+  color: #f00;
+}
+.xxicon-emoji:before {
+  content: "\e926";
+}
+.xxicon-shop:before {
+  content: "\e928";
+  color: #003cff;
+}
+.xxicon-sms:before {
+  content: "\e929";
+  color: #ffa200;
+}
+.xxicon-plus:before {
+  content: "\e92a";
+  color: #003cff;
+}
+.xxicon-remove:before {
+  content: "\e92b";
+  color: #003cff;
+}
+.xxicon-scan:before {
+  content: "\e92c";
+}
+.xxicon-img:before {
+  content: "\e92d";
+}
+.xxicon-lock-0:before {
+  content: "\e92e";
+  color: #999;
+}
+.xxicon-lock-1:before {
+  content: "\e92f";
+  color: #003cff;
+}
+.xxicon-bulb:before {
+  content: "\e930";
+}
+.xxicon-wx:before {
+  content: "\e931";
+  color: #24ce1e;
+}
+.xxicon-msg:before {
+  content: "\e932";
+  color: #003cff;
+}
+.xxicon-user:before {
+  content: "\e933";
+  color: #ffa200;
+}
+.xxicon-import:before {
+  content: "\e90a";
+}
+.xxicon-save:before {
+  content: "\e907";
+}
+.xxicon-checked-2:before {
+  content: "\e908";
+}
+.xxicon-search:before {
+  content: "\e905";
+  color: #666;
+}
+.xxicon-export:before {
+  content: "\e904";
+  color: #666;
+}
+.xxicon-checked:before {
+  content: "\e900";
+  color: #ff533d;
+}
+.xxicon-clear-cache:before {
+  content: "\e96b";
+}
+.xxicon-password:before {
+  content: "\e978";
+  color: #ff9d3d;
+}
+.xxicon-phone:before {
+  content: "\e979";
+  color: #ff9d3d;
+}
+.xxicon-sign-out:before {
+  content: "\e97a";
+  color: #ff9d3d;
+}
+.xxicon-right:before {
+  content: "\e927";
+}

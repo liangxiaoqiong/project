@@ -1,0 +1,33 @@
+<script>
+  var ue = {}
+
+  function UE_INIT (UE_EL, option) {
+    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+    UE.Editor.prototype.getActionUrl = function (action) {
+      if (action === 'uploadimage' || action === 'uploadscrawl' || action === 'uploadimage' || action === 'uploadvideo' ||
+        action === 'uploadfile') {
+        return '{$uploadUrl}' + '?action=' + action;
+      } else {
+        return this._bkGetActionUrl.call(this, action);
+      }
+    };
+    // 实例化ue实例
+    var config = Object.assign({}, {
+      serverUrl: "{:U('Public/uEditor')}",
+      elementPathEnabled: false, // 禁止元素路径显示
+      wordCount: false, // 禁止字数统计
+      zIndex: 99
+    }, option || {})
+
+    ue = UE.getEditor(UE_EL, config);
+    // 初始化
+    ue.ready(function () {
+      // 设置参数
+      ue.execCommand('serverparam', {
+        'type': 3,
+        'from': 'ueditor',
+        'domain': window.location.protocol + '//' + window.location.host
+      });
+    });
+  }
+</script>

@@ -1,0 +1,656 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": {
+    "variable_params": [
+      {
+        "title": "客户变量词",
+        "item": [
+          {
+            "name": "客户名",
+            "value": "{CUSTOMER_NAME}",
+            "show": "{客户名}",
+            "tips": "收货人姓名，例：张三",
+            "type": "{CUSTOMER_NAME}"
+          },
+          {
+            "name": "客户备注名",
+            "value": "{CUSTOMER_OTHER_NAME}",
+            "show": "{客户备注名}",
+            "tips": "商家给在会员资料里给会员备注的名称，例：建材市场张经理",
+            "type": "{CUSTOMER_OTHER_NAME}"
+          },
+          {
+            "name": "代理商等级",
+            "value": "{GROUP_NAME}",
+            "show": "{代理商等级}",
+            "tips": "会员所属的代理商级别，例：级别1",
+            "type": "{GROUP_NAME}"
+          },
+          {
+            "name": "会员标签",
+            "value": "{MEMBER_TAG_TEXT}",
+            "show": "{会员标签}",
+            "tips": "商家给在会员资料里给会员设置的标签，例：常买童装,常买调料",
+            "type": "{MEMBER_TAG_TEXT}"
+          },
+          {
+            "name": "客户电话",
+            "value": "{CUSTOMER_PHONE}",
+            "show": "{客户电话}",
+            "tips": "收货人联系方式，例：1234567890",
+            "type": "{CUSTOMER_PHONE}"
+          },
+          {
+            "name": "客户地址",
+            "value": "{CUSTOMER_ADDRESS}",
+            "show": "{客户地址}",
+            "tips": "收货地址，例：福建省厦门市湖里区枋湖西路189号512",
+            "type": "{CUSTOMER_ADDRESS}"
+          },
+          {
+            "name": "客户备注",
+            "value": "{CUSTOMER_REMARK}",
+            "show": "{客户备注}",
+            "tips": "支付方式+下单时填写的备注，例：[微信支付]多套一个大袋子打包",
+            "type": "{CUSTOMER_REMARK}"
+          },
+          {
+            "name": "配送方式",
+            "value": "{DELIVERY_METHOD}",
+            "show": "{配送方式}",
+            "tips": "客户下单时选择的配送方式，例：商家配送\/由[xxxx]配送\/用户自提时间：2021-05-24 17:15:04",
+            "type": "{DELIVERY_METHOD}"
+          },
+          {
+            "name": "门店名称",
+            "value": "{PICKUP_NAME}",
+            "show": "{门店名称}",
+            "tips": "客户下单时选择的门店，例：安兜1号店",
+            "type": "{PICKUP_NAME}"
+          },
+          {
+            "name": "配送时间",
+            "value": "{DELIVERY_PERIOD}",
+            "show": "{配送时间}",
+            "tips": "客户下单时选择的配送时间，例：早上10点-12点",
+            "type": "{DELIVERY_PERIOD}"
+          },
+          {
+            "name": "发票信息",
+            "value": "{INVOICE_INFO}",
+            "show": "{发票信息}",
+            "tips": "客户下单时选择的发票信息，例：发票类型：个人|发票抬头：微聚点|税号：64694646",
+            "type": "{INVOICE_INFO}"
+          }
+        ]
+      },
+      {
+        "title": "商家变量词",
+        "item": [
+          {
+            "name": "单号",
+            "value": "{ORDER_ID}",
+            "show": "{单号}",
+            "tips": "订单编号，例：22601",
+            "type": "{ORDER_ID}"
+          },
+          {
+            "name": "客服电话",
+            "value": "{SERVICE_PHONE}",
+            "show": "{客服电话}",
+            "tips": "商家管理-商家信息-联系我们中配置的客服电话，例：0592-8988998",
+            "type": "{SERVICE_PHONE}"
+          },
+          {
+            "name": "商家名称",
+            "value": "{STORE_NAME}",
+            "show": "{商家名称}",
+            "tips": "商家的名称，例：全球采购体验店",
+            "type": "{STORE_NAME}"
+          },
+          {
+            "name": "商家地址",
+            "value": "{SELLER_ADDRESS}",
+            "show": "{商家地址}",
+            "tips": "商家管理-商家信息-联系我们中配置的详细地址，例：福建省厦门市湖里区枋湖西路189号512",
+            "type": "{SELLER_ADDRESS}"
+          },
+          {
+            "name": "下单时间",
+            "value": "{ORDER_CREATE_TIME}",
+            "show": "{下单时间}",
+            "tips": "下单时间，例：2020-09-04 11:22:02",
+            "type": "{ORDER_CREATE_TIME}"
+          },
+          {
+            "name": "开单时间",
+            "value": "{NOW_TIME}",
+            "show": "{开单时间}",
+            "tips": "当前进行打印的时间，例：2020-09-04 11:34:03",
+            "type": "{NOW_TIME}"
+          },
+          {
+            "name": "发货备注",
+            "value": "{SEND_REMARK}",
+            "show": "{发货备注}",
+            "tips": "商家发货时填写的备注，例：已和客户协商，由于料酒B无货，用料酒A替代",
+            "type": "{SEND_REMARK}"
+          },
+          {
+            "name": "商家备注",
+            "value": "{EXPORT_REMARK}",
+            "show": "{商家备注}",
+            "tips": "商家统一配置的备注，商家管理-配送设置-打印设置中配置的订单底部备注，例：如对本单数量或金额有异议，清在三个工作日之内致电，逾期无效！",
+            "type": "{EXPORT_REMARK}"
+          },
+          {
+            "name": "仓库名称",
+            "value": "{DEPOT_NAME}",
+            "show": "{仓库名称}",
+            "tips": "分仓打印时的仓库名称，例：广东仓",
+            "type": "{DEPOT_NAME}"
+          },
+          {
+            "name": "联系QQ",
+            "value": "{STORE_QQ}",
+            "show": "{联系QQ}",
+            "tips": "商家管理-商家信息中，配置的联系QQ，例：123456",
+            "type": "{STORE_QQ}"
+          },
+          {
+            "name": "快递单号",
+            "value": "{WAYBILL_NUM}",
+            "show": "{快递单号}",
+            "tips": "商家发货时填写的快递单号，如有多个会用\/分割，例：JD001\/SF001\/YT001",
+            "type": "{WAYBILL_NUM}"
+          },
+          {
+            "name": "支付流水号",
+            "value": "{PAY_ID}",
+            "show": "{支付流水号}",
+            "tips": "在线支付时，微信\/支付宝的支付流水号，例如：40098120012017083091",
+            "type": "{PAY_ID}"
+          }
+        ]
+      },
+      {
+        "title": "其他变量词",
+        "item": [
+          {
+            "name": "商品总额",
+            "value": "{GOODS_TOTAL}",
+            "show": "{商品总额}",
+            "tips": "商品总计金额，例：199",
+            "type": "{GOODS_TOTAL}"
+          },
+          {
+            "name": "实际支付金额",
+            "value": "{TOTAL_PRICE}",
+            "show": "{实际支付金额}",
+            "tips": "实际支付金额，例：189",
+            "type": "{TOTAL_PRICE}"
+          },
+          {
+            "name": "订单二维码",
+            "value": "{ORDER_QR_CODE}",
+            "show": "{订单二维码}",
+            "tips": "相关人员扫描订单二维码可进行拣货、配送等操作",
+            "type": "{ORDER_QR_CODE}"
+          },
+          {
+            "name": "运费",
+            "value": "{POSTAGE}",
+            "show": "{运费}",
+            "tips": "运费，例：1.34",
+            "type": "{POSTAGE}"
+          },
+          {
+            "name": "优惠券金额",
+            "value": "{COUPON_MONEY}",
+            "show": "{优惠券金额}",
+            "tips": "优惠券抵用的金额，例：1.11",
+            "type": "{COUPON_MONEY}"
+          },
+          {
+            "name": "优惠券名称",
+            "value": "{COUPON_NAME}",
+            "show": "{优惠券名称}",
+            "tips": "客户使用的优惠券名称，例：中秋特惠券",
+            "type": "{COUPON_NAME}"
+          },
+          {
+            "name": "满减金额",
+            "value": "{MJ_PRICE}",
+            "show": "{满减金额}",
+            "tips": "满减活动优惠的金额，例：1.99",
+            "type": "{MJ_PRICE}"
+          },
+          {
+            "name": "团长优惠价",
+            "value": "{HEADER_REDUCE_PRICE}",
+            "show": "{团长优惠价}",
+            "tips": "拼团活动团长优惠的金额，例：1.23",
+            "type": "{HEADER_REDUCE_PRICE}"
+          }
+        ]
+      }
+    ],
+    "header_data": {
+      "base_data": [
+        {
+          "type": "id",
+          "value": "{column_id}",
+          "default_name": "序号",
+          "diy_name": "序号",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_name",
+          "value": "{column_goods_name}",
+          "default_name": "品名",
+          "diy_name": "品名",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_spec",
+          "value": "{column_goods_spec}",
+          "default_name": "规格",
+          "diy_name": "规格",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_barcode",
+          "value": "{column_goods_barcode}",
+          "default_name": "商品条码",
+          "diy_name": "商品条码",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_number",
+          "value": "{column_goods_number}",
+          "default_name": "商品货号",
+          "diy_name": "商品货号",
+          "is_checked": "1"
+        },
+        {
+          "type": "num",
+          "value": "{column_num}",
+          "default_name": "数量",
+          "diy_name": "数量",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_units_name",
+          "value": "{column_goods_units_name}",
+          "default_name": "单位",
+          "diy_name": "单位",
+          "is_checked": "0"
+        },
+        {
+          "type": "goods_price",
+          "value": "{column_goods_price}",
+          "default_name": "单价",
+          "diy_name": "单价",
+          "is_checked": "1"
+        },
+        {
+          "type": "total_price",
+          "value": "{column_total_price}",
+          "default_name": "金额",
+          "diy_name": "金额",
+          "is_checked": "1"
+        },
+        {
+          "type": "sale_price",
+          "value": "{column_sale_price}",
+          "default_name": "零售价",
+          "diy_name": "零售价",
+          "is_checked": "0"
+        },
+        {
+          "type": "sale_tax_rate",
+          "value": "{column_sale_tax_rate}",
+          "default_name": "税率(%)",
+          "diy_name": "税率(%)",
+          "is_checked": "0"
+        },
+        {
+          "type": "goods_tag_text",
+          "value": "{column_goods_tag_text}",
+          "default_name": "商品标签",
+          "diy_name": "商品标签",
+          "is_checked": "0"
+        },
+        {
+          "type": "remark",
+          "value": "{column_remark}",
+          "default_name": "备注",
+          "diy_name": "备注",
+          "is_checked": "1"
+        }
+      ],
+      "params_tpl": [
+        {
+          "tpl_id": "3",
+          "tpl_name": "测试参数一",
+          "tpl_params": [
+            {
+              "param_id": "1",
+              "param_name": "净含量",
+              "param_desc": "180ml|250ml|500ml",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_3-1}",
+              "value": "{column_param_3-1}",
+              "default_name": "净含量",
+              "diy_name": "净含量"
+            },
+            {
+              "param_id": "2",
+              "param_name": "口味",
+              "param_desc": "中辣",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_3-2}",
+              "value": "{column_param_3-2}",
+              "default_name": "口味",
+              "diy_name": "口味"
+            },
+            {
+              "param_id": "3",
+              "param_name": "产地",
+              "param_desc": "山东",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_3-3}",
+              "value": "{column_param_3-3}",
+              "default_name": "产地",
+              "diy_name": "产地"
+            }
+          ]
+        },
+        {
+          "tpl_id": "5",
+          "tpl_name": "参数模板二",
+          "tpl_params": [
+            {
+              "param_id": "1",
+              "param_name": "品牌",
+              "param_desc": "农夫",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-1}",
+              "value": "{column_param_5-1}",
+              "default_name": "品牌",
+              "diy_name": "品牌"
+            },
+            {
+              "param_id": "2",
+              "param_name": "产地",
+              "param_desc": "中国",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-2}",
+              "value": "{column_param_5-2}",
+              "default_name": "产地",
+              "diy_name": "产地"
+            },
+            {
+              "param_id": "3",
+              "param_name": "品名",
+              "param_desc": "农夫山泉",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-3}",
+              "value": "{column_param_5-3}",
+              "default_name": "品名",
+              "diy_name": "品名"
+            },
+            {
+              "param_id": "4",
+              "param_name": "净含量",
+              "param_desc": "500ml|1000ml|330ml",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-4}",
+              "value": "{column_param_5-4}",
+              "default_name": "净含量",
+              "diy_name": "净含量"
+            },
+            {
+              "param_id": "5",
+              "param_name": "厂商",
+              "param_desc": "农夫厂家",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-5}",
+              "value": "{column_param_5-5}",
+              "default_name": "厂商",
+              "diy_name": "厂商"
+            },
+            {
+              "param_id": "6",
+              "param_name": "保质期",
+              "param_desc": "2年",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-6}",
+              "value": "{column_param_5-6}",
+              "default_name": "保质期",
+              "diy_name": "保质期"
+            },
+            {
+              "param_id": "7",
+              "param_name": "生产日期",
+              "param_desc": "见瓶盖",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-7}",
+              "value": "{column_param_5-7}",
+              "default_name": "生产日期",
+              "diy_name": "生产日期"
+            },
+            {
+              "param_id": "8",
+              "param_name": "味道",
+              "param_desc": "无味",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-8}",
+              "value": "{column_param_5-8}",
+              "default_name": "味道",
+              "diy_name": "味道"
+            },
+            {
+              "param_id": "9",
+              "param_name": "颜色",
+              "param_desc": "无色",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-9}",
+              "value": "{column_param_5-9}",
+              "default_name": "颜色",
+              "diy_name": "颜色"
+            },
+            {
+              "param_id": "10",
+              "param_name": "合作商",
+              "param_desc": "纯净水",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-10}",
+              "value": "{column_param_5-10}",
+              "default_name": "合作商",
+              "diy_name": "合作商"
+            },
+            {
+              "param_id": "11",
+              "param_name": "合作品牌",
+              "param_desc": "美汁源",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-11}",
+              "value": "{column_param_5-11}",
+              "default_name": "合作品牌",
+              "diy_name": "合作品牌"
+            },
+            {
+              "param_id": "12",
+              "param_name": "品质",
+              "param_desc": "优选",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-12}",
+              "value": "{column_param_5-12}",
+              "default_name": "品质",
+              "diy_name": "品质"
+            },
+            {
+              "param_id": "13",
+              "param_name": "品牌",
+              "param_desc": "精品",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-13}",
+              "value": "{column_param_5-13}",
+              "default_name": "品牌",
+              "diy_name": "品牌"
+            },
+            {
+              "param_id": "14",
+              "param_name": "推荐",
+              "param_desc": "最新",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-14}",
+              "value": "{column_param_5-14}",
+              "default_name": "推荐",
+              "diy_name": "推荐"
+            },
+            {
+              "param_id": "15",
+              "param_name": "测试",
+              "param_desc": "2",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-15}",
+              "value": "{column_param_5-15}",
+              "default_name": "测试",
+              "diy_name": "测试"
+            },
+            {
+              "param_id": "16",
+              "param_name": "其他",
+              "param_desc": "最优质",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-16}",
+              "value": "{column_param_5-16}",
+              "default_name": "其他",
+              "diy_name": "其他"
+            },
+            {
+              "param_id": "17",
+              "param_name": "其他2",
+              "param_desc": "新",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-17}",
+              "value": "{column_param_5-17}",
+              "default_name": "其他2",
+              "diy_name": "其他2"
+            },
+            {
+              "param_id": "18",
+              "param_name": "其他3",
+              "param_desc": "好",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-18}",
+              "value": "{column_param_5-18}",
+              "default_name": "其他3",
+              "diy_name": "其他3"
+            },
+            {
+              "param_id": "19",
+              "param_name": "其他4",
+              "param_desc": "ok",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_5-19}",
+              "value": "{column_param_5-19}",
+              "default_name": "其他4",
+              "diy_name": "其他4"
+            }
+          ]
+        },
+        {
+          "tpl_id": "15",
+          "tpl_name": "服装模板",
+          "tpl_params": [
+            {
+              "param_id": "1",
+              "param_name": "产地",
+              "param_desc": "福建",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_15-1}",
+              "value": "{column_param_15-1}",
+              "default_name": "产地",
+              "diy_name": "产地"
+            },
+            {
+              "param_id": "2",
+              "param_name": "统一尺码",
+              "param_desc": "M",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_15-2}",
+              "value": "{column_param_15-2}",
+              "default_name": "统一尺码",
+              "diy_name": "统一尺码"
+            },
+            {
+              "param_id": "3",
+              "param_name": "颜色",
+              "param_desc": "白|蓝",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "type": "{column_param_15-3}",
+              "value": "{column_param_15-3}",
+              "default_name": "颜色",
+              "diy_name": "颜色"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "time": "0.0482s"
+}

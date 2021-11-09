@@ -1,0 +1,31 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form has-nav" id="app" v-cloak="">
+    <div class="tab-nav">
+      <a :class="{'active': +query.tabId === 0}" @click="changeTab(0)">全部</a>
+      <a :class="{'active': +query.tabId === 1}" @click="changeTab(1)">待接单</a>
+      <a :class="{'active': +query.tabId === 2}" @click="changeTab(2)">已收货</a>
+      <a :class="{'active': +query.tabId === 3}" @click="changeTab(3)">已完成</a>
+    </div>
+    <div>
+      <div>悬浮置顶tab【<span class="color-red">顶部admin-main需要加上class="has-nav"，防止页面内容被遮挡</span>】</div>
+    </div>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: function () {
+        return {
+          query: {
+            tabId: 0
+          }
+        }
+      },
+      methods: {
+        changeTab: function (tid) {
+          this.query.tabId = tid;
+        }
+      }
+    })
+  </script>
+</block>

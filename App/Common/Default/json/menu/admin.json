@@ -1,0 +1,457 @@
+[
+  {
+    "id": "1",
+    "name": "组件",
+    "pid": "0",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "组件",
+    "child": [
+      {
+        "name": "说明",
+        "child": [
+          {
+            "name": "说明",
+            "pid": "1",
+            "module": "Index",
+            "action": "component",
+            "url": "/admin.php?c=Index&a=component",
+            "menu_type": "component"
+          }
+        ]
+      },
+      {
+        "name": "基础样式",
+        "child": [
+          {
+            "name": "颜色",
+            "pid": "1",
+            "module": "Index",
+            "action": "color",
+            "url": "/admin.php?c=Index&a=color",
+            "menu_type": "color"
+          },
+          {
+            "name": "文字",
+            "pid": "1",
+            "module": "Index",
+            "action": "font",
+            "url": "/admin.php?c=Index&a=font",
+            "menu_type": "font"
+          },
+          {
+            "name": "icon图标",
+            "pid": "1",
+            "module": "Index",
+            "action": "icon",
+            "url": "/admin.php?c=Index&a=icon",
+            "menu_type": "icon"
+          },
+          {
+            "name": "按钮",
+            "pid": "1",
+            "module": "Index",
+            "action": "button",
+            "url": "/admin.php?c=Index&a=button",
+            "menu_type": "button"
+          }
+        ]
+      },
+      {
+        "name": "其他组件",
+        "child": [
+          {
+            "name": "过滤器filters",
+            "pid": "1",
+            "module": "Index",
+            "action": "filters",
+            "url": "/admin.php?c=Index&a=filters",
+            "menu_type": "filters"
+          },
+          {
+            "name": "复制文本",
+            "pid": "1",
+            "module": "Index",
+            "action": "copy",
+            "url": "/admin.php?c=Index&a=copy",
+            "menu_type": "copy"
+          },
+          {
+            "name": "分页",
+            "pid": "1",
+            "module": "Index",
+            "action": "pagination",
+            "url": "/admin.php?c=Index&a=pagination",
+            "menu_type": "pagination"
+          },
+          {
+            "name": "表格初始化加载中、为空",
+            "pid": "1",
+            "module": "Index",
+            "action": "tableLoadEmpty",
+            "url": "/admin.php?c=Index&a=tableLoadEmpty",
+            "menu_type": "table_load_empty"
+          },
+          {
+            "name": "搜索栏",
+            "pid": "1",
+            "module": "Index",
+            "action": "searchDemo",
+            "url": "/admin.php?c=Index&a=searchDemo",
+            "menu_type": "search_demo"
+          },
+          {
+            "name": "list-row-ul",
+            "pid": "1",
+            "module": "Index",
+            "action": "listRowUl",
+            "url": "/admin.php?c=Index&a=listRowUl",
+            "menu_type": "list_row_ul"
+          },
+          {
+            "name": "tip-box",
+            "pid": "1",
+            "module": "Index",
+            "action": "tipBox",
+            "url": "/admin.php?c=Index&a=tipBox",
+            "menu_type": "tip_box"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "",
+    "name": "表单",
+    "pid": "",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "表单",
+    "child": [
+      {
+        "name": "表单组件",
+        "child": [
+          {
+            "name": "输入框",
+            "pid": "",
+            "module": "Index",
+            "action": "input",
+            "url": "/admin.php?c=Index&a=input",
+            "menu_type": "input"
+          },
+          {
+            "name": "文本框",
+            "pid": "",
+            "module": "Index",
+            "action": "textarea",
+            "url": "/admin.php?c=Index&a=textarea",
+            "menu_type": "textarea"
+          },
+          {
+            "name": "单选",
+            "pid": "",
+            "module": "Index",
+            "action": "radio",
+            "url": "/admin.php?c=Index&a=radio",
+            "menu_type": "radio"
+          },
+          {
+            "name": "复选框",
+            "pid": "",
+            "module": "Index",
+            "action": "checkbox",
+            "url": "/admin.php?c=Index&a=checkbox",
+            "menu_type": "checkbox"
+          },
+          {
+            "name": "下拉框",
+            "pid": "",
+            "module": "Index",
+            "action": "select",
+            "url": "/admin.php?c=Index&a=select",
+            "menu_type": "select"
+          },
+          {
+            "name": "switch开关",
+            "pid": "",
+            "module": "Index",
+            "action": "switch",
+            "url": "/admin.php?c=Index&a=switch",
+            "menu_type": "switch"
+          },
+          {
+            "name": "级联选择器",
+            "pid": "",
+            "module": "Index",
+            "action": "cascader",
+            "url": "/admin.php?c=Index&a=cascader",
+            "menu_type": "cascader"
+          },
+          {
+            "name": "日期时间选择器",
+            "pid": "",
+            "module": "Index",
+            "action": "date",
+            "url": "/admin.php?c=Index&a=date",
+            "menu_type": "date"
+          },
+          {
+            "name": "日期粒度",
+            "pid": "",
+            "module": "Index",
+            "action": "dateGranularity",
+            "url": "/admin.php?c=Index&a=dateGranularity",
+            "menu_type": "date_granularity"
+          },
+          {
+            "name": "上传文件",
+            "pid": "",
+            "module": "Index",
+            "action": "upload",
+            "url": "/admin.php?c=Index&a=upload",
+            "menu_type": "upload"
+          },
+          {
+            "name": "颜色选择器",
+            "pid": "",
+            "module": "Index",
+            "action": "colorPicker",
+            "url": "/admin.php?c=Index&a=colorPicker",
+            "menu_type": "color_picker"
+          },
+          {
+            "name": "滑块",
+            "pid": "",
+            "module": "Index",
+            "action": "slider",
+            "url": "/admin.php?c=Index&a=slider",
+            "menu_type": "slider"
+          }
+        ]
+      },
+      {
+        "name": "表单提交组合",
+        "child": [
+          {
+            "name": "basic-dl",
+            "pid": "",
+            "module": "Index",
+            "action": "basicDl",
+            "url": "/admin.php?c=Index&a=basicDl",
+            "menu_type": "basic_dl"
+          },
+          {
+            "name": "form-row",
+            "pid": "",
+            "module": "Index",
+            "action": "formRow",
+            "url": "/admin.php?c=Index&a=formRow",
+            "menu_type": "form_row"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "4",
+    "name": "导航栏",
+    "pid": "0",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "nav",
+    "child": [
+      {
+        "name": "导航栏nav",
+        "child": [
+          {
+            "name": "tab-nav",
+            "pid": "4",
+            "module": "Index",
+            "action": "tabNav",
+            "url": "/admin.php?c=Index&a=tabNav",
+            "menu_type": "tab_nav"
+          },
+          {
+            "name": "tab-box",
+            "pid": "4",
+            "module": "Index",
+            "action": "tabBox",
+            "url": "/admin.php?c=Index&a=tabBox",
+            "menu_type": "tab_box"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "",
+    "name": "弹框",
+    "pid": "0",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "弹框",
+    "child": [
+      {
+        "name": "基础组件",
+        "child": [
+          {
+            "name": "文字提示tip",
+            "pid": "1",
+            "module": "Index",
+            "action": "contentPopover",
+            "url": "/admin.php?c=Index&a=contentPopover",
+            "menu_type": "content_popover"
+          },
+          {
+            "name": "图片悬浮放大",
+            "pid": "1",
+            "module": "Index",
+            "action": "imgPopover",
+            "url": "/admin.php?c=Index&a=imgPopover",
+            "menu_type": "img_popover"
+          },
+          {
+            "name": "messageBox弹框",
+            "pid": "1",
+            "module": "Index",
+            "action": "messageBox",
+            "url": "/admin.php?c=Index&a=messageBox",
+            "menu_type": "message-box"
+          },
+          {
+            "name": "消息提示",
+            "pid": "1",
+            "module": "Index",
+            "action": "message",
+            "url": "/admin.php?c=Index&a=message",
+            "menu_type": "message"
+          },
+          {
+            "name": "dialog弹框",
+            "pid": "1",
+            "module": "Index",
+            "action": "dialog",
+            "url": "/admin.php?c=Index&a=dialog",
+            "menu_type": "dialog"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "",
+    "name": "地图",
+    "pid": "0",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "地图",
+    "child": [
+      {
+        "name": "地图",
+        "child": [
+          {
+            "name": "地图弹框",
+            "pid": "3",
+            "module": "Index",
+            "action": "mapIndex",
+            "url": "/admin.php?c=Index&a=mapIndex",
+            "menu_type": "map_index"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "",
+    "name": "图表",
+    "pid": "0",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "图表",
+    "child": [
+      {
+        "name": "进度条",
+        "child": [
+          {
+            "name": "通用图表进度条",
+            "pid": "3",
+            "module": "Index",
+            "action": "progressIndex",
+            "url": "/admin.php?c=Index&a=progressIndex",
+            "menu_type": "progress_index"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "3",
+    "name": "编辑器",
+    "pid": "0",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "编辑器",
+    "child": [
+      {
+        "name": "文本编辑器",
+        "child": [
+          {
+            "name": "文本编辑器-ueditor",
+            "pid": "3",
+            "module": "Index",
+            "action": "ueditorDemo",
+            "url": "/admin.php?c=Index&a=ueditorDemo",
+            "menu_type": "ueditor"
+          },
+          {
+            "name": "多个文本编辑器-ueditor",
+            "pid": "3",
+            "module": "Index",
+            "action": "ueditorDemo2",
+            "url": "/admin.php?c=Index&a=ueditorDemo2",
+            "menu_type": "ueditor2"
+          },
+          {
+            "name": "文本编辑器-diy",
+            "pid": "3",
+            "module": "Index",
+            "action": "printTplList",
+            "url": "/admin.php?c=Index&a=printTplList",
+            "menu_type": "print_tpl_list"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "2",
+    "name": "表格",
+    "pid": "0",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "表格",
+    "child": [
+      {
+        "name": "系统默认表格",
+        "child": [
+          {
+            "name": "默认表格",
+            "pid": "2",
+            "module": "Index",
+            "action": "tableDefault",
+            "url": "/admin.php?c=Index&a=tableDefault",
+            "menu_type": "table_default"
+          },
+          {
+            "name": "默认表格+分页",
+            "pid": "2",
+            "module": "Index",
+            "action": "tableDefaultPage",
+            "url": "/admin.php?c=Index&a=tableDefaultPage",
+            "menu_type": "table_default_page"
+          },
+          {
+            "name": "默认表格+分页+搜索栏",
+            "pid": "2",
+            "module": "Index",
+            "action": "tableDefaultPage",
+            "url": "/admin.php?c=Index&a=tableDefaultPageSearch",
+            "menu_type": "table_default_page_search"
+          }
+        ]
+      }
+    ]
+  }
+]
