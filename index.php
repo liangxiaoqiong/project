@@ -25,6 +25,6 @@ defined('APP_PATH') or define('APP_PATH', realpath(__DIR__ . '/App/') . '/');
 defined('BIND_MODULE') or define('BIND_MODULE', 'Wap');
 
 // 引入ThinkPHP入口文件
-require './ThinkPHP/ThinkPHP.php';
+require './Include/ThinkPHP.php';
 
 // 亲^_^ 后面不需要任何代码了 就是如此简单

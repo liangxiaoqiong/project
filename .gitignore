@@ -1,4 +1,4 @@
-#参考案例：园区、团购、生产系统、智慧工地、联发预缴费
+#参考案例：xunixn、园区、团购、生产系统、智慧工地、联发预缴费
 
 /*
 Runtime/
@@ -15,6 +15,7 @@ uploads/
 !/Include
 !/Public
 !/Tpl
+!/ThinkPHP
 
 # 入口文件
 !/admin.php
