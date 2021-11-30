@@ -13,6 +13,9 @@
 		el.innerHTML = '<span style="font-family: \'xxicon\'">' + entity + '</span>' + html;
 	}
 	var icons = {
+		'xxicon-stock-max': '&#xe903;',
+		'xxicon-stock-min': '&#xe906;',
+		'xxicon-order-0': '&#xe909;',
 		'xxicon-menu-hezuo': '&#xe902;',
 		'xxicon-menu-baobiao': '&#xe90e;',
 		'xxicon-menu-caiwu': '&#xe90f;',
@@ -32,7 +35,6 @@
 		'xxicon-bells': '&#xe91d;',
 		'xxicon-chuku': '&#xe91e;',
 		'xxicon-ruku': '&#xe91f;',
-		'xxicon-order-0': '&#xe920;',
 		'xxicon-msg-1': '&#xe921;',
 		'xxicon-chart': '&#xe901;',
 		'xxicon-star-0': '&#xe924;',

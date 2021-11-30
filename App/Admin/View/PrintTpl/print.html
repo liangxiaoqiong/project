@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>diy打印预览[无分页]</title>
+  <title>diy打印预览</title>
 </head>
 <link rel="stylesheet" href="__PUBLIC__/common/js/plug-in/DragResize/DragResize.css?v={$V}">
 <body>
@@ -18,34 +18,40 @@
     margin: 0;
   }
   .drsElement {
+    position: absolute;
     background-color: transparent;
   }
   .editor-order-table {
     width: 100%;
     background: #FFFFff;
-    border: 1px solid #333;
+    border: 1px solid #000!important;
     border-collapse: collapse;
   }
   .editor-order-table td {
-    border: 1px solid #333;
+    border: 1px solid #000!important;
     min-width: 24px;
   }
-
-  .print-table__2,
+  .dragresize-direct .print-table__undefined table,
+  .dragresize-direct .print-table__undefined td,
+  .dragresize-direct .print-table__0 table,
+  .dragresize-direct .print-table__0 td {
+    border: none!important;
+  }
+  .print-table__2 table,
   .print-table__2 td {
-    border: 2px solid #333;
+    border: 2px solid #000!important;
   }
-  .print-table__3,
+  .print-table__3 table,
   .print-table__3 td {
-    border: 3px solid #333;
+    border: 3px solid #000!important;
   }
-  .print-table__4,
+  .print-table__4 table,
   .print-table__4 td {
-    border: 4px solid #333;
+    border: 4px solid #000!important;
   }
-  .print-table__5,
+  .print-table__5 table,
   .print-table__5 td {
-    border: 4px solid #333;
+    border: 4px solid #000!important;
   }
   .drsElement.drs__order-table {
     z-index: 1!important;
@@ -63,14 +69,12 @@
     background-repeat: no-repeat;
   }
   /*region 热敏打印*/
-  .dragresize-direct .editor-order-table {
-    border: none;
-  }
   .dragresize-direct .editor-order-table td {
-    border: none;
     text-align: center;
   }
   #print-content-html .dragresize-box {
+    position: relative;
+    height: calc(100% - 76px);
     overflow-y: hidden;
   }
   .table-bottom .flex-between {
@@ -84,10 +88,19 @@
     justify-content: space-between;
   }
   .editor-order-table td {
-      word-break: break-all;
+    word-break: break-all;
   }
   .position-r {
     position: relative;
+  }
+  .table-box__num1,
+  .table-box__num2 {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+  }
+  .table-box__num2 table {
+    width: calc(50% - 5px);
   }
 </style>
 <div id="print-content-html"></div>
@@ -127,6 +140,7 @@
             },
           ],
           tpl: {
+            show_bottom: '{$req["show_bottom"]}',// 是否显示底部统计信息
             tpl_content: [{}], //"string,模版列表(可拖动的元素列数据)，包含变量词，表格等"
             tpl_config: {}
           },
@@ -141,17 +155,31 @@
     methods: {
       initLoad: function () {
         var self = this;
-        self.getInfoData()
+        self.getPrintTplData().then(function (result) {
+          self.tplOrder.tpl = result.data;
+          self.getOrderData();
+        })
       },
-      //获取模板详情
-      getInfoData: function () {
+      // 获取diy模板数据
+      getPrintTplData: function () {
+        var self = this;
+        return AppUtil.ajaxRequest({
+          url: '/Public/json/admin/PrintTpl/printTplInfo/getPrintTplData_'+self.query.id+'.json',
+          type: 'get',
+          data: {
+            id: self.query.id,
+          },
+        })
+      },
+      //获取订单数据
+      getOrderData: function () {
         var self = this
         AppUtil.ajaxRequest({
           type: 'get',
-          url: '/Public/json/admin/PrintTpl/print/getPrintData_id'+self.query.id+'_order'+self.query.order_id+'.json',
+          url: '/Public/json/admin/PrintTpl/print/getOrder_'+self.query.order_id+'.json',
           data: self.query,
         }).then(function (result) {
-          self.tplOrder = result.data
+          self.tplOrder.orderList = result.data.orderList;
           self.loadCompleted = true;
         }).catch(function () {
 
@@ -161,6 +189,7 @@
       },
 
       submitPrint: function () {
+        var self = this
         this.$nextTick(function () {
           bdhtml = window.document.body.innerHTML;
           sprnstr = "<!--startprint-->";
@@ -169,7 +198,27 @@
           prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr));
           window.document.body.innerHTML = prnhtml;
           window.document.body.style.backgroundColor = '#fff';
-          window.print();
+          if (+'{$req["is_export"]}' === 1) {
+            // 导出export
+            self.exportDiy(prnhtml);
+          } else {
+            window.print();
+          }
+        })
+      },
+      exportDiy: function (prnhtml) {
+        var self = this
+        window.parent.layer.load()
+        // 将大文本内容保存到缓存接口
+        AppUtil.ajaxRequest({
+          url: AppUtil.getTPUrl('Common', 'saveContent'),
+          data: {content: prnhtml},
+        }).then(function (result) {
+          // html导出excel接口
+          var url = AppUtil.getTPUrl('Common', 'html2Excel') + '&content_key=' + result.data.key;
+          window.open(url)
+        }).finally(function () {
+          window.parent.layer.closeAll('loading');
         })
       }
     },

@@ -121,10 +121,10 @@
   },
   {
     "id": "",
-    "name": "表单",
+    "name": "表单组件",
     "pid": "",
     "icon": "xxicon-menu-shangcheng",
-    "short_name": "表单",
+    "short_name": "表单组件",
     "child": [
       {
         "name": "表单组件",
@@ -162,14 +162,6 @@
             "menu_type": "checkbox"
           },
           {
-            "name": "下拉框",
-            "pid": "",
-            "module": "Index",
-            "action": "select",
-            "url": "/admin.php?c=Index&a=select",
-            "menu_type": "select"
-          },
-          {
             "name": "switch开关",
             "pid": "",
             "module": "Index",
@@ -184,22 +176,6 @@
             "action": "cascader",
             "url": "/admin.php?c=Index&a=cascader",
             "menu_type": "cascader"
-          },
-          {
-            "name": "日期时间选择器",
-            "pid": "",
-            "module": "Index",
-            "action": "date",
-            "url": "/admin.php?c=Index&a=date",
-            "menu_type": "date"
-          },
-          {
-            "name": "日期粒度",
-            "pid": "",
-            "module": "Index",
-            "action": "dateGranularity",
-            "url": "/admin.php?c=Index&a=dateGranularity",
-            "menu_type": "date_granularity"
           },
           {
             "name": "上传文件",
@@ -227,6 +203,70 @@
           }
         ]
       },
+      {
+        "name": "下拉框",
+        "child": [
+          {
+            "name": "示例说明",
+            "pid": "",
+            "module": "Index",
+            "action": "select",
+            "url": "/admin.php?c=Index&a=select",
+            "menu_type": "select_index"
+          },
+          {
+            "name": "带有假禁用状态",
+            "pid": "",
+            "module": "Index",
+            "action": "select",
+            "url": "/admin.php?c=Index&a=selectText1",
+            "menu_type": "select_text1"
+          }
+        ]
+      },
+      {
+        "name": "日期",
+        "child": [
+          {
+            "name": "日期时间选择器",
+            "pid": "",
+            "module": "Index",
+            "action": "date",
+            "url": "/admin.php?c=Index&a=date",
+            "menu_type": "date"
+          },
+          {
+            "name": "日期粒度",
+            "pid": "",
+            "module": "Index",
+            "action": "dateGranularity",
+            "url": "/admin.php?c=Index&a=dateGranularity",
+            "menu_type": "date_granularity"
+          }
+        ]
+      },
+      {
+        "name": "区域选择",
+        "child": [
+          {
+            "name": "地址级联选择",
+            "pid": "",
+            "module": "Index",
+            "action": "region",
+            "url": "/admin.php?c=Index&a=region",
+            "menu_type": "region"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "",
+    "name": "表单提交组合",
+    "pid": "",
+    "icon": "xxicon-menu-shangcheng",
+    "short_name": "表单提交",
+    "child": [
       {
         "name": "表单提交组合",
         "child": [
@@ -403,9 +443,14 @@
             "action": "ueditorDemo2",
             "url": "/admin.php?c=Index&a=ueditorDemo2",
             "menu_type": "ueditor2"
-          },
+          }
+        ]
+      },
+      {
+        "name": "diy编辑器",
+        "child": [
           {
-            "name": "文本编辑器-diy",
+            "name": "diy编辑器",
             "pid": "3",
             "module": "Index",
             "action": "printTplList",
@@ -449,6 +494,19 @@
             "action": "tableDefaultPage",
             "url": "/admin.php?c=Index&a=tableDefaultPageSearch",
             "menu_type": "table_default_page_search"
+          }
+        ]
+      },
+      {
+        "name": "el表格组件",
+        "child": [
+          {
+            "name": "封装的el-table组件",
+            "pid": "2",
+            "module": "Index",
+            "action": "tableElDiy",
+            "url": "/admin.php?c=Index&a=tableElDiy",
+            "menu_type": "table_el_diy"
           }
         ]
       }

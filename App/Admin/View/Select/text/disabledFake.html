@@ -1,3 +1,4 @@
+<!--带有假的禁用状态，用于可点击，点击不赋值，弹框提示-->
 <extend name="Public:base"/>
 <block name="content">
   <style>
@@ -10,8 +11,8 @@
       <el-option value="" label="选项"></el-option>
       <el-option value="2" label="选项2"></el-option>
       <el-option value="3" label="选项3"></el-option>
-      <el-option value="4" class="is-disabled" label="选项4-禁用"></el-option>
-      <el-option value="5" disabled label="选项5-禁用"></el-option>
+      <el-option value="4" class="is-disabled" label="选项4-假禁用"></el-option>
+      <el-option value="5" disabled label="选项5-真实禁用"></el-option>
     </el-select>
   </div>
   <script>

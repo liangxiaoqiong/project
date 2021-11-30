@@ -1,4 +1,7 @@
-<!--地图弹框-->
+<!--地图弹框，
+1、可根据info.文本地址快捷定位地图中心位
+2、可根据输入地址解析经纬度显示地图
+-->
 <style>
   #allmap {
     width: 100%;
@@ -40,10 +43,6 @@
   AppUtil.COMPONENTS.MAP_LAYER = {
     template: '#map_layer',
     props: {
-      pageSource: {
-        type: String,
-        default: ''
-      },
       mapInfo: Object
       //{map_type: 1-百度地图，2-谷歌地图}
     },
@@ -95,8 +94,8 @@
         self.mapEl.enableScrollWheelZoom(true);
 
         if (self.mapInfo.longitude === '' && self.mapInfo.latitude === '') {
-          if (self.pageSource === 'pick_store_info' && self.mapInfo.area_id > 0 && self.mapInfo.address !== '') {
-            // 自提门店编辑
+          if (self.mapInfo.area_id > 0 && self.mapInfo.address !== '') {
+            // 编辑
             var mapAddress = self.mapInfo.country + '' + self.mapInfo.province + '' + self.mapInfo.city + '' + self.mapInfo.area + '' + self.mapInfo.address;
             self.addressToMap(mapAddress);
           } else {

@@ -2,30 +2,29 @@
   "code": 200,
   "msg": "",
   "data": {
-    "id": "332",
-    "store_id": "138",
+    "id": 2,
+    "tpl_name": "A4-分页-双表格",
     "type": "0",
-    "tpl_name": "分仓针式测",
-    "tpl_type": "2",
+    "tpl_type": "0",
     "status": "1",
     "tpl_content": [
       {
         "type": "order-table",
-        "id": "1",
-        "left": "16px",
-        "top": "173px",
-        "width": "660px",
-        "height": "109px",
+        "id": 1,
+        "left": "22px",
+        "top": "111px",
+        "width": "747px",
+        "height": "89px",
         "isFontBold": "0",
         "isFontSlant": "0",
         "isFontUnderline": "0",
         "textAlign": "left",
         "fontFamily": "arial, helvetica, sans-serif",
         "fontSize": "12px",
-        "color": "",
+        "color": null,
         "lineHeight": "100%",
         "tableBorderWidth": "1",
-        "zIndex": "2",
+        "zIndex": "9",
         "checkedItem": [
           {
             "type": "id",
@@ -33,7 +32,7 @@
             "default_name": "序号",
             "diy_name": "序号",
             "is_checked": "1",
-            "sort": "1"
+            "sort": 1
           },
           {
             "type": "goods_name",
@@ -41,7 +40,7 @@
             "default_name": "品名",
             "diy_name": "品名",
             "is_checked": "1",
-            "sort": "2"
+            "sort": 2
           },
           {
             "type": "goods_spec",
@@ -49,23 +48,7 @@
             "default_name": "规格",
             "diy_name": "规格",
             "is_checked": "1",
-            "sort": "3"
-          },
-          {
-            "type": "goods_barcode",
-            "value": "{column_goods_barcode}",
-            "default_name": "商品条码",
-            "diy_name": "商品条码",
-            "is_checked": "1",
-            "sort": "4"
-          },
-          {
-            "type": "goods_number",
-            "value": "{column_goods_number}",
-            "default_name": "商品货号",
-            "diy_name": "商品货号",
-            "is_checked": "1",
-            "sort": "5"
+            "sort": 3
           },
           {
             "type": "num",
@@ -73,7 +56,7 @@
             "default_name": "数量",
             "diy_name": "数量",
             "is_checked": "1",
-            "sort": "6"
+            "sort": 6
           },
           {
             "type": "goods_price",
@@ -81,7 +64,7 @@
             "default_name": "单价",
             "diy_name": "单价",
             "is_checked": "1",
-            "sort": "7"
+            "sort": 8
           },
           {
             "type": "total_price",
@@ -89,7 +72,7 @@
             "default_name": "金额",
             "diy_name": "金额",
             "is_checked": "1",
-            "sort": "8"
+            "sort": 9
           },
           {
             "type": "remark",
@@ -97,154 +80,100 @@
             "default_name": "备注",
             "diy_name": "备注",
             "is_checked": "1",
-            "sort": "11"
+            "sort": 13
           }
         ],
         "otherTableItem": [],
         "content": ""
       },
       {
-        "type": "CUSTOMER_NAME",
-        "left": "11px",
-        "top": "26px",
-        "width": "150px",
-        "height": "16px",
-        "zIndex": "2",
-        "isFontBold": "0",
-        "isFontSlant": "0",
-        "isFontUnderline": "0",
-        "textAlign": "left",
-        "fontFamily": "arial, helvetica, sans-serif",
-        "fontSize": "12px",
-        "color": "",
-        "lineHeight": "100%",
-        "content": "客户名：<a contenteditable=\"false\">{客户名}<\/a>",
-        "contentImg": ""
-      },
-      {
-        "type": "CUSTOMER_OTHER_NAME",
-        "left": "13px",
-        "top": "56px",
-        "width": "150px",
-        "height": "16px",
-        "zIndex": "5",
-        "isFontBold": "0",
-        "isFontSlant": "0",
-        "isFontUnderline": "0",
-        "textAlign": "left",
-        "fontFamily": "arial, helvetica, sans-serif",
-        "fontSize": "12px",
-        "color": "",
-        "lineHeight": "100%",
-        "content": "客户备注名：<a contenteditable=\"false\">{客户备注名}<\/a>",
-        "contentImg": ""
-      },
-      {
-        "type": "CUSTOMER_PHONE",
-        "left": "15px",
-        "top": "87px",
-        "width": "150px",
-        "height": "16px",
-        "zIndex": "6",
-        "isFontBold": "0",
-        "isFontSlant": "0",
-        "isFontUnderline": "0",
-        "textAlign": "left",
-        "fontFamily": "arial, helvetica, sans-serif",
-        "fontSize": "12px",
-        "color": "",
-        "lineHeight": "100%",
-        "content": "客户电话：<a contenteditable=\"false\">{客户电话}<\/a>",
-        "contentImg": ""
-      },
-      {
-        "type": "CUSTOMER_ADDRESS",
-        "left": "15px",
-        "top": "113px",
-        "width": "253px",
-        "height": "39px",
+        "type": "custom-text",
+        "left": "111px",
+        "top": "29px",
+        "width": "603px",
+        "height": "29px",
         "zIndex": "10",
-        "isFontBold": "0",
+        "isFontBold": 1,
         "isFontSlant": "0",
         "isFontUnderline": "0",
-        "textAlign": "left",
+        "textAlign": "center",
         "fontFamily": "arial, helvetica, sans-serif",
-        "fontSize": "12px",
-        "color": "",
+        "fontSize": "24px",
+        "color": null,
         "lineHeight": "100%",
-        "content": "客户地址：<a contenteditable=\"false\">{客户地址}<\/a>",
+        "content": "A4打印-分页16-补全空格-双表格",
         "contentImg": ""
       },
       {
-        "type": "STORE_NAME",
-        "left": "296px",
-        "top": "21px",
+        "type": "ORDER_ID",
+        "left": "23px",
+        "top": "83px",
         "width": "150px",
         "height": "16px",
-        "zIndex": "10",
+        "zIndex": 11,
         "isFontBold": "0",
         "isFontSlant": "0",
         "isFontUnderline": "0",
         "textAlign": "left",
         "fontFamily": "arial, helvetica, sans-serif",
         "fontSize": "12px",
-        "color": "",
+        "color": null,
         "lineHeight": "100%",
-        "content": "商家名称：<a contenteditable=\"false\">{商家名称}<\/a>",
+        "content": "单号：<a contenteditable=\"false\">{单号}</a>",
         "contentImg": ""
       },
       {
         "type": "ORDER_CREATE_TIME",
-        "left": "299px",
-        "top": "53px",
-        "width": "150px",
-        "height": "16px",
-        "zIndex": "11",
-        "isFontBold": "0",
-        "isFontSlant": "0",
-        "isFontUnderline": "0",
-        "textAlign": "left",
-        "fontFamily": "arial, helvetica, sans-serif",
-        "fontSize": "12px",
-        "color": "",
-        "lineHeight": "100%",
-        "content": "下单时间：<a contenteditable=\"false\">{下单时间}<\/a>",
-        "contentImg": ""
-      },
-      {
-        "type": "NOW_TIME",
-        "left": "299px",
+        "left": "558px",
         "top": "81px",
-        "width": "150px",
+        "width": "205px",
         "height": "16px",
-        "zIndex": "12",
+        "zIndex": "18",
         "isFontBold": "0",
         "isFontSlant": "0",
         "isFontUnderline": "0",
-        "textAlign": "left",
+        "textAlign": "right",
         "fontFamily": "arial, helvetica, sans-serif",
         "fontSize": "12px",
-        "color": "",
+        "color": null,
         "lineHeight": "100%",
-        "content": "开单时间：<a contenteditable=\"false\">{开单时间}<\/a>",
+        "content": "下单时间：<a contenteditable=\"false\">{下单时间}</a>",
         "contentImg": ""
       },
       {
-        "type": "SELLER_ADDRESS",
-        "left": "298px",
-        "top": "110px",
-        "width": "253px",
-        "height": "41px",
-        "zIndex": "14",
+        "type": "DEPOT_NAME",
+        "left": "26px",
+        "top": "206px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": 15,
         "isFontBold": "0",
         "isFontSlant": "0",
         "isFontUnderline": "0",
         "textAlign": "left",
         "fontFamily": "arial, helvetica, sans-serif",
         "fontSize": "12px",
-        "color": "",
+        "color": null,
         "lineHeight": "100%",
-        "content": "商家地址：<a contenteditable=\"false\">{商家地址}<\/a>",
+        "content": "仓库名称：<a contenteditable=\"false\">{仓库名称}</a>",
+        "contentImg": ""
+      },
+      {
+        "type": "SEND_REMARK",
+        "left": "615px",
+        "top": "206px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": 16,
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": null,
+        "lineHeight": "100%",
+        "content": "发货备注：<a contenteditable=\"false\">{发货备注}</a>",
         "contentImg": ""
       }
     ],
@@ -260,7 +189,7 @@
             "value_type": "1",
             "default_value": ""
           },
-          "sort": "1"
+          "sort": 1
         },
         {
           "default_name": "空白列2",
@@ -272,7 +201,7 @@
             "value_type": "1",
             "default_value": ""
           },
-          "sort": "2"
+          "sort": 2
         },
         {
           "default_name": "空白列3",
@@ -284,7 +213,7 @@
             "value_type": "1",
             "default_value": ""
           },
-          "sort": "3"
+          "sort": 3
         }
       ],
       "base_data": [
@@ -294,7 +223,7 @@
           "default_name": "序号",
           "diy_name": "序号",
           "is_checked": "1",
-          "sort": "1"
+          "sort": 1
         },
         {
           "type": "goods_name",
@@ -302,7 +231,7 @@
           "default_name": "品名",
           "diy_name": "品名",
           "is_checked": "1",
-          "sort": "2"
+          "sort": 2
         },
         {
           "type": "goods_spec",
@@ -310,23 +239,23 @@
           "default_name": "规格",
           "diy_name": "规格",
           "is_checked": "1",
-          "sort": "3"
+          "sort": 3
         },
         {
           "type": "goods_barcode",
           "value": "{column_goods_barcode}",
           "default_name": "商品条码",
           "diy_name": "商品条码",
-          "is_checked": "1",
-          "sort": "4"
+          "is_checked": "0",
+          "sort": 4
         },
         {
           "type": "goods_number",
           "value": "{column_goods_number}",
           "default_name": "商品货号",
           "diy_name": "商品货号",
-          "is_checked": "1",
-          "sort": "5"
+          "is_checked": "0",
+          "sort": 5
         },
         {
           "type": "num",
@@ -334,14 +263,15 @@
           "default_name": "数量",
           "diy_name": "数量",
           "is_checked": "1",
-          "sort": "6"
+          "sort": 6
         },
         {
           "type": "goods_units_name",
           "value": "{column_goods_units_name}",
           "default_name": "单位",
           "diy_name": "单位",
-          "is_checked": "0"
+          "is_checked": "0",
+          "sort": 7
         },
         {
           "type": "goods_price",
@@ -349,7 +279,7 @@
           "default_name": "单价",
           "diy_name": "单价",
           "is_checked": "1",
-          "sort": "7"
+          "sort": 8
         },
         {
           "type": "total_price",
@@ -357,14 +287,15 @@
           "default_name": "金额",
           "diy_name": "金额",
           "is_checked": "1",
-          "sort": "8"
+          "sort": 9
         },
         {
           "type": "sale_price",
           "value": "{column_sale_price}",
           "default_name": "零售价",
           "diy_name": "零售价",
-          "is_checked": "0"
+          "is_checked": "0",
+          "sort": 10
         },
         {
           "type": "sale_tax_rate",
@@ -372,7 +303,7 @@
           "default_name": "税率(%)",
           "diy_name": "税率(%)",
           "is_checked": "0",
-          "sort": "9"
+          "sort": 11
         },
         {
           "type": "goods_tag_text",
@@ -380,7 +311,7 @@
           "default_name": "商品标签",
           "diy_name": "商品标签",
           "is_checked": "0",
-          "sort": "10"
+          "sort": 12
         },
         {
           "type": "remark",
@@ -388,7 +319,7 @@
           "default_name": "备注",
           "diy_name": "备注",
           "is_checked": "1",
-          "sort": "11"
+          "sort": 13
         }
       ],
       "params_tpl": [
@@ -407,7 +338,7 @@
               "value": "{column_param_3-1}",
               "default_name": "净含量",
               "diy_name": "净含量",
-              "sort": "1"
+              "sort": 1
             },
             {
               "param_id": "2",
@@ -420,7 +351,7 @@
               "value": "{column_param_3-2}",
               "default_name": "口味",
               "diy_name": "口味",
-              "sort": "2"
+              "sort": 2
             },
             {
               "param_id": "3",
@@ -433,7 +364,7 @@
               "value": "{column_param_3-3}",
               "default_name": "产地",
               "diy_name": "产地",
-              "sort": "3"
+              "sort": 3
             }
           ]
         },
@@ -452,7 +383,7 @@
               "value": "{column_param_5-1}",
               "default_name": "品牌",
               "diy_name": "品牌",
-              "sort": "1"
+              "sort": 1
             },
             {
               "param_id": "2",
@@ -465,7 +396,7 @@
               "value": "{column_param_5-2}",
               "default_name": "产地",
               "diy_name": "产地",
-              "sort": "2"
+              "sort": 2
             },
             {
               "param_id": "3",
@@ -478,7 +409,7 @@
               "value": "{column_param_5-3}",
               "default_name": "品名",
               "diy_name": "品名",
-              "sort": "3"
+              "sort": 3
             },
             {
               "param_id": "4",
@@ -491,7 +422,7 @@
               "value": "{column_param_5-4}",
               "default_name": "净含量",
               "diy_name": "净含量",
-              "sort": "4"
+              "sort": 4
             },
             {
               "param_id": "5",
@@ -504,7 +435,7 @@
               "value": "{column_param_5-5}",
               "default_name": "厂商",
               "diy_name": "厂商",
-              "sort": "5"
+              "sort": 5
             },
             {
               "param_id": "6",
@@ -517,7 +448,7 @@
               "value": "{column_param_5-6}",
               "default_name": "保质期",
               "diy_name": "保质期",
-              "sort": "6"
+              "sort": 6
             },
             {
               "param_id": "7",
@@ -530,7 +461,7 @@
               "value": "{column_param_5-7}",
               "default_name": "生产日期",
               "diy_name": "生产日期",
-              "sort": "7"
+              "sort": 7
             },
             {
               "param_id": "8",
@@ -543,7 +474,7 @@
               "value": "{column_param_5-8}",
               "default_name": "味道",
               "diy_name": "味道",
-              "sort": "8"
+              "sort": 8
             },
             {
               "param_id": "9",
@@ -556,7 +487,7 @@
               "value": "{column_param_5-9}",
               "default_name": "颜色",
               "diy_name": "颜色",
-              "sort": "9"
+              "sort": 9
             },
             {
               "param_id": "10",
@@ -569,7 +500,7 @@
               "value": "{column_param_5-10}",
               "default_name": "合作商",
               "diy_name": "合作商",
-              "sort": "10"
+              "sort": 10
             },
             {
               "param_id": "11",
@@ -582,7 +513,7 @@
               "value": "{column_param_5-11}",
               "default_name": "合作品牌",
               "diy_name": "合作品牌",
-              "sort": "11"
+              "sort": 11
             },
             {
               "param_id": "12",
@@ -595,7 +526,7 @@
               "value": "{column_param_5-12}",
               "default_name": "品质",
               "diy_name": "品质",
-              "sort": "12"
+              "sort": 12
             },
             {
               "param_id": "13",
@@ -608,7 +539,7 @@
               "value": "{column_param_5-13}",
               "default_name": "品牌",
               "diy_name": "品牌",
-              "sort": "13"
+              "sort": 13
             },
             {
               "param_id": "14",
@@ -621,7 +552,7 @@
               "value": "{column_param_5-14}",
               "default_name": "推荐",
               "diy_name": "推荐",
-              "sort": "14"
+              "sort": 14
             },
             {
               "param_id": "15",
@@ -634,7 +565,7 @@
               "value": "{column_param_5-15}",
               "default_name": "测试",
               "diy_name": "测试",
-              "sort": "15"
+              "sort": 15
             },
             {
               "param_id": "16",
@@ -647,7 +578,7 @@
               "value": "{column_param_5-16}",
               "default_name": "其他",
               "diy_name": "其他",
-              "sort": "16"
+              "sort": 16
             },
             {
               "param_id": "17",
@@ -660,7 +591,7 @@
               "value": "{column_param_5-17}",
               "default_name": "其他2",
               "diy_name": "其他2",
-              "sort": "17"
+              "sort": 17
             },
             {
               "param_id": "18",
@@ -673,7 +604,7 @@
               "value": "{column_param_5-18}",
               "default_name": "其他3",
               "diy_name": "其他3",
-              "sort": "18"
+              "sort": 18
             },
             {
               "param_id": "19",
@@ -686,7 +617,7 @@
               "value": "{column_param_5-19}",
               "default_name": "其他4",
               "diy_name": "其他4",
-              "sort": "19"
+              "sort": 19
             }
           ]
         },
@@ -705,7 +636,7 @@
               "value": "{column_param_15-1}",
               "default_name": "产地",
               "diy_name": "产地",
-              "sort": "1"
+              "sort": 1
             },
             {
               "param_id": "2",
@@ -718,7 +649,7 @@
               "value": "{column_param_15-2}",
               "default_name": "统一尺码",
               "diy_name": "统一尺码",
-              "sort": "2"
+              "sort": 2
             },
             {
               "param_id": "3",
@@ -731,28 +662,21 @@
               "value": "{column_param_15-3}",
               "default_name": "颜色",
               "diy_name": "颜色",
-              "sort": "3"
+              "sort": 3
             }
           ]
         }
       ],
-      "dragSizeBoxHeight": "282",
-      "is_show_subtotal": "0",
-      "pre_page_row": "",
-      "page_width": "566px",
-      "tableTrHeight": "16"
-    },
-    "link_data": {
-      "type_2_id": "",
-      "type_3_id": "",
-      "type_9_id": "",
-      "type_10_id": "",
-      "type_13_id": "",
-      "type_14_id": ""
-    },
-    "is_system": "0",
-    "create_time": "1626227338",
-    "is_delete": "0"
+      "dragSizeBoxHeight": 222,
+      "is_show_subtotal": "1",
+      "pre_page_row": "16",
+      "add_blank_line": "1",
+      "table_item_show_type": "0",
+      "is_show_total": "1",
+      "page_width": "794px",
+      "table_num": "2",
+      "table_gap": 10
+    }
   },
-  "time": "0.0369s"
+  "time": "0.0362s"
 }

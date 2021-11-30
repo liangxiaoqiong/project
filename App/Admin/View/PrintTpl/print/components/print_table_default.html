@@ -7,7 +7,9 @@
 <script type="x-template" id="print_table_default">
   <!--region 模版-->
   <table class="editor-order-table"
-         :class="'print-table__'+tplOrder.tpl.tpl_content[0].tableBorderWidth" id="editor-order-table">
+         :class="'print-table__'+tplOrder.tpl.tpl_content[0].tableBorderWidth"
+         :id="'editor-order-table'+tableIndex"
+         :style="tableStyle">
     <!--region 表头-->
     <thead>
     <tr>
@@ -20,13 +22,12 @@
     </thead>
     <!--endregion-->
     <tbody>
-    <template v-for="(goods, gIndex) in depot.goodsList" v-if="isShowGoods(pIndex, gIndex)">
-      <tr>
+    <template v-for="(goods, gIndex) in goodsTableList" v-if="isShowTr(gIndex)">
+      <!--region 商品行，赠品-->
+      <tr v-if="goods.type !== 'blank_line' && goods.type !== 'total' &&  goods.type !== 'sub_total'">
         <td v-for="table in tplOrder.tpl.tpl_content[0].checkedItem" v-if="+table.is_checked === 1">
-          <!--备注不显示，用于打印后手写内容-->
-          <template v-if="table.type === 'remark'"></template>
           <!--空白列1、空白列2、空白列3-->
-          <template v-else-if="table.type === 'other_1' || table.type === 'other_2' || table.type === 'other_3'">
+          <template v-if="table.type === 'other_1' || table.type === 'other_2' || table.type === 'other_3'">
             <template v-if="table.value_data">
               <template v-if="+table.value_data.value_type === 1"><!--空白列项--></template>
               <template v-else-if="+table.value_data.value_type === 2">
@@ -40,42 +41,35 @@
             </template>
           </template>
           <template v-else>
-            {{ goods[table.type] }}
+            {{ goodsItemString(goods, table, gIndex) }}
           </template>
         </td>
       </tr>
-      <!--region 赠品-->
-      <template v-if="goods.send_goods && goods.send_goods.length > 0">
-        <tr v-for="sendGoods in goods.send_goods">
-          <td v-for="table in tplOrder.tpl.tpl_content[0].checkedItem" v-if="+table.is_checked === 1">
-            <template v-if="table.type === 'id'"></template>
-            <template v-else>
-              {{ sendGoods[table.type] }}
-            </template>
-          </td>
-        </tr>
-      </template>
       <!--endregion-->
-    </template>
 
-    <!--小计-->
-    <tr v-if="+tplOrder.tpl.tpl_config.is_show_subtotal === 1">
-      <template v-for="(table, index) in tplOrder.tpl.tpl_content[0].checkedItem" v-if="+table.is_checked === 1">
-        <td v-if="index === 0">小计</td>
-        <td v-else>
-          <template v-if="table.type === 'num'">{{ tableGoodsSubTotal(depot, pIndex).num }}</template>
-          <template v-if="table.type === 'total_price'">{{ tableGoodsSubTotal(depot, pIndex).price }}</template>
+      <!--region 补充的空白行-->
+      <tr v-if="goods.type === 'blank_line'">
+        <td v-for="table in tplOrder.tpl.tpl_content[0].checkedItem" v-if="+table.is_checked === 1">
+          <div style="display: inline-block;">
+            <template v-if="table.type === 'id'">{{ goodsItemString(goods, table, gIndex) }}</template>
+            <template v-else>&nbsp;</template>
+          </div>
         </td>
-      </template>
-    </tr>
-    <!--分页打印，最后一页显示；-->
-    <template v-if="(isPrintPage && pIndex === +pageLen(order, depot) - 1) || !isPrintPage">
-      <!--合计-->
-      <default-table-total :checked-item="tplOrder.tpl.tpl_content[0].checkedItem" :depot="depot"></default-table-total>
-      <!--region 额外新增的空白行【该功能暂隐藏】-->
-      <tr v-for="tr in tplOrder.tpl.tpl_content[0].otherTableItem" v-if="false">
-        <td :colspan="tableCheckedItemLen(tplOrder.tpl.tpl_content[0])">&nbsp;</td>
       </tr>
+      <!--endregion-->
+
+      <!--region 每页合计(小计)；总合计：分页打印，最后一页显示；-->
+      <template v-if="goods.type === 'total' || goods.type === 'sub_total'">
+        <default-table-total
+          :checked-item="tplOrder.tpl.tpl_content[0].checkedItem"
+          :tpl="tplOrder.tpl"
+          :depot="depot"
+          :p-index="pIndex"
+          :goods-table-list="goodsTableList"
+          :table-tr-len="tableTrLen"
+          :table-index="tableIndex"
+          :total-type="goods.type"></default-table-total>
+      </template>
       <!--endregion-->
     </template>
     </tbody>
@@ -95,42 +89,179 @@
       depot: Object,
       order: Object,
       pIndex: [String, Number],
+      tableIndex: [String, Number], // 单排、双排表格，key，0||1
+      pageLen: Number, // 有分页时商品表格个数
     },
     data: function () {
-      return {}
+      return {
+        tableGoodsLen: 0, // 表格中商品行（goodsTableList-补充的空白行）
+      }
     },
     computed: {
       // 是否是分页打印
       isPrintPage: function () {
         return this.tplOrder.tpl.tpl_config.pre_page_row !== '';
+      },
+      // 是否是双排表格
+      isTableTwo: function () {
+        return +this.tplOrder.tpl.tpl_config.table_num === 2;
+      },
+      // 小计+合计 行数量
+      otherLen: function () {
+        var otherLen = 0;
+        if (this.isShowSubTotal) {
+          otherLen++;
+        }
+        if (this.isShowTableTotal) otherLen++;
+        return otherLen;
+      },
+      // 是否补全空白行
+      isAddBlankLine: function () {
+        return typeof +this.tplOrder.tpl.tpl_config.add_blank_line !== 'undefined' &&
+          +this.tplOrder.tpl.tpl_config.add_blank_line === 1 &&
+          this.isPrintPage &&
+          this.isTableTwo;
+      },
+      // 所有的商品数据+赠品 长度【双排时：左右表格行数相加】【分页时：只有当前页表格商品】
+      tableTrLen: function () {
+        var num = +this.goodsTableList.length;
+        if (this.isPrintPage) {
+          if (this.isAddBlankLine) {
+            if ((+this.goodsTableList.length - this.otherLen) < +this.tplOrder.tpl.tpl_config.pre_page_row) {
+              num = +this.tplOrder.tpl.tpl_config.pre_page_row;
+            }
+          }
+        }
+        return num;
+      },
+      // 所有的商品数据+赠品
+      goodsTotalList: function () {
+        var self = this;
+        var list = [];
+        self.depot.goodsList.forEach(function (goods, index) {
+          list.push(goods)
+          // 赠品
+          if (goods.send_goods) {
+            goods.send_goods.forEach(function (sendGoods) {
+              list.push(sendGoods)
+            })
+          }
+        });
+        return list;
+      },
+      // 显示在表格中的商品列
+      goodsTableList: function () {
+        var self = this;
+        var list = [];
+        if (self.goodsTotalList) {
+          self.goodsTotalList.forEach(function (goods, index) {
+            if (self.isShowGoods(index)) {
+              list.push(goods)
+            }
+          });
+        }
+        self.tableGoodsLen = list.length;
+        if (self.isAddBlankLine) {
+          var blankLen = +this.tplOrder.tpl.tpl_config.pre_page_row - list.length - self.otherLen; // 补充空白行个数
+          if (blankLen > 0) {
+            for (var i = 0; i < blankLen; i++) {
+              list.push({type: 'blank_line'})
+            }
+          }
+        }
+        // 每页合计
+        if (self.isShowSubTotal) {
+          list.push({type: 'sub_total'});
+        }
+        if (self.isShowTableTotal) {
+          list.push({type: 'total'})
+        }
+        return list;
+      },
+      // 双排表格样式
+      tableStyle: function () {
+        var width = '100%';
+        if (+this.tplOrder.tpl.tpl_config.table_num === 2) {
+          var gap = +this.tplOrder.tpl.tpl_config.table_gap / 2;
+          width = 'calc(50% - '+gap+'px)';
+        }
+        return {width: width, fontSize: this.tplOrder.tpl.tpl_content[0].fontSize};
+      },
+      // 是否显示小计
+      isShowSubTotal: function () {
+        return +this.tplOrder.tpl.tpl_config.is_show_subtotal === 1
+      },
+      // 是否显示合计行
+      isShowTableTotal: function () {
+        var isShow = true;
+        if (this.isPrintPage) {
+          if (+this.pIndex !== +this.pageLen - 1) {
+            isShow = false
+          }
+        }
+        if (+this.tplOrder.tpl.tpl_config.is_show_total === 0) {
+          isShow = false;
+        }
+        return isShow;
       }
     },
     mounted: function () {
     },
     methods: {
-      //有分页时商品表格个数
-      pageLen: function () {
-        return Math.ceil(+this.depot.goodsList.length/+this.tplOrder.tpl.tpl_config.pre_page_row)
-      },
-      isShowGoods: function (pIndex, gIndex) {
+      isShowGoods: function (gIndex) {
         var self = this
         if (!self.isPrintPage) return true;
         // 分页打印
+        var otherLen = 0;
+        if (this.isShowSubTotal) {
+          otherLen++;
+        }
+        /*if (self.isShowTableTotal) {
+          otherLen++;
+        }*/
         var arr = []
-        for (var i = 0; i < self.tplOrder.tpl.tpl_config.pre_page_row; i++) {
-          arr.push(pIndex * self.tplOrder.tpl.tpl_config.pre_page_row + i)
+        var pageLen = +self.tplOrder.tpl.tpl_config.pre_page_row;
+        pageLen = pageLen - otherLen;
+        if (pageLen <= 0) pageLen = 0;
+        for (var i = 0; i < pageLen; i++) {
+          arr.push(self.pIndex * pageLen + i)
         }
         return arr.indexOf(gIndex) > -1
-      },
-      tableCheckedItemLen: function (item) {
-        return diyPrintTpl.tableCheckedItemLen(item)
       },
       tableTdWidth: function (item, table) {
         return diyPrintTpl.tableTdWidth(this.tplOrder.tpl, item, table)
       },
-      tableGoodsSubTotal: function (depot, pIndex) {
-        return diyPrintTpl.tableGoodsSubTotal(depot, pIndex, this.tplOrder.tpl)
+      // 是否显示表格行
+      isShowTr: function (index) {
+        var self = this;
+        if (self.isTableTwo) {
+          var tableListLenAvg = Math.ceil(self.tableTrLen / 2);
+          if (+self.tableIndex === 0) {
+            return index < tableListLenAvg;
+          } else {
+            return index >= tableListLenAvg;
+          }
+        } else {
+          return true;
+        }
       },
+      // 表格中商品项
+      goodsItemString: function (goods, table, gIndex) {
+        if (table.type === 'id') {
+          return gIndex + 1;
+        } else {
+          if (typeof goods[table.type] !== 'undefined') {
+            if (typeof table.digital !== 'undefined') {
+              // 小数点位数
+              return goods[table.type].toFixed(+table.digital)
+            } else {
+              return goods[table.type];
+            }
+          } else {
+            return '';
+          }
+        }
+      }
     }
   }
 </script>

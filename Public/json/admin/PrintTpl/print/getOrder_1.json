@@ -3,341 +3,9 @@
   "msg": "",
   "data": {
     "show_bottom": 1,
-    "tpl": {
-      "id": "331",
-      "tpl_name": "测试小票二维码",
-      "type": "0",
-      "tpl_type": "4",
-      "tpl_content": [
-        {
-          "type": "order-table",
-          "id": "1",
-          "left": "0px",
-          "top": "139px",
-          "width": "182px",
-          "height": "155px",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "tableBorderWidth": "1",
-          "zIndex": "24",
-          "checkedItem": [
-            {
-              "type": "goods_name",
-              "value": "{column_goods_name}",
-              "default_name": "品名",
-              "diy_name": "品名",
-              "is_checked": "1",
-              "sort": "1"
-            },
-            {
-              "type": "num",
-              "value": "{column_num}",
-              "default_name": "数量",
-              "diy_name": "数量",
-              "is_checked": "1",
-              "sort": "2"
-            },
-            {
-              "type": "goods_price",
-              "value": "{column_goods_price}",
-              "default_name": "单价",
-              "diy_name": "单价",
-              "is_checked": "1",
-              "sort": "3"
-            },
-            {
-              "type": "total_price",
-              "value": "{column_total_price}",
-              "default_name": "金额",
-              "diy_name": "金额",
-              "is_checked": "1",
-              "sort": "4"
-            },
-            {
-              "type": "goods_barcode",
-              "value": "{column_goods_barcode}",
-              "default_name": "商品条码",
-              "diy_name": "商品条码",
-              "is_checked": "1",
-              "sort": "5"
-            }
-          ],
-          "otherTableItem": [],
-          "content": ""
-        },
-        {
-          "type": "CUSTOMER_NAME",
-          "left": "0px",
-          "top": "8px",
-          "width": "150px",
-          "height": "16px",
-          "zIndex": "2",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "content": "客户名：<a contenteditable=\"false\">{客户名}<\/a>",
-          "contentImg": ""
-        },
-        {
-          "type": "CUSTOMER_PHONE",
-          "left": "0px",
-          "top": "32px",
-          "width": "150px",
-          "height": "16px",
-          "zIndex": "3",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "content": "客户电话：<a contenteditable=\"false\">{客户电话}<\/a>",
-          "contentImg": ""
-        },
-        {
-          "type": "CUSTOMER_ADDRESS",
-          "left": "0px",
-          "top": "56px",
-          "width": "150px",
-          "height": "16px",
-          "zIndex": "4",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "content": "客户地址：<a contenteditable=\"false\">{客户地址}<\/a>",
-          "contentImg": ""
-        },
-        {
-          "type": "DELIVERY_METHOD",
-          "left": "0px",
-          "top": "79px",
-          "width": "150px",
-          "height": "16px",
-          "zIndex": "6",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "content": "配送方式：<a contenteditable=\"false\">{配送方式}<\/a>",
-          "contentImg": ""
-        },
-        {
-          "type": "PICKUP_NAME",
-          "left": "0px",
-          "top": "104px",
-          "width": "150px",
-          "height": "16px",
-          "zIndex": "7",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "content": "门店名称：<a contenteditable=\"false\">{门店名称}<\/a>",
-          "contentImg": ""
-        },
-        {
-          "type": "ORDER_QR_CODE",
-          "left": "68px",
-          "top": "341px",
-          "width": "60px",
-          "height": "60px",
-          "zIndex": "8",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "content": "订单二维码：<a contenteditable=\"false\">{订单二维码}<\/a>",
-          "contentImg": "\/Public\/pc\/imgs\/QRcode.jpg"
-        },
-        {
-          "type": "GOODS_TOTAL",
-          "left": "23px",
-          "top": "298px",
-          "width": "150px",
-          "height": "16px",
-          "zIndex": "14",
-          "isFontBold": "0",
-          "isFontSlant": "0",
-          "isFontUnderline": "0",
-          "textAlign": "left",
-          "fontFamily": "arial, helvetica, sans-serif",
-          "fontSize": "12px",
-          "color": "",
-          "lineHeight": "100%",
-          "content": "商品总额：<a contenteditable=\"false\">{商品总额}<\/a>",
-          "contentImg": ""
-        }
-      ],
-      "tpl_config": {
-        "tableOtherData": [
-          {
-            "default_name": "空白列1",
-            "diy_name": "空白列1",
-            "is_checked": "0",
-            "type": "other_1",
-            "value": "{column_other_1}",
-            "value_data": {
-              "value_type": "1",
-              "default_value": ""
-            },
-            "sort": "5"
-          },
-          {
-            "default_name": "空白列2",
-            "diy_name": "空白列2",
-            "is_checked": "0",
-            "type": "other_2",
-            "value": "{column_other_2}",
-            "value_data": {
-              "value_type": "1",
-              "default_value": ""
-            },
-            "sort": "2"
-          },
-          {
-            "default_name": "空白列3",
-            "diy_name": "空白列3",
-            "is_checked": "0",
-            "type": "other_3",
-            "value": "{column_other_3}",
-            "value_data": {
-              "value_type": "1",
-              "default_value": ""
-            },
-            "sort": "3"
-          }
-        ],
-        "base_data": [
-          {
-            "type": "goods_name",
-            "value": "{column_goods_name}",
-            "default_name": "品名",
-            "diy_name": "品名",
-            "is_checked": "1",
-            "sort": "1"
-          },
-          {
-            "type": "goods_barcode",
-            "value": "{column_goods_barcode}",
-            "default_name": "商品条码",
-            "diy_name": "商品条码",
-            "is_checked": "1",
-            "sort": "5"
-          },
-          {
-            "type": "goods_number",
-            "value": "{column_goods_number}",
-            "default_name": "商品货号",
-            "diy_name": "商品货号",
-            "is_checked": "0",
-            "sort": "5"
-          },
-          {
-            "type": "num",
-            "value": "{column_num}",
-            "default_name": "数量",
-            "diy_name": "数量",
-            "is_checked": "1",
-            "sort": "2"
-          },
-          {
-            "type": "goods_price",
-            "value": "{column_goods_price}",
-            "default_name": "单价",
-            "diy_name": "单价",
-            "is_checked": "1",
-            "sort": "3"
-          },
-          {
-            "type": "total_price",
-            "value": "{column_total_price}",
-            "default_name": "金额",
-            "diy_name": "金额",
-            "is_checked": "1",
-            "sort": "4"
-          },
-          {
-            "type": "sale_tax_rate",
-            "value": "{column_sale_tax_rate}",
-            "default_name": "税率(%)",
-            "diy_name": "税率(%)",
-            "is_checked": "0",
-            "sort": "5"
-          },
-          {
-            "type": "goods_tag_text",
-            "value": "{column_goods_tag_text}",
-            "default_name": "商品标签",
-            "diy_name": "商品标签",
-            "is_checked": "0",
-            "sort": "5"
-          }
-        ],
-        "params_tpl": [],
-        "dragSizeBoxHeight": "401",
-        "is_show_subtotal": "0",
-        "pre_page_row": "",
-        "page_width": "180px",
-        "tableTrHeight": "15.2"
-      },
-      "link_data": {
-        "type_2_id": "",
-        "type_3_id": "",
-        "type_9_id": "",
-        "type_10_id": "",
-        "type_13_id": "",
-        "type_14_id": ""
-      },
-      "content_types": [
-        "order-table",
-        "CUSTOMER_NAME",
-        "CUSTOMER_PHONE",
-        "CUSTOMER_ADDRESS",
-        "DELIVERY_METHOD",
-        "PICKUP_NAME",
-        "ORDER_QR_CODE",
-        "GOODS_TOTAL",
-        "goods_name",
-        "num",
-        "goods_price",
-        "total_price",
-        "goods_barcode"
-      ],
-      "has_goods_param": false
-    },
     "orderList": [
       {
-        "order_id": "22830",
+        "order_id": "1",
         "depotList": [
           {
             "depot_id": 0,
@@ -407,7 +75,8 @@
                 "goods_spec": "白+大+1.2米",
                 "num": 1,
                 "total_price": "6.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179997",
@@ -473,7 +142,8 @@
                 "goods_spec": "白+中+1米",
                 "num": 1,
                 "total_price": "5.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179997",
@@ -539,7 +209,8 @@
                 "goods_spec": "白+大+1米",
                 "num": 1,
                 "total_price": "5.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179997",
@@ -605,7 +276,8 @@
                 "goods_spec": "红+大+1.2米",
                 "num": 1,
                 "total_price": "6.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179997",
@@ -671,7 +343,8 @@
                 "goods_spec": "黑+大+1米",
                 "num": 1,
                 "total_price": "5.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179998",
@@ -737,7 +410,8 @@
                 "goods_spec": "111+222+333",
                 "num": 1,
                 "total_price": "6.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179995",
@@ -778,7 +452,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "0.00",
-                "goods_name": "多单位多规格测试",
+                "goods_name": "多单位多规格",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/goods\\\/20201021\\\/06565955572503148.jpg\"}]",
                 "goods_pv": "0.00",
                 "thirdpart_money_limit": "0.00",
@@ -803,7 +477,11 @@
                 "goods_spec": "红色+1米",
                 "num": 1,
                 "total_price": "1.00",
-                "remark": ""
+                "remark": "",
+                "{column_param_15-1}": "福建",
+                "{column_param_15-2}": "1.2米|1米",
+                "{column_param_15-3}": "白",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "175549",
@@ -871,7 +549,11 @@
                 "goods_spec": "MSMHK--CD",
                 "num": 1,
                 "total_price": "8.00",
-                "remark": ""
+                "remark": "",
+                "{column_param_3-1}": "180ml",
+                "{column_param_3-2}": "中辣",
+                "{column_param_3-3}": "山东",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "175548",
@@ -939,7 +621,11 @@
                 "goods_spec": "MSMHK--AB",
                 "num": 1,
                 "total_price": "15.00",
-                "remark": ""
+                "remark": "",
+                "{column_param_3-1}": "180ml",
+                "{column_param_3-2}": "中辣",
+                "{column_param_3-3}": "山东",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "175526",
@@ -1007,7 +693,11 @@
                 "goods_spec": "商品规格2",
                 "num": 1,
                 "total_price": "40.00",
-                "remark": ""
+                "remark": "",
+                "{column_param_3-1}": "180ml",
+                "{column_param_3-2}": "中辣",
+                "{column_param_3-3}": "山东",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "175447",
@@ -1048,7 +738,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "0.00",
-                "goods_name": "同城起送价\/城际快递模板",
+                "goods_name": "发夹",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/goods\\\/20191011\\\/06241048471431218.jpg\"}]",
                 "goods_pv": "0.00",
                 "thirdpart_money_limit": "0.00",
@@ -1075,7 +765,11 @@
                 "goods_spec": "规格1",
                 "num": 1,
                 "total_price": "0.30",
-                "remark": ""
+                "remark": "",
+                "{column_param_3-1}": "180ml",
+                "{column_param_3-2}": "中辣",
+                "{column_param_3-3}": "山东",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179787",
@@ -1116,7 +810,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "0.00",
-                "goods_name": "新的商品  汤包发",
+                "goods_name": "汤包发",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/goods\\\/20200628\\\/06466709676726030.jpg\"},{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/goods\\\/20200907\\\/06527892846437031.jpg\"},{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/goods\\\/20200907\\\/06527892884493634.jpg\"}]",
                 "goods_pv": "50.00",
                 "thirdpart_money_limit": "0.00",
@@ -1143,7 +837,8 @@
                 "goods_spec": "小包",
                 "num": 1,
                 "total_price": "125.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179769",
@@ -1184,7 +879,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "3.00",
-                "goods_name": "按重量运费设置",
+                "goods_name": "按重量运费",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/goods\\\/20200619\\\/06458915342217778.jpg\"}]",
                 "goods_pv": "0.00",
                 "thirdpart_money_limit": "0.00",
@@ -1211,7 +906,8 @@
                 "goods_spec": "",
                 "num": 1,
                 "total_price": "2.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179776",
@@ -1279,7 +975,8 @@
                 "goods_spec": "",
                 "num": 1,
                 "total_price": "3.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179779",
@@ -1347,7 +1044,8 @@
                 "goods_spec": "",
                 "num": 1,
                 "total_price": "2.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "179780",
@@ -1388,7 +1086,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "0.00",
-                "goods_name": "新品购买权限",
+                "goods_name": "新品购买",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/goods\\\/20200622\\\/06461614887572756.jpg\"}]",
                 "goods_pv": "0.00",
                 "thirdpart_money_limit": "0.00",
@@ -1415,7 +1113,8 @@
                 "goods_spec": "",
                 "num": 1,
                 "total_price": "30.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "22350",
@@ -1450,11 +1149,11 @@
                   {
                     "id": "",
                     "goods_barcode": "",
-                    "goods_name": "盼盼香橙软面包200g",
+                    "goods_name": "盼盼软面包",
                     "goods_spec": "",
                     "goods_number": "",
                     "num": 1,
-                    "goods_price": "赠品",
+                    "goods_price": "",
                     "total_price": "",
                     "remark": "赠品",
                     "is_send_goods": 1
@@ -1469,7 +1168,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "0.00",
-                "goods_name": "9.7度百威330ml瓶装",
+                "goods_name": "百威",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/file.duinin.com\\\/data\\\/upload\\\/04892540456700974.jpg\"}]",
                 "goods_pv": "0.00",
                 "thirdpart_money_limit": "0.00",
@@ -1496,7 +1195,8 @@
                 "goods_spec": "",
                 "num": 1,
                 "total_price": "8.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "174262",
@@ -1535,7 +1235,7 @@
                     "goods_spec": "",
                     "goods_number": "",
                     "num": 2,
-                    "goods_price": "赠品",
+                    "goods_price": "",
                     "total_price": "",
                     "remark": "赠品",
                     "is_send_goods": 1
@@ -1577,7 +1277,8 @@
                 "goods_spec": "300g",
                 "num": 5,
                 "total_price": "995.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "174262",
@@ -1616,7 +1317,7 @@
                     "goods_spec": "",
                     "goods_number": "",
                     "num": 2,
-                    "goods_price": "赠品",
+                    "goods_price": "",
                     "total_price": "",
                     "remark": "赠品",
                     "is_send_goods": 1
@@ -1658,7 +1359,8 @@
                 "goods_spec": "500g",
                 "num": 1,
                 "total_price": "199.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "174263",
@@ -1726,7 +1428,8 @@
                 "goods_spec": "150g",
                 "num": 1,
                 "total_price": "0.02",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "22348",
@@ -1765,7 +1468,7 @@
                     "goods_spec": "",
                     "goods_number": "",
                     "num": 1,
-                    "goods_price": "赠品",
+                    "goods_price": "",
                     "total_price": "",
                     "remark": "赠品",
                     "is_send_goods": 1
@@ -1780,7 +1483,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "0.00",
-                "goods_name": "怡泉+C柠檬味塑料500（12）",
+                "goods_name": "怡泉",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/file.duinin.com\\\/data\\\/upload\\\/7ff232c0dc624333c740061b007569ad.jpg\"}]",
                 "goods_pv": "0.00",
                 "thirdpart_money_limit": "0.00",
@@ -1807,7 +1510,8 @@
                 "goods_spec": "",
                 "num": 1,
                 "total_price": "4.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               },
               {
                 "goods_id": "180106",
@@ -1842,11 +1546,11 @@
                   {
                     "id": "",
                     "goods_barcode": "",
-                    "goods_name": "盼盼香橙软面包200g",
+                    "goods_name": "盼盼",
                     "goods_spec": "",
                     "goods_number": "",
                     "num": 1,
-                    "goods_price": "赠品",
+                    "goods_price": "",
                     "total_price": "",
                     "remark": "赠品",
                     "is_send_goods": 1
@@ -1861,7 +1565,7 @@
                 "city_no_send_price": "0",
                 "nid": "",
                 "goods_weight": "0.00",
-                "goods_name": "多单位单规格测试",
+                "goods_name": "多单位单规格",
                 "goods_image": "[{\"url\":\"http:\\\/\\\/dl.duinin.com\\\/data\\\/upload\\\/20210115\\\/06640545047060659.jpg\",\"file_type\":\"image\"}]",
                 "goods_pv": "2.00",
                 "thirdpart_money_limit": "0.00",
@@ -1886,7 +1590,8 @@
                 "goods_spec": "红色",
                 "num": 1,
                 "total_price": "10.00",
-                "remark": ""
+                "remark": "",
+                "sale_tax_rate": "0.00"
               }
             ],
             "params_data": {
@@ -1901,11 +1606,14 @@
               "PAY_ID": "",
               "WAYBILL_NUM": "",
               "CUSTOMER_NAME": "张三",
+              "CUSTOMER_OTHER_NAME": null,
+              "GROUP_NAME": null,
+              "MEMBER_TAG_TEXT": "",
               "SELLER_ADDRESS": "万达广场",
               "CUSTOMER_ADDRESS": "北京市北京市东城区23",
               "ORDER_CREATE_TIME": "2021-01-19 17:19:38",
               "CUSTOMER_REMARK": "[线下付款] ",
-              "NOW_TIME": "2021-07-30 10:52:55",
+              "NOW_TIME": "2021-07-30 10:11:18",
               "DELIVERY_PERIOD": "上午10点",
               "PICKUP_NAME": null,
               "SERVICE_PHONE": "05928988998",
@@ -1932,5 +1640,6 @@
         ]
       }
     ]
-  }
+  },
+  "time": "0.1074s"
 }

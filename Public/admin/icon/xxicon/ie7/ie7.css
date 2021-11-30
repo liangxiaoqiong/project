@@ -1,3 +1,12 @@
+.xxicon-stock-max {
+  *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe903;');
+}
+.xxicon-stock-min {
+  *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe906;');
+}
+.xxicon-order-0 {
+  *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe909;');
+}
 .xxicon-menu-hezuo {
   *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe902;');
 }
@@ -54,9 +63,6 @@
 }
 .xxicon-ruku {
   *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe91f;');
-}
-.xxicon-order-0 {
-  *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe920;');
 }
 .xxicon-msg-1 {
   *zoom: expression(this.runtimeStyle['zoom'] = '1', this.innerHTML = '&#xe921;');

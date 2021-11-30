@@ -25,7 +25,7 @@
   .set-layer-main {
     display: inline-block;
     padding: 10px 0 10px 30px;
-    max-height: 350px;
+    max-height: 300px;
     overflow-y: auto;
     width: 99.99%;
     box-sizing: border-box;
@@ -59,20 +59,26 @@
     <div class="table-setting-layer" id="table-setting-layer">
       <div class="set-layer-title">设置列表项</div>
       <div class="set-layer-main">
-        <el-checkbox v-for="(item, index) in tableFiled" :label="item.filed_val" :key="index" disabled checked v-if="!isSetting(item)">
-          {{ item.th_name }}
+        <el-checkbox v-for="(item, index) in tableFiledThis" :label="item.filed_val" :key="index" disabled checked
+                     v-if="!isSetting(item) && +item.is_setting_show !== 3">
+          <div class="display-align" v-html="item.th_name"></div>
         </el-checkbox>
-        <el-checkbox-group style="display: contents;" v-model="checkFieldIds">
-          <el-checkbox v-for="(item, index) in tableFiled" :label="item.filed_val" :key="index" v-if="isSetting(item)">
-            {{ item.th_name }}
+
+        <!--可拖动顺序、可选择是否显示的选项-->
+        <div class="sortable-box" style="display: contents;">
+          <el-checkbox v-for="(item, index) in tableFiledThis" :id="index+''" :true-label="1" :false-label="0" v-model="item.is_setting_show"
+                       :label="item.filed_val" :key="index"
+                       v-if="isSetting(item) && +item.is_setting_show !== 3">
+            <div class="display-align" v-html="item.th_name"></div>
           </el-checkbox>
-        </el-checkbox-group>
+        </div>
       </div>
       <div class="set-layer-foot">
+        <span class="color-gray mr-10">(按住拖动可更改排序)</span>
         <button type="button" class="xxbtn-white" @click.stop="clickAllField">
           {{ isCheckAllField ? '全部取消' : '全部选中' }}
         </button>
-        <button type="button" class="xxbtn-primary ml-10" @click.stop="submitSet" style="min-width: 82px">{:L('OK')}<!--确定--></button>
+        <button type="button" class="xxbtn-primary ml-10" @click.stop="submitSet" style="min-width: 82px">确定</button>
       </div>
     </div>
   </div>
@@ -83,101 +89,240 @@
     template: '#table_setting_component',
     props: {
       query: Object,
-      tableFiled: Array,
+      tableFiled: {
+        type: Array,
+        default: function () {
+          return []
+        }
+      }, // 可能为undefined=>[] 未通过<diy-table>组件的页面。示例：订单列表order_list_admin.html
+      tableFiledObj: {
+        type: Object,
+        default: function () {
+          return {
+            tableFiled: [],
+            version: '',
+            tablePageType: ''
+          }
+        }
+      },
+      // {
+      // tableFiled: [{}] 表格项配置数组
+      // version：String 保存的版本号，查询入参与反参不一致，使用默认的tableFiled数据【用于兼容后续新增或者移除表格项时】
+      // }
     },
     data: function () {
       return {
         isShowLayer: false,
-        checkFieldIds: [] //显示的表格项数组is_setting_show=1，[filed_val, filed_val, ...]
+        tableFiledThis: [], // 当前编辑的
       }
     },
     mounted: function () {
-      this.init()
+      this.init();
     },
     computed: {
       //是否全选
       isCheckAllField: function () {
-        var self = this
-        if (self.tableFiled) {
-          var len = 0
-          self.tableFiled.forEach(function (value) {
-            if (self.isSetting(value)) {
-              len++
-            }
-          })
-          return self.checkFieldIds.length === len
-        }
+        var self = this;
+        var len = 0;
+        self.tableFiledThis.forEach(function (value) {
+          if (+value.is_setting_show === 1 || +value.is_setting_show === 2) {
+            len++
+          }
+        })
+        return self.tableFiledThis.length === len
       }
     },
     methods: {
+      init: function () {
+        var self = this;
+        if (self.tableFiledObj.tablePageType !== '') {
+          self.getTableSetting();
+        } else {
+          self.$set(self.tableFiledObj, 'tableFiled', JSON.parse(JSON.stringify(self.tableFiled)));
+          self.$emit('load-completed');
+        }
+      },
       //判断是否可设置显示||不显示
       isSetting: function (item) {
-        return typeof item.is_setting_show ==='undefined' ||
-          (typeof item.is_setting_show !== 'undefined' && (+item.is_setting_show === 1 || +item.is_setting_show === 0))
+        return +item.is_setting_show === 1 || +item.is_setting_show === 0;
       },
-      isSettingShow: function (item) {
-        return typeof item.is_setting_show ==='undefined' ||
-          (typeof item.is_setting_show !== 'undefined' && +item.is_setting_show === 1)
-      },
-      init: function () {
+      initSortable: function () {
         var self = this
-        var field = []
-        if (typeof self.query.field_val_arr !== 'undefined' && self.query.field_val_arr !== '') {
-          self.checkFieldIds = self.query.field_val_arr.split(',')
-          self.setTableFieldShow()
-        } else {
-          //为空时默认全选中
-          if (self.tableFiled) {
-            self.tableFiled.forEach(function (value) {
-              if (self.isSettingShow(value)) {
-                field.push(value.filed_val)
-              }
+        $(".sortable-box").sortable({
+          //cancel: "a,button,input,select",
+          update: function (event, ui) {
+          },
+          stop: function (event, ui) {
+            self.$nextTick(function () {
+              var a = JSON.stringify(self.tableFiledThis);
+              a = JSON.parse(a);
+              a.sort(publicWap.compare('drag_sort'));//排序
+              a.forEach(function (value) {
+                var key = publicWap.getArrayKey({list: self.tableFiledThis, param: 'filed_val', value: value.filed_val})
+                self.tableFiledThis[key].drag_sort = value.drag_sort;
+              })
+              self.tableFiledThis.sort(publicWap.compare('drag_sort'));//排序
+              // self.tableFiledThis = a;
+              event.preventDefault();
+              window.optionchanged = true;
             })
-            self.checkFieldIds = field
-            self.query.field_val_arr = self.checkFieldIds.join(',')
+          },
+          deactivate: function (event) {
+            self.getSortableItem();
+            event.preventDefault();
+            return false;
+          }
+        });
+      },
+      /*获取 拖拽数据*/
+      getSortableItem: function () {
+        var self = this;
+        var updateArr = $(".sortable-box").sortable("toArray");
+        var newArr = JSON.stringify(updateArr);
+        newArr = JSON.parse(newArr);
+        var list = self.tableFiledThis;
+        for (var j = 0; j < newArr.length; j++) {
+          for (var i = 0; i < list.length; i++) {
+            if (+i === +newArr[j]) {
+              list[i].drag_sort = j;
+            }
           }
         }
       },
       showLayer: function () {
+        var self = this
         this.isShowLayer = !this.isShowLayer
+        self.tableFiledThis = JSON.parse(JSON.stringify(self.tableFiledObj.tableFiled));
+        self.tableFiledThis.forEach(function (value, index) {
+          if (typeof value.drag_sort === 'undefined') {
+            self.$set(value, 'drag_sort', index);
+          }
+          if (typeof value.is_setting_show === 'undefined') {
+            self.$set(value, 'is_setting_show', 1);
+          } else {
+            self.$set(value, 'is_setting_show', +value.is_setting_show);
+          }
+        })
+        self.$nextTick(function () {
+          self.initSortable();
+        })
       },
       hideLayer: function () {
         this.isShowLayer = false
       },
       //全选表头
       clickAllField: function () {
-        var self = this
-        if (self.isCheckAllField) {
-          self.checkFieldIds = []
-          return false
-        } else {
-          var ids = []
-          self.tableFiled.forEach(function (value) {
-            if (self.isSetting(value)) {
-              ids.push(value.filed_val)
-            }
-          })
-          self.checkFieldIds = ids
-        }
-      },
-      setTableFieldShow: function () {
-        var self = this
-        self.tableFiled.forEach(function (value) {
-          if (+value.is_setting_show !== 2) {
-            if (self.checkFieldIds.indexOf(value.filed_val) > -1) {
-              self.$set(value, 'is_setting_show', 1)
-            } else {
-              self.$set(value, 'is_setting_show', 0)
-            }
+        var self = this;
+        var newSetting = self.isCheckAllField ? 0 : 1;
+        self.tableFiledThis.forEach(function (value) {
+          if (self.isSetting(value)) {
+            self.$set(value, 'is_setting_show', newSetting);
           }
         })
       },
       submitSet: function () {
-        var self = this
-        self.query.field_val_arr = self.checkFieldIds.join(',')
-        self.setTableFieldShow()
-        this.$emit('sync-table-auto')
-        self.hideLayer()
+        var self = this;
+        self.$nextTick(function () {
+          var filedList = JSON.parse(JSON.stringify(self.tableFiledThis));
+          self.syncTableFiledValue(filedList);
+          self.$emit('sync-table-auto')
+          if (self.tableFiledObj.tablePageType !== '') {
+            self.saveTableSetting()
+          }
+          self.hideLayer()
+        })
+      },
+      // self.$set(self.tableFiled, index, value);// 拖住排序时，diy-table组件，表头无法重新渲染，必须在每一项属性值set
+      syncTableFiledValue: function (filedList) {
+        var self = this;
+        filedList.forEach(function (value, index) {
+          self.$set(self.tableFiledObj.tableFiled[index], 'filed_val', value.filed_val);
+          self.$set(self.tableFiledObj.tableFiled[index], 'th_val', value.th_val);
+          self.$set(self.tableFiledObj.tableFiled[index], 'th_name', value.th_name);
+          self.$set(self.tableFiledObj.tableFiled[index], 'is_th_slot', value.is_th_slot);
+          self.$set(self.tableFiledObj.tableFiled[index], 'is_fixed_left', value.is_fixed_left);
+          self.$set(self.tableFiledObj.tableFiled[index], 'is_fixed_right', value.is_fixed_right);
+          self.$set(self.tableFiledObj.tableFiled[index], 'is_fixed_right', value.is_fixed_right);
+          self.$set(self.tableFiledObj.tableFiled[index], 't_width', value.t_width);
+          self.$set(self.tableFiledObj.tableFiled[index], 'is_setting_show', value.is_setting_show);
+          self.$set(self.tableFiledObj.tableFiled[index], 'drag_sort', value.drag_sort);
+          self.$set(self.tableFiledObj.tableFiled[index], 'sort', value.sort);
+          self.$set(self.tableFiledObj.tableFiled[index], 'tip_text', value.tip_text);
+          self.$set(self.tableFiledObj.tableFiled[index], 'show_overflow_tooltip', value.show_overflow_tooltip);
+          self.$set(self.tableFiledObj.tableFiled[index], 'align', value.align);
+
+          self.tableFiled.forEach(function (value2, index2) {
+            if (value.filed_val === value2.filed_val) {
+              self.$set(self.tableFiled[index2], 'th_val', value.th_val);
+              self.$set(self.tableFiled[index2], 'th_name', value.th_name);
+              self.$set(self.tableFiled[index2], 'is_th_slot', value.is_th_slot);
+              self.$set(self.tableFiled[index2], 'is_fixed_left', value.is_fixed_left);
+              self.$set(self.tableFiled[index2], 'is_fixed_right', value.is_fixed_right);
+              self.$set(self.tableFiled[index2], 'is_fixed_right', value.is_fixed_right);
+              self.$set(self.tableFiled[index2], 't_width', value.t_width);
+              self.$set(self.tableFiled[index2], 'is_setting_show', value.is_setting_show);
+              self.$set(self.tableFiled[index2], 'drag_sort', value.drag_sort);
+              self.$set(self.tableFiled[index2], 'sort', value.sort);
+              self.$set(self.tableFiled[index2], 'tip_text', value.tip_text);
+              self.$set(self.tableFiled[index2], 'show_overflow_tooltip', value.show_overflow_tooltip);
+              self.$set(self.tableFiled[index2], 'align', value.align);
+            }
+          })
+        })
+      },
+      // diy-table组件。el-table列宽改变
+      changeWidth: function (column) {
+        var self = this;
+        self.tableFiledThis.forEach(function (value) {
+          if (value.th_val[0] === column.property) {
+            self.$set(value, 't_width', column.width);
+          }
+        })
+      },
+      // 获取表格配置项
+      getTableSetting: function () {
+        var self = this;
+        AppUtil.ajaxRequest({
+          url: AppUtil.getTPUrl('Common', 'getTableSetting'),
+          data: {page: self.tableFiledObj.tablePageType},
+        }).then(function (result) {
+          var list = [];
+          if (self.tableFiled.length !== 0) {
+            list = JSON.parse(JSON.stringify(self.tableFiled));
+          } else {
+            // 未通过<diy-table>组件的页面。示例：订单列表order_list_admin.html
+            list = JSON.parse(JSON.stringify(self.tableFiledObj.tableFiled));
+          }
+          if (typeof result.data.id !== 'undefined' && result.data.id !== '' ) {
+            if (result.data.setting.tableFiled.length > 0 ||
+              (typeof result.data.setting.version !== 'undefined' &&
+                result.data.setting.version !== '' &&
+                result.data.setting.version !== self.tableFiledObj.tablePageVersion)) {
+              list = JSON.parse(JSON.stringify(result.data.setting.tableFiled));
+            }
+          }
+          self.$set(self.tableFiledObj, 'tableFiled', list);
+          self.$nextTick(function () {
+            self.syncTableFiledValue(JSON.parse(JSON.stringify(list)));
+            self.$emit('load-completed');
+          })
+        })
+      },
+      // 保存表格配置项到服务器
+      saveTableSetting: function () {
+        var self = this;
+        var queryObj = {
+          page: self.tableFiledObj.tablePageType,
+          setting: {
+            version: '', // 保存的版本号
+            tableFiled: self.tableFiledObj.tableFiled
+          }
+        }
+        AppUtil.ajaxRequest({
+          url: AppUtil.getTPUrl('Common', 'saveTableSetting'),
+          data: JSON.stringify(queryObj),
+          contentType: AppUtil.CONTENT_TYPE_JSON
+        })
       }
     }
   }

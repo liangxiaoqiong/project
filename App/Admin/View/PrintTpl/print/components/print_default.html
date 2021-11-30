@@ -17,12 +17,20 @@
 
             <div class="position-r">
               <!--region 表格-->
-              <div :style="printTableStyle" v-if="+tableCheckedItemLen(tplOrder.tpl.tpl_content[0]) > 0">
+              <div :style="printTableStyle" v-if="+tableCheckedItemLen(tplOrder.tpl.tpl_content[0]) > 0"
+                   :class="'print-table__'+tplOrder.tpl.tpl_content[0].tableBorderWidth">
                 <template v-if="+tplOrder.tpl.tpl_type === 4">
                   <print-table-mini :tpl-order="tplOrder" :depot="depot"></print-table-mini>
                 </template>
                 <template v-else>
-                  <print-table-default :tpl-order="tplOrder" :depot="depot"></print-table-default>
+                  <div :class="'table-box__num'+tableNum">
+                    <print-table-default
+                      v-for="(num, i) in tableNum"
+                      :key="i"
+                      :table-index="i"
+                      :tpl-order="tplOrder"
+                      :depot="depot"></print-table-default>
+                  </div>
                 </template>
               </div>
               <!--endregion-->
@@ -89,18 +97,7 @@
     computed: {
       printTableStyle: function () {
         var item = this.tplOrder.tpl.tpl_content[0];
-        return {
-          marginLeft: item.left,
-          width: item.width,
-          color: item.color,
-          fontFamily: item.fontFamily + '!important',
-          fontSize: item.fontSize,
-          fontWeight: +item.isFontBold === 1 ? 'bold' : '',
-          fontStyle: +item.isFontSlant === 1 ? 'italic' : '',
-          textDecoration: +item.isFontUnderline === 1 ? 'underline' : '',
-          textAlign: item.textAlign,
-          lineHeight: item.lineHeight,
-        }
+        return diyPrintTpl.printTableStyle(item);
       },
       // 获取表格底部距离顶部的高度
       getTableDefaultStyle: function () {
@@ -112,7 +109,11 @@
           height: +tableHeight,
           bottomHeight: (+tableTop) + (+tableHeight)
         };
-      }
+      },
+      // 双排、单排表格数量
+      tableNum: function () {
+        return +this.tplOrder.tpl.tpl_config.table_num || 1
+      },
     },
     mounted: function () {
     },
@@ -163,6 +164,10 @@
             if (bottom > parentBoxHeight) parentBoxHeight = bottom
           }
         })
+        var tableTop = +self.tplOrder.tpl.tpl_content[0].top.replace('px', '');
+        if (parentBoxHeight <= tableTop) {
+          parentBoxHeight = tableTop;
+        }
         switch (+type) {
           case 2: // 表格下方
             parentBoxHeight -= self.getTableDefaultStyle.bottomHeight;

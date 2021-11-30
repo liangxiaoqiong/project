@@ -1,9 +1,5 @@
 <!--
- diy文本编辑器：
- 【可拖拽组件随意摆放位置】
- 【可设置各组件的宽高、字体样式】
- 【可通过Ctrl+Shift+点击 选中多个进行统一设置位置等，，，】
- 【可设置表格列表、表格列选项位置、表格字体、表格边框等样式】
+ diy文本编辑器：具体功能看doc文档
 -->
 <extend name="Public:base"/>
 <block name="content">
@@ -41,26 +37,79 @@
             <div class="param-title">
               <b>其他设置</b>
             </div>
-            <div>
-              <span>每页列表行数:</span>
-              <el-select class="small" style="width: 100px" v-model="info.tpl_config.pre_page_row">
-                <el-option value="" label="默认"></el-option>
-                <el-option v-for="i in 100" :value="''+i" :label="i"></el-option>
-              </el-select>
+            <ul class="other-setting-list">
+              <template v-if="+info.tpl_type !== 4">
+                <li>
+                  <label>表格模式:</label>
+                  <el-select class="small" style="width: 100px" v-model="tableNum">
+                    <el-option value="1" label="单排"></el-option>
+                    <el-option value="2" label="双排"></el-option>
+                  </el-select>
+                </li>
+                <li v-if="+tableNum === 2">
+                  <label>表格间隔:</label>
+                  <div class="display-align slider-gap">
+                    <el-slider
+                      v-model="info.tpl_config.table_gap"
+                      :min="0"
+                      :max="100"
+                      show-input
+                      :show-input-controls="false"></el-slider>
+                    <span>px</span>
+                  </div>
+                </li>
+              </template>
+              <li>
+                <label>每页列表行数:</label>
+                <el-select class="small" style="width: 100px" v-model="prePageRow">
+                  <el-option value="" label="默认"></el-option>
+                  <el-option v-for="i in 100" :value="''+i" :label="i" :disabled="i === 1 && +tableNum === 2"></el-option>
+                </el-select>
+              </li>
               <template v-if="info.tpl_config.pre_page_row !== '' && +info.tpl_type !== 4">
-                <span class="ml-10">每页小计:</span>
-                <el-select class="small" style="width: 100px" v-model="info.tpl_config.is_show_subtotal">
+                <li>
+                  <label>底部内容显示:</label>
+                  <el-select class="small" style="width: 100px" v-model="tableItemShowType">
+                    <el-option value="0" label="只最后一页显示"></el-option>
+                    <el-option value="1" label="每页显示"></el-option>
+                  </el-select>
+                </li>
+                <li v-if="+tableNum === 2">
+                  <label>实际行数不足时用空白行补全:</label>
+                  <el-select class="small" style="width: 100px" v-model="addBlankLine">
+                    <el-option value="0" label="不补全"></el-option>
+                    <el-option value="1" label="补全"></el-option>
+                  </el-select>
+                </li>
+                <li>
+                  <label>每页合计:</label>
+                  <el-select class="small" style="width: 100px" v-model="info.tpl_config.is_show_subtotal">
+                    <el-option value="1" label="显示"></el-option>
+                    <el-option value="0" label="不显示"></el-option>
+                  </el-select>
+                </li>
+              </template>
+              <li v-if="+info.tpl_type !== 4">
+                <label>总合计:</label>
+                <el-select class="small" style="width: 100px" v-model="isShowTotal">
                   <el-option value="1" label="显示"></el-option>
                   <el-option value="0" label="不显示"></el-option>
                 </el-select>
-              </template>
+              </li>
 
-              <span class="ml-10">纸张宽度:</span>
-              <el-select class="small" style="width: 100px" v-model="info.tpl_config.page_width">
-                <el-option v-for="(item, i) in tplPageWidth" :key="i" :value="item.value" :label="item.label"
-                           v-if="item.tpl_type.indexOf(info.tpl_type) > -1"></el-option>
-              </el-select>
-            </div>
+              <li>
+                <label>纸张宽度:</label>
+                <el-select class="small" style="width: 100px" v-model="info.tpl_config.page_width">
+                  <el-option v-for="(item, i) in tplPageWidth" :key="i" :value="item.value" :label="item.label"
+                             v-if="item.tpl_type.indexOf(+info.tpl_type) > -1"></el-option>
+                </el-select>
+                <el-popover placement="top" trigger="hover">
+                  <div>纸张宽度包含打印设置的边距，打印时请设置边距为“无”</div>
+                  <a slot="reference" class="xxicon-warning-tip el-icon-warning"></a>
+                </el-popover>
+              </li>
+
+            </ul>
           </div>
           <!--endregion-->
 
@@ -132,7 +181,7 @@
     <div class="form-submit">
       <a class="xxbtn-primary" id="saveData" @click="save">保存模板</a>
       <a class="xxbtn-white ml-10" @click="backToList">返回列表</a>
-      <a class="xxbtn-white ml-10" @click="print">打印</a>
+      <a class="xxbtn-white ml-10" @click="print" v-if="+info.id > 0">打印</a>
     </div>
   </div>
   <include file="Public/components/switch/switch_default"/>
@@ -153,8 +202,9 @@
           variableParams: [],
           tplPageWidth: [
             // region a4
-            {value: '595px', label: '595px(分辨率是72像素/英寸时)', tpl_type: [0]},
-            {value: '794px', label: '794px(分辨率是96像素/英寸时)', tpl_type: [0]},
+            /*{value: '595px', label: '595px(分辨率是72像素/英寸时)', tpl_type: [0]},*/
+            {value: '794px', height: '1123px', label: 'A4纵向', tpl_type: [0], tip: '(分辨率是96像素/英寸时)'},
+            {value: '1123px', height: '794px', label: 'A4横向', tpl_type: [0], tip: '(分辨率是96像素/英寸时)'},
             // endregion
             // region 针式
             {value: '566px', label: '566px', tpl_type: [2]},
@@ -233,20 +283,112 @@
               base_data: [],//表头数据
               params_tpl: [], //产品数据
               dragSizeBoxHeight: '', // 编辑器内容高度
-              is_show_subtotal: '0', //是否显示小计0/1，不分页不显示小计
-              pre_page_row: '',//每页显示的行数，''默认不设置
+              is_show_subtotal: '0', //【单排&&分页&&!==热敏打印】不分页不显示小计，是否显示每个表格的合计，样式同【合计】=1合计不显示
+              pre_page_row: '',//每页显示的行数，''默认不设置,双排时，最少2条以上
+              add_blank_line: '0', // 【双排&&分页&&!==热敏打印】实际行数不足时使用空白行补全,1-补全，0-不补全
+              table_item_show_type: '0', // 【分页&&!==热敏打印】表格底部模块显示类型，0-只最后一页显示，1-每页都显示
+              is_show_total: '1', // 【!==热敏打印】是否显示总合计，最后一页&&最后一行显示
               page_width: '794px',// 打印纸张宽度
+              table_num: '1',// 表格模式，1-单排(默认)，2-双排
+              table_gap: 10,// Number;表格双排模式。2表格之间的间隔，单位px
             },
           },
         }
       },
-      computed: {},
-      watch: {
-        'info.tpl_config.pre_page_row': function () {
-          if (this.info.tpl_config.pre_page_row === '') {
-            this.info.tpl_config.is_show_subtotal = '0'
+      computed: {
+        // 页面样式
+        isTplStyle2: function () {
+          var self = this;
+          var pageWith = 794;
+          if (typeof self.info.tpl_config.page_width !== 'undefined') {
+            pageWith = self.info.tpl_config.page_width.replace('px', '');
+            return +pageWith > 794;
           }
-        }
+        },
+        // 表格模式
+        tableNum: {
+          set: function (val) {
+            this.$set(this.info.tpl_config, 'table_num', val);
+          },
+          get: function () {
+            return this.info.tpl_config.table_num || '1';
+          }
+        },
+        // 是否使用空白行补全
+        addBlankLine: {
+          set: function (val) {
+            this.$set(this.info.tpl_config, 'add_blank_line', val);
+          },
+          get: function () {
+            return this.info.tpl_config.add_blank_line || '0';
+          }
+        },
+        // 分页时，表格底部模块显示类型
+        tableItemShowType: {
+          set: function (val) {
+            this.$set(this.info.tpl_config, 'table_item_show_type', val);
+          },
+          get: function () {
+            return this.info.tpl_config.table_item_show_type || '0';
+          }
+        },
+        // 是否显示整个订单总合计，最后一页最后一行显示
+        isShowTotal: {
+          set: function (val) {
+            this.$set(this.info.tpl_config, 'is_show_total', val);
+          },
+          get: function () {
+            return this.info.tpl_config.is_show_total || '1';
+          }
+        },
+        prePageRow: {
+          set: function (val) {
+            this.info.tpl_config.pre_page_row = val;
+            if (val === '') {
+              this.info.tpl_config.is_show_subtotal = '0'
+            }
+          },
+          get: function () {
+            return this.info.tpl_config.pre_page_row;
+          }
+        },
+        // 获取表格配置项初始化列表值
+        initTableCheckedItemList: function () {
+          var self = this
+          var checkedItemParam = []
+          self.info.tpl_config.params_tpl.forEach(function (val_param) {
+            val_param.tpl_params.forEach(function (val_item, index) {
+              self.$set(val_item, 'sort', index + 1);
+              if (typeof val_item.is_checked !== 'undefined' && +val_item.is_checked === 1) {
+                checkedItemParam.push(val_item)
+              }
+            })
+          })
+          var checkedItem = []
+          self.info.tpl_config.base_data.forEach(function (value, index) {
+            self.$set(value, 'sort', index + 1);
+            if (value.type === 'goods_spec') {
+              if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+                checkedItem.push(value)
+              }
+              checkedItem = checkedItem.concat(checkedItemParam)
+            } else {
+              if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+                checkedItem.push(value)
+              }
+            }
+          })
+          var checkedOther = [];
+          self.info.tpl_config.tableOtherData.forEach(function (value, index) {
+            self.$set(value, 'sort', index + 1);
+            if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
+              checkedOther.push(value)
+            }
+          })
+          // 初始化
+          checkedItem = checkedItem.concat(checkedOther);
+          return checkedItem;
+        },
       },
       mounted: function () {
         this.initLoad();
@@ -254,35 +396,42 @@
       methods: {
         initLoad: function () {
           var self = this;
-          AppUtil.ajaxRequest({
+          self.getBaseData().then(function (result) {
+            self.variableParams = result.data.variable_params;
+            self.info.tpl_config.base_data = result.data.header_data.base_data;
+            self.info.tpl_config.params_tpl = result.data.header_data.params_tpl;
+            if (+self.info.id > 0) {
+              self.getInfoData()
+            } else {
+              if (+self.info.tpl_type === 4) {
+                // 热敏纸
+                self.info.tpl_content[0].left = '0px'
+                self.info.tpl_content[0].width = '180px'
+                self.info.tpl_content[0].height = '125px'
+                self.info.tpl_config.page_width = '180px'
+              } else if (+self.info.tpl_type === 0) {
+                // A4
+                self.info.tpl_config.page_width = '794px'
+              }else if (+self.info.tpl_type === 2) {
+                // 分仓针式
+                self.info.tpl_config.page_width = '566px'
+              }
+              self.$nextTick(function () {
+                self.info.tpl_content[0].checkedItem = self.initTableCheckedItemList; //基础通用表格初始化
+                self.$refs.diyDragEditor.init()
+              })
+            }
+          })
+        },
+        getBaseData: function () {
+          var self = this;
+          return AppUtil.ajaxRequest({
             url: '/Public/json/admin/PrintTpl/printTplInfo/getVariableWords.json',
             type: 'get',
             data: {
               type: self.info.tpl_type,
               order_type: self.info.type,
             },
-          }).then(function (result) {
-            self.variableParams = result.data.variable_params;
-            if (+self.info.id > 0) {
-              self.getInfoData()
-            } else {
-              if (+self.info.tpl_type === 4) {
-                self.info.tpl_content[0].left = '0px'
-                self.info.tpl_content[0].width = '180px'
-                self.info.tpl_content[0].height = '125px'
-                self.info.tpl_config.page_width = '180px'
-              } else if (+self.info.tpl_type === 0) {
-                self.info.tpl_config.page_width = '794px'
-              }else if (+self.info.tpl_type === 2) {
-                self.info.tpl_config.page_width = '566px'
-              }
-              self.$nextTick(function () {
-                self.info.tpl_config.base_data = result.data.header_data.base_data
-                self.info.tpl_config.params_tpl = result.data.header_data.params_tpl
-                self.initBasicTable();
-                self.$refs.diyDragEditor.init()
-              })
-            }
           })
         },
         //获取模板详情
@@ -293,77 +442,8 @@
             url: '/Public/json/admin/PrintTpl/printTplInfo/getPrintTplData_'+self.info.id+'.json',
             data: {
               id: self.info.id,
-              is_update_variable: 1, // 实时更新变量词
             },
           }).then(function (result) {
-            if (typeof result.data.tpl_config.page_width === 'undefined' || result.data.tpl_config.page_width === '') {
-              if (+result.data.tpl_type === 0) {
-                result.data.tpl_config.page_width = '794px';
-              }
-              if (+result.data.tpl_type === 2) {
-                result.data.tpl_config.page_width = '566px';
-              }
-              if (+result.data.tpl_type === 4) {
-                result.data.tpl_config.page_width = '180px';
-              }
-            }
-            if (typeof result.data.tpl_config.tableOtherData === 'undefined') {
-              result.data.tpl_config.tableOtherData = [
-                {
-                  default_name:"空白列1",
-                  diy_name:"空白列1",
-                  is_checked:"0",
-                  type:"other_1",
-                  value:"{column_other_1}",
-                  value_data: {
-                    value_type: '1', // 1-空白列项，2-固定列项，''-关联基础数据的type
-                    default_value: '', // 固定值
-                  }
-                },
-                {
-                  default_name:"空白列2",
-                  diy_name:"空白列2",
-                  is_checked:"0",
-                  type:"other_2",
-                  value:"{column_other_2}",
-                  value_data: {
-                    value_type: '1',
-                    default_value: '',
-                  }
-                },
-                {
-                  default_name:"空白列3",
-                  diy_name:"空白列3",
-                  is_checked:"0",
-                  type:"other_3",
-                  value:"{column_other_3}",
-                  value_data: {
-                    value_type: '1',
-                    default_value: '',
-                  }
-                }
-              ];
-            }
-            var checkedItem = [];
-            result.data.tpl_content[0].checkedItem.forEach(function (value) {
-              if (+value.is_checked === 1) {
-                checkedItem.push(value);
-              }
-            })
-            checkedItem.forEach(function (value) {
-              result.data.tpl_config.tableOtherData.forEach(function (value2, index2) {
-                if (typeof value2.value_data === 'undefined') {
-                  self.$set(result.data.tpl_config.tableOtherData[index2], 'value_data', {
-                    value_type: '1',
-                    default_value: '',})
-                }
-                if (value.value === value2.value) {
-                  self.$set(result.data.tpl_config.tableOtherData, index2, value)
-                }
-              })
-            })
-            result.data.tpl_content[0].checkedItem = JSON.parse(JSON.stringify(checkedItem));
-            console.log(result.data);
             self.info = result.data
             self.$nextTick(function () {
               self.$refs.diyDragEditor.init();
@@ -389,7 +469,17 @@
           })
           switch (actionType) {
             case 'check': // 是否显示
-              self.initBasicTable(actionType, item)
+              var key = -1;
+              self.info.tpl_content[0].checkedItem.forEach(function (value, index) {
+                if (item.value === value.value) {
+                  key = index;
+                }
+              })
+              if (key > -1) {
+                self.info.tpl_content[0].checkedItem.splice(key, 1);
+              } else {
+                self.info.tpl_content[0].checkedItem.push(item);
+              }
               break
             case 'modify-diy-name': // 更新表头项名称
               var content = ''
@@ -411,58 +501,6 @@
               break
           }
         },
-        //基础通用表格初始化
-        initBasicTable: function (actionType, item) {
-          var self = this
-          if (typeof actionType !== 'undefined' && actionType === 'check') {
-            //
-            var key = -1;
-            self.info.tpl_content[0].checkedItem.forEach(function (value, index) {
-              if (item.value === value.value) {
-                key = index;
-              }
-            })
-            if (key > -1) {
-              self.info.tpl_content[0].checkedItem.splice(key, 1);
-            } else {
-              self.info.tpl_content[0].checkedItem.push(item);
-            }
-          } else {
-            // 初始化
-            var checkedItemParam = []
-            self.info.tpl_config.params_tpl.forEach(function (val_param) {
-              val_param.tpl_params.forEach(function (val_item, index) {
-                self.$set(val_item, 'sort', index + 1);
-                if (typeof val_item.is_checked !== 'undefined' && +val_item.is_checked === 1) {
-                  checkedItemParam.push(val_item)
-                }
-              })
-            })
-            var checkedItem = []
-            self.info.tpl_config.base_data.forEach(function (value, index) {
-              self.$set(value, 'sort', index + 1);
-              if (value.type === 'goods_spec') {
-                if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
-                  checkedItem.push(value)
-                }
-                checkedItem = checkedItem.concat(checkedItemParam)
-              } else {
-                if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
-                  checkedItem.push(value)
-                }
-              }
-            })
-            var checkedOther = [];
-            self.info.tpl_config.tableOtherData.forEach(function (value, index) {
-              self.$set(value, 'sort', index + 1);
-              if (typeof value.is_checked !== 'undefined' && +value.is_checked === 1) {
-                checkedOther.push(value)
-              }
-            })
-            checkedItem = checkedItem.concat(checkedOther);
-            self.info.tpl_content[0].checkedItem = checkedItem
-          }
-        },
         //保存
         save: function () {
           var self = this
@@ -477,18 +515,20 @@
               self.info.tpl_config.dragSizeBoxHeight = self.getDragBoxHeight()
             }
             if (self.info.tpl_name === '') {
-              publicWap.layerMsg('{:L("INPUT_TEMP_NAME")}')
+              publicWap.layerMsg('请输入模板名称！')
               return false
             }
             $("#saveData").attr('disabled', true);
             var action = +self.info.id > 0 ? 'modify' : 'add'
             var query = JSON.stringify(self.info)
+            console.log(query);
+            return false;
             AppUtil.ajaxRequest({
               url: AppUtil.getTPUrl('PrintTpl', action),
               data: query,
               contentType: AppUtil.CONTENT_TYPE_JSON
             }).then(function (result) {
-              publicWap.layerMsg('{:L("SAVE_TEMP_SUCCESS")}', 1) // 保存模板成功
+              publicWap.layerMsg('保存模板成功', 1);
               $("#saveData").attr('disabled', false);
               self.backToList();
             })
@@ -531,7 +571,7 @@
         print: function () {
           var self = this;
           var url = AppUtil.getTPUrl('Index', 'printTplPrint') +
-            "&order_id=22830" +
+            "&order_id=1" +
             '&id=' + self.info.id
           layer.load();
           var lay = layer.open({

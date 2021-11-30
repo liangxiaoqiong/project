@@ -99,6 +99,9 @@ html,body{
 .font-12, .font-12 * {
     font-size: 12px;
 }
+.font-13, .font-13 * {
+    font-size: 13px;
+}
 .font-14, .font-14 * {
     font-size: 14px;
 }
@@ -199,6 +202,9 @@ html,body{
 }
 .pr-10 {
     padding-right: 10px;
+}
+.border-b1 {
+    border-bottom: 1px solid #E0E0E0;
 }
 .border-b10 {
     border-bottom: 10px solid #F6F6F6;
@@ -479,6 +485,7 @@ textarea.el-textarea__inner {
 
 /*region el-cascader 级联选择器*/
 .el-cascader {
+    height: 36px;
     line-height: 36px;
     width: 100%;
 }
@@ -717,9 +724,13 @@ textarea.el-textarea__inner {
     padding: 0 20px 0 10px;
     display: inline-block;
     vertical-align: middle;
-    background: url('/Public/common/img/icon_img/down_gray.png')calc(100% - 6px) center no-repeat;
+    background: url('/Public/common/img/down_gray.png')calc(100% - 6px) center no-repeat;
     background-size: 10px auto;
     cursor: pointer;
+}
+.select-diy.medium {
+    height: 36px;
+    line-height: 36px;
 }
 /*endregion*/
 
@@ -925,7 +936,7 @@ img[src=""], img:not([src]) {
 .el-icon-error {
     color: rgba(0,0,0,0.6);
     background-color: #FFFFff;
-    font-size: 19px!important;
+    font-size: 19px;
     border-radius: 100%;
 }
 .el-icon-error:hover {
@@ -938,8 +949,8 @@ img[src=""], img:not([src]) {
     position: absolute;
     z-index: 9;
     display: none;
-    right: -8px;
-    top: -8px;
+    right: -13px;
+    top: -13px;
     cursor: pointer;
 }
 
@@ -1060,6 +1071,9 @@ img[src=""], img:not([src]) {
 .diy-time-picker.no-relate .el-input__inner {
     padding-left: 10px;
     padding-right: 5px;
+}
+.el-picker-panel__body-wrapper .el-picker-panel__shortcut {
+    font-size: 12px;
 }
 /*endregion*/
 
@@ -1207,8 +1221,6 @@ img[src=""], img:not([src]) {
     font-weight: bold;
 }
 /*endregion*/
-
-/*region tip-box*/
 .tip-box {
     background-color: #FAFAFA;
     border: 1px solid #E0E0E0;
@@ -1233,7 +1245,6 @@ img[src=""], img:not([src]) {
     padding: 7px 10px;
     line-height: 22px;
 }
-/*endregion*/
 
 /*region 表格上搜索栏*/
 .search-box {
@@ -1258,16 +1269,29 @@ img[src=""], img:not([src]) {
     vertical-align: middle;
     display: flex;
 }
+.search-box .setting-float {
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: -11px;
+    font-size: 12px;
+    color: #fff;
+    background: #003cff;
+    border-radius: 100%;
+    padding: 2px;
+}
 .search-toggle {
     background-color: #F6F6F6;
     padding: 10px;
 }
-.search-toggle .li {
+.search-toggle .li,
+.search-toggle .search-item {
     margin: 0 16px 14px 0;
     display: inline-block;
     vertical-align: middle;
 }
-.search-toggle .li label {
+.search-toggle .li label,
+.search-toggle .search-item label {
     margin-right: 8px;
     min-width: 48px;
     display: inline-block;
@@ -1314,10 +1338,6 @@ img[src=""], img:not([src]) {
 .search-box .input-two-period .input-div,
 .search-toggle .input-two-period .input-div {
     height: 28px;
-}
-.search-box .input-two-period .input-div .unit,
-.search-toggle .input-two-period .input-div .unit {
-    line-height: 28px;
 }
 /*endregion*/
 /*endregion*/
@@ -1367,10 +1387,10 @@ img[src=""], img:not([src]) {
 
 }
 .table-diy-ul .table-thead {
-     border-bottom: 1px solid #E0E0E0;
-     background-color: #FAFAFA;
-     display: flex;
- }
+    border-bottom: 1px solid #E0E0E0;
+    background-color: #FAFAFA;
+    display: flex;
+}
 .table-diy-ul .table-tbody li {
     display: flex;
     border-bottom: 1px solid #E0E0E0;
@@ -1446,6 +1466,7 @@ td.table-action {
     font-size: 12px;
     font-weight: normal;
     color: #333;
+    width: 100%!important;
 }
 .el-table-diy .el-table th {
     background-color: #FAFAFA;
@@ -1680,9 +1701,17 @@ td.table-action {
     box-sizing: border-box;
 }
 .table-base-info td:nth-child(even) {
-    width: 200px;
+    min-width: 200px;
 }
 /*endregion*/
+
+.table-total-tr td {
+    text-align: right;
+    color: #ff0000;
+}
+.table-total-tr td:first-child {
+    text-align: left;
+}
 
 /*endregion*/
 
@@ -1907,7 +1936,7 @@ td.table-action {
     bottom: 0;
     width: 100%;
     background: #fff;
-    z-index: 1;
+    z-index: 10;
 }
 .dialog-footer-h {
     height: 80px;
@@ -2104,6 +2133,45 @@ td.table-action {
     content: '';
     display: inline-block;
 }
+.goods-layout2 {
+    min-width: 900px;
+}
+.goods-layout2 .layout-right {
+    min-width: 750px;
+    padding: 10px;
+    overflow-y: hidden;
+}
+.goods-layout2 .table-eldiy {
+    position: relative;
+    height: calc(100% - 80px);
+    width: 100%;
+    overflow-y: hidden;
+    border: 1px solid #E0E0E0;
+    border-left: none;
+}
+.goods-layout2 .table-th-fixed {
+    position: absolute;
+    z-index: 2;
+    width: calc(100% - 5.5px);
+    left: 0;
+    top: 0;
+    border: none;
+}
+.goods-layout2 .table-th-fixed th {
+    border-top: none;
+}
+.goods-layout2 .scroll-table {
+    padding: 0 6px 0 0;
+    height: 100%;
+    overflow-y: scroll;
+}
+.goods-layout2 .scroll-table table {
+    border: none;
+    width: calc(100% + 6px);
+}
+.goods-layout2 .layout-right .table-bottom {
+    padding: 10px 0;
+}
 /*endregion*/
 
 /*region erp*/
@@ -2230,25 +2298,6 @@ td.table-action {
 }
 /*endregion*/
 
-/*region*/
-.table-stock-foot-ul li {
-    display: flex;
-    display: -webkit-flex;
-    align-items: center;
-    justify-content: space-between;
-}
-.table-stock-foot-ul li div {
-    width: calc(50% - 10px);
-    text-align: left;
-    margin: 2px 0;
-}
-.table-stock-foot-ul li div .input-inner {
-    flex: 1;
-}
-.table-stock-foot-ul.ul-upd li div {
-    margin: 5px 0;
-}
-/*endregion*/
 
 /*region 批标签*/
 .xxicon-batch-text {
@@ -2333,6 +2382,23 @@ td.table-action {
 }
 .table-stock textarea.input-inner {
     height: 66px;
+}
+.table-stock-foot-ul li {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.table-stock-foot-ul li div {
+    width: calc(50% - 10px);
+    text-align: left;
+    margin: 2px 0;
+}
+.table-stock-foot-ul li div .input-inner {
+    flex: 1;
+}
+.table-stock-foot-ul.ul-upd li div {
+    margin: 5px 0;
 }
 /*endregion*/
 
@@ -2431,6 +2497,27 @@ td.table-action {
 }
 /*endregion*/
 
+/*region 折叠面板多层*/
+.collapse-tree .tree-list .tree-title {}
+.collapse-tree .tree-list .tree-text {
+    min-height: 30px;
+    padding: 5px 0;
+    display: inline-block;
+}
+.collapse-tree .tree-list .tree-text .arrow-btn {
+    width: 25px;
+    text-align: center;
+    display: inline-block;
+}
+.collapse-tree .tree-list .tree-text .arrow-btn i {
+    font-weight: bold;
+}
+.collapse-tree .tree-list .tree-child {
+    padding-left: 30px;
+}
+/*endregion*/
+
+/*region 不替换内容*/
 /*region */
 .border-box-list {
     margin-top: 10px;
@@ -2469,4 +2556,5 @@ td.table-action {
 .border-box-list .list-item a font {
     margin-top: 20px;
 }
+/*endregion*/
 /*endregion*/

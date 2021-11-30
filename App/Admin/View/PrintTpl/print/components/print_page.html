@@ -6,7 +6,7 @@
       <template v-for="order in tplOrder.orderList">
         <template v-for="depot in order.depotList">
           <div class="dragresize-box" style="border: none;page-break-after:always;overflow-y: hidden"
-               v-for="(page, pIndex) in pageLen(order, depot)"
+               v-for="(page, pIndex) in pageLen(depot)"
                :class="[(+tplOrder.tpl.tpl_type === 4 ? 'dragresize-direct' : '')]">
             <!--region 表格上方-->
             <div class="position-r" :style="diyItemParentStyle(0)">
@@ -18,12 +18,23 @@
 
             <div class="position-r">
               <!--region 表格-->
-              <div :style="printTableStyle" v-if="+tableCheckedItemLen(tplOrder.tpl.tpl_content[0]) > 0">
+              <div :style="printTableStyle" v-if="+tableCheckedItemLen(tplOrder.tpl.tpl_content[0]) > 0"
+                   :class="'print-table__'+tplOrder.tpl.tpl_content[0].tableBorderWidth">
                 <template v-if="+tplOrder.tpl.tpl_type === 4">
                   <print-table-mini :tpl-order="tplOrder" :depot="depot" :p-index="pIndex" :order="order"></print-table-mini>
                 </template>
                 <template v-else>
-                  <print-table-default :tpl-order="tplOrder" :depot="depot" :p-index="pIndex" :order="order"></print-table-default>
+                  <div :class="'table-box__num'+tableNum">
+                    <print-table-default
+                      v-for="(num, i) in tableNum"
+                      :key="i"
+                      :table-index="i"
+                      :tpl-order="tplOrder"
+                      :depot="depot"
+                      :p-index="pIndex"
+                      :page-len="pageLen(depot)"
+                      :order="order"></print-table-default>
+                  </div>
                 </template>
               </div>
               <!--endregion-->
@@ -40,7 +51,7 @@
             </div>
 
             <!--region 表格下方[最后一个表格显示]-->
-            <div class="position-r" :style="diyItemParentStyle(2)" v-if="+pIndex === +pageLen(order, depot) - 1">
+            <div class="position-r" :style="diyItemParentStyle(2)" v-if="isShowTableFootItem(pIndex, depot)">
               <template v-for="item in tplOrder.tpl.tpl_content" v-if="+item.position_type === 2">
                 <print-item :item="item" :depot="depot" :tpl-order="tplOrder" :get-table-default-style="getTableDefaultStyle"></print-item>
               </template>
@@ -89,18 +100,7 @@
     computed: {
       printTableStyle: function () {
         var item = this.tplOrder.tpl.tpl_content[0];
-        return {
-          marginLeft: item.left,
-          width: item.width,
-          color: item.color,
-          fontFamily: item.fontFamily + '!important',
-          fontSize: item.fontSize,
-          fontWeight: +item.isFontBold === 1 ? 'bold' : '',
-          fontStyle: +item.isFontSlant === 1 ? 'italic' : '',
-          textDecoration: +item.isFontUnderline === 1 ? 'underline' : '',
-          textAlign: item.textAlign,
-          lineHeight: item.lineHeight,
-        }
+        return diyPrintTpl.printTableStyle(item);
       },
       // 获取表格底部距离顶部的高度
       getTableDefaultStyle: function () {
@@ -112,7 +112,11 @@
           height: +tableHeight,
           bottomHeight: (+tableTop) + (+tableHeight)
         };
-      }
+      },
+      // 双排、单排表格数量
+      tableNum: function () {
+        return +this.tplOrder.tpl.tpl_config.table_num || 1
+      },
     },
     mounted: function () {
     },
@@ -162,6 +166,10 @@
             if (bottom > parentBoxHeight) parentBoxHeight = bottom
           }
         })
+        var tableTop = +self.tplOrder.tpl.tpl_content[0].top.replace('px', '');
+        if (parentBoxHeight <= tableTop) {
+          parentBoxHeight = tableTop;
+        }
         switch (+type) {
           case 2: // 表格下方
             parentBoxHeight -= self.getTableDefaultStyle.bottomHeight;
@@ -172,13 +180,29 @@
         return {height: parentBoxHeight + 'px'}
       },
       //有分页时商品表格个数
-      pageLen: function (order, depot) {
-        return Math.ceil(+depot.goodsList.length/+this.tplOrder.tpl.tpl_config.pre_page_row)
+      pageLen: function (depot) {
+        var list = [];
+        depot.goodsList.forEach(function (goods, index) {
+          list.push(goods)
+          // 赠品
+          if (goods.send_goods) {
+            goods.send_goods.forEach(function (sendGoods) {
+              list.push(sendGoods)
+            })
+          }
+        });
+        var subTotalLen = 0; // 小计行
+        if (+this.tplOrder.tpl.tpl_config.is_show_subtotal === 1) {
+          subTotalLen++;
+        }
+        var totalLen = 0; // 合计行
+        if (+this.tplOrder.tpl.tpl_config.is_show_total === 1) {
+          totalLen++;
+        }
+        var pageLen = (list.length + totalLen) / (+this.tplOrder.tpl.tpl_config.pre_page_row - subTotalLen)
+        return Math.ceil(pageLen)
       },
 
-      tableGoodsTotal: function (depot) {
-        return diyPrintTpl.tableGoodsTotal(depot)
-      },
       tableCheckedItemLen: function (item) {
         return diyPrintTpl.tableCheckedItemLen(item)
       },
@@ -189,6 +213,14 @@
         return diyPrintTpl.isCheckedGoodsName(item)
       },
 
+      // 是否显示表格底部样式
+      isShowTableFootItem: function (pIndex, depot) {
+        if (+this.tplOrder.tpl.tpl_config.table_item_show_type === 1) {
+          return true;
+        } else {
+          return +pIndex === +this.pageLen(depot) - 1
+        }
+      },
 
       printHtml: function () {
         this.$emit('print')

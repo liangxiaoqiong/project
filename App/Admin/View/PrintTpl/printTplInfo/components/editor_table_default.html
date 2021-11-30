@@ -6,7 +6,9 @@
 <!-- template 打印模板编辑器表格、非热敏打印的通用表格-->
 <script type="x-template" id="editor_table_default">
   <!--region 模版-->
-  <table class="editor-order-table" :class="'print-table__'+item.tableBorderWidth" id="editor-order-table">
+  <table class="editor-order-table"
+         :id="'editor-order-table'+tableIndex"
+         :style="tableStyle">
     <!--region 表头-->
     <thead>
       <tr>
@@ -17,7 +19,7 @@
     </thead>
     <!--endregion-->
     <tbody>
-    <template v-for="(goods, gIndex) in 3">
+    <template v-for="(goods, gIndex) in tableListLen" v-if="isShowTr(gIndex)">
       <tr>
         <td v-for="table in item.checkedItem" v-if="+table.is_checked === 1">
           <!--备注不显示，用于打印后手写内容-->
@@ -39,12 +41,11 @@
       </tr>
     </template>
 
-    <default-table-total :checked-item="item.checkedItem" type="'edit'"></default-table-total>
-
-    <!--region 额外新增的空白行【该功能暂隐藏】-->
-    <tr v-for="tr in item.otherTableItem" v-if="false">
-      <td :colspan="tableCheckedItemLen">&nbsp;</td>
-    </tr>
+    <!--region 每页合计-->
+    <default-table-total :checked-item="item.checkedItem" type="'edit'" :tpl="info" total-type="sub_total" v-if="isShowSubTotal"></default-table-total>
+    <!--endregion-->
+    <!--region 总合计-->
+    <default-table-total :checked-item="item.checkedItem" type="'edit'" :tpl="info" total-type="total" v-if="isShowTotal"></default-table-total>
     <!--endregion-->
     </tbody>
   </table>
@@ -62,11 +63,25 @@
     props: {
       info: Object,
       item: Object,
+      tableIndex: [String, Number], // 单排、双排表格，key，0||1
     },
     data: function () {
       return {}
     },
     computed: {
+      // 是否显示小计
+      isShowSubTotal: function () {
+        var isShow = true;
+        if (+this.info.tpl_config.is_show_subtotal === 0) {
+          isShow = false;
+        } else {
+          if (+this.info.tpl_config.table_num === 2) {
+            //（双排）
+            isShow = +this.tableIndex === 1;
+          }
+        }
+        return isShow;
+      },
       // 显示的表格项个数
       tableCheckedItemLen: function () {
         var len = 0
@@ -77,6 +92,39 @@
         })
         return len
       },
+      // 表格数据行数（不包含总计、小计）
+      tableListLen: function () {
+        var len = 3;
+        if (+this.info.tpl_config.table_num === 2) {
+          var total_len = 0;
+          if (this.isShowSubTotal) total_len = total_len + 2;
+          if (this.isShowTotal) total_len++;
+          len = 8 - total_len;
+        }
+        return len;
+      },
+      // 双排表格样式
+      tableStyle: function () {
+        if (+this.info.tpl_config.table_num === 2) {
+          var gap = +this.info.tpl_config.table_gap / 2;
+          var width = 'calc(50% - '+gap+'px)';
+          return {width: width};
+        }
+      },
+      // 是否显示合计行
+      isShowTotal: function () {
+        var self = this;
+        var isShow = true;
+        if (+this.info.tpl_config.is_show_total === 0) {
+          isShow = false;
+        } else {
+          if (+self.info.tpl_config.table_num === 2) {
+            //（双排）
+            isShow = +self.tableIndex === 1;
+          }
+        }
+        return isShow;
+      }
     },
     mounted: function () {
     },
@@ -85,25 +133,21 @@
       tableTdWidth: function (table) {
         return diyPrintTpl.tableTdWidth(this.info, this.item, table);
       },
+      // 是否显示表格行
+      isShowTr: function (index) {
+        var self = this;
+        if (+self.info.tpl_config.table_num === 2) {
+          //（双排）
+          var tableListLenAvg = (self.tableListLen-1) / 2;
+          if (+self.tableIndex === 0) {
+            return index <= tableListLenAvg;
+          } else {
+            return index > tableListLenAvg;
+          }
+        } else {
+          return true;
+        }
+      },
     }
   }
 </script>
-
-<style>
-  .print-table__2,
-  .print-table__2 td {
-    border: 2px solid #333;
-  }
-  .print-table__3,
-  .print-table__3 td {
-    border: 3px solid #333;
-  }
-  .print-table__4,
-  .print-table__4 td {
-    border: 4px solid #333;
-  }
-  .print-table__5,
-  .print-table__5 td {
-    border: 4px solid #333;
-  }
-</style>

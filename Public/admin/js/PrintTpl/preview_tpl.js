@@ -77,23 +77,27 @@ var diyPrintTpl = new Object({
     var num = 0
     var price = 0
     depot.goodsList.forEach(function (valGoods) {
-      num = num + (+valGoods.num)
+      var goods_num = +valGoods.num || +valGoods.units_num;
+      num = num + (+goods_num)
       price = price + (+valGoods.total_price)
     })
     return {num: num, price: parseFloat(price).toFixed(2)}
   },
-  //商品小计：数量、价格
-  tableGoodsSubTotal: function (depot, pIndex, tpl) {
+  //商品小计：数量、价格（双表格时，计算当前页2个表格的合计）
+  tableGoodsSubTotal: function (goodsTableList, tpl) {
     var num = 0
     var price = 0
-    var arr = []
-    for (var i = 0; i < tpl.tpl_config.pre_page_row; i++) {
-      arr.push(pIndex * tpl.tpl_config.pre_page_row + i)
-    }
-    depot.goodsList.forEach(function (valGoods, inGoods) {
-      if (arr.indexOf(inGoods) > -1) {
-        num = num + (valGoods.num)
-        price = price + (+valGoods.total_price)
+    goodsTableList.forEach(function (valGoods, inGoods) {
+      var goods_num = +valGoods.num || +valGoods.units_num;
+      if (typeof valGoods.type === 'undefined' ||
+        (typeof valGoods.type !== 'undefined' && valGoods.type !== 'blank_line' && valGoods.type !== 'sub_total' && valGoods.type !== 'total')) {
+        if (+tpl.tpl_config.table_num === 2) {
+          num = num + (goods_num)
+          price = price + (+valGoods.total_price)
+        } else {
+          num = num + (goods_num)
+          price = price + (+valGoods.total_price)
+        }
       }
     })
     return {num: num, price: parseFloat(price).toFixed(2)}
@@ -113,8 +117,7 @@ var diyPrintTpl = new Object({
           }
           if (tpl.type == key) {
             if (key === 'ORDER_QR_CODE') {
-             // result = value
-              result = '/Public/pc/imgs/QRcode.jpg'
+              result = value
             } else {
               var reg = (new RegExp("<a contenteditable=\"false\">(.*)<\/a>","ig")).exec(tpl.content)
               result = tpl.content.replace(reg[1], value)
@@ -132,6 +135,21 @@ var diyPrintTpl = new Object({
       }
     } catch (e) {}
     return result
+  },
+  // 打印时表格自定义样式
+  printTableStyle: function (item) {
+    return {
+      marginLeft: item.left,
+      width: item.width,
+      color: item.color,
+      fontFamily: item.fontFamily, // + '!important',
+      fontSize: item.fontSize || '12px',
+      fontWeight: +item.isFontBold === 1 ? 'bold' : '',
+      fontStyle: +item.isFontSlant === 1 ? 'italic' : '',
+      textDecoration: +item.isFontUnderline === 1 ? 'underline' : '',
+      textAlign: item.textAlign,
+      lineHeight: item.lineHeight,
+    }
   },
   /**endregion*/
 })

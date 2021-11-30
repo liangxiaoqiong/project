@@ -7,21 +7,33 @@
 <script type="x-template" id="default_table_total">
   <!--region 模版-->
   <tr>
-    <td>合计</td>
-    <td v-for="(item, index) in getEmptyTd.tdList" :colspan="item.len">
-      <template v-if="item.keyType === 'num'">
-        <template v-if="type === 'print'">{{ tableGoodsTotal(depot).num }}</template>
-        <template v-else>xxxx</template>
-      </template>
-      <template v-if="item.keyType === 'total_price'">
-        <template v-if="type === 'print'">{{ tableGoodsTotal(depot).price }}</template>
-        <template v-else>xxxx</template>
-      </template>
-      <template v-if="isShowChinesePrice(index)">
-        <template v-if="type === 'print'">{{ chineseAmount }}</template>
-        <template v-else>大写金额</template>
-      </template>
-    </td>
+    <td>{{ totalType === 'total' ? '总' : '' }}合计</td>
+    <template v-if="thisTplTypeData.hasType">
+      <td v-for="(table, i) in checkedItem" v-if="+table.is_checked === 1 && i > 0">
+        <template v-if="thisTplTypeData.itemList.indexOf(table.type) > -1">
+          <!--应付||应收款单-->
+          <template v-if="type === 'print'">{{ getTotalData(table.type) }}</template>
+          <template v-else>xxxx</template>
+        </template>
+      </td>
+    </template>
+
+    <template v-else>
+      <td v-for="(item, index) in getEmptyTd.tdList" :colspan="item.len">
+        <template v-if="item.keyType === 'num'">
+          <template v-if="type === 'print'">{{ totalNum }}</template>
+          <template v-else>xxxx</template>
+        </template>
+        <template v-if="item.keyType === 'total_price'">
+          <template v-if="type === 'print'">{{ totalPrice }}</template>
+          <template v-else>xxxx</template>
+        </template>
+        <template v-if="isShowChinesePrice(index)">
+          <template v-if="type === 'print'">{{ chineseAmount }}</template>
+          <template v-else>大写金额</template>
+        </template>
+      </td>
+    </template>
   </tr>
   <!--endregion-->
 </script>
@@ -34,18 +46,44 @@
     props: {
       checkedItem: Array,
       depot: Object,
+      pIndex: [String, Number],
       type: {
         type: String,
         default: 'print'
       }, // 页面类型：'edit'-编辑，'print'-打印
+
+      /** region 打印时 */
+      totalType: {
+        type: String,
+        default: 'total'
+      }, // 合计类型：'total'-总合计(最后一页&&最后一行显示)，'sub_total'-每页合计(小计)
+      tpl: Object,
+      /*region 用于小计计算*/
+      tableTrLen: Number, // 所有的商品数据+赠品 长度【双排时：左右表格行数相加】【分页时：只有当前页表格商品】
+      tableIndex: [String, Number], // 单排、双排表格，key，0||1
+      goodsTableList: Array, // 表格内容（包含商品、赠品、空白行、小计、合计）[用于小计时计算每个表格的数量、价格]
+      /* endregion */
+      /** endregion */
     },
     data: function () {
-      return {}
+      return {
+        // 需要合计的参数
+        setTotalItem: {
+          // 待入库单，待出库单
+          '7_8': ['units_num', 'wait_num', 'units_process_num'],
+          // 付款单，收款单
+          '11_12': ['link_order_fee_text', 'collect_fee_text'],
+          // 供应商付款单，供应商收款单，客户付款单，客户收款单
+          '13_14_15_16': ['total_fee', 'reduce_fee', 'actual_fee'],
+          // 盘点单
+          '17': ['system_stock', 'actual_stock', 'loss_num', 'loss_price', 'profit_num', 'profit_price']
+        }
+      }
     },
     computed: {
       getEmptyTd: function () {
         var self = this;
-        var numKey = -1;
+        var numKey = -1; // 销售订单的数量, erp部分表格的数量
         var totalPriceKey = -1;
         var goodsNameKey = -1;
         var checkedItemArr = [];
@@ -56,6 +94,11 @@
         })
         checkedItemArr.forEach(function (value, index) {
           if (value.type === 'num') {
+            // 销售订单的数量
+            numKey = index - 1;
+          }
+          if (value.type === 'units_num') {
+            // erp部分表格的数量
             numKey = index - 1;
           }
           if (value.type === 'total_price') {
@@ -72,7 +115,6 @@
         var itemMaxKey = checkedItemArr.length - 2;
         keySort.sort(function (a, b) {return a - b});
         var keyDiff = keySort[1] - keySort[0] - 1;
-        console.log(keySort)
         if(keySort[0] === 0) {
           tdList.push({len: 1, keyType: numFirst ? 'num' : 'total_price'});
         } else if (keySort[0] > 0) {
@@ -117,8 +159,44 @@
         } catch (e) {}
         return {tdList: tdList, chinesePriceKey: chinesePriceKey}
       },
+      totalNum: function () {
+        var self = this;
+        var num = diyPrintTpl.tableGoodsTotal(self.depot).num;
+        if (self.totalType === 'sub_total') {
+          num = diyPrintTpl.tableGoodsSubTotal(self.goodsTableList, self.tpl).num;
+        }
+        var digital = 0;
+        self.checkedItem.forEach(function (value, index) {
+          if (value.type === 'num' && typeof value.digital !== 'undefined') {
+            digital = value.digital || 0;
+          }
+        })
+        return num.toFixed(+digital);
+      },
+      totalPrice:function () {
+        var self = this;
+        var price = diyPrintTpl.tableGoodsTotal(self.depot).price;
+        if (self.totalType === 'sub_total') {
+          price = diyPrintTpl.tableGoodsSubTotal(self.goodsTableList, self.tpl).price;
+        }
+        return price;
+      },
       chineseAmount: function () {
-        return publicWap.digitalAmountToChinese(this.tableGoodsTotal(this.depot).price);
+        return publicWap.digitalAmountToChinese(this.totalPrice);
+      },
+      // 判断当前打印类型=》获取需要合计的参数列
+      thisTplTypeData: function () {
+        var self = this;
+        var obj = {hasType: false};
+        for (var i in self.setTotalItem) {
+          var value = self.setTotalItem[i];
+          var keyList = i.split('_');
+          if (keyList.indexOf(self.tpl.type) > -1) {
+            obj = Object.assign({hasType: true, itemList: value})
+            break;
+          }
+        }
+        return obj;
       }
     },
     mounted: function () {
@@ -127,8 +205,25 @@
       isShowChinesePrice: function (index) {
         return this.getEmptyTd.chinesePriceKey > -1 && index === this.getEmptyTd.chinesePriceKey;
       },
-      tableGoodsTotal: function (depot) {
-        return diyPrintTpl.tableGoodsTotal(depot)
+      // 总合计、小计合计参数
+      getTotalData: function (type) {
+        var self = this;
+        var total = 0
+        self.depot.goodsList.forEach(function (valGoods) {
+          if (self.totalType === 'sub_total') {
+            if (typeof valGoods.type === 'undefined' ||
+              (typeof valGoods.type !== 'undefined' && valGoods.type !== 'blank_line' && valGoods.type !== 'sub_total' && valGoods.type !== 'total')) {
+              if (+self.tpl.tpl_config.table_num === 2) {
+                total = total + (+valGoods[type]);
+              } else {
+                total = total + (+valGoods[type]);
+              }
+            }
+          } else {
+            total = total + (+valGoods[type]);
+          }
+        })
+        return publicWap.digitalFloatSync(total);
       },
     }
   }

@@ -1,0 +1,88 @@
+<!--组件》表单》级联选择器-->
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：引用element-ui的el-cascader<br>
+    </div>
+    <el-radio-group v-model="cascader_region_type">
+      <el-radio label="1">必须选中最后一级选项才能更改值</el-radio>
+      <el-radio label="2">可选择任意一级选项</el-radio>
+    </el-radio-group>
+    <div v-if="isLoadRegion">
+      <cascader-region style="width: 400px;" placeholder="请选择地址" :region="region" :cascader-props="{checkStrictly: +cascader_region_type === 2}" :info="info"></cascader-region>
+      <cascader-region style="width: 400px;" placeholder="请选择地址" :region="region" :cascader-props="{checkStrictly: +cascader_region_type === 2}" :info="info"></cascader-region>
+    </div>
+    <button @click="changeRegion">赋值</button>
+  </div>
+  <include file="Public/components/region/region_cascader_info" />
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'cascader-region': AppUtil.COMPONENTS.REGION_CASCADER_INFO
+      },
+      data: function () {
+        return {
+          cascader_region_type: '1',
+          isLoadRegion: false, // 区域地址是否加载完
+          region: {},
+          info: {
+            "city": "",//"string,市",
+            "city_id": "0",//"string",
+            "area": "",//"string",
+            "area_id": "0",//"string",
+            "country": "",//"string",
+            "country_id": "",//"string",
+            "province_id": "0",//"string",
+            "province": "",//"string",
+          },
+        }
+      },
+      mounted: function () {
+        this.getArea();
+        this.getInfo();
+      },
+      methods: {
+        // 获取省市区区域数据
+        getArea: function () {
+          var self = this
+          AppUtil.ajaxRequest({
+            url: '/Public/json/common/region.json'
+          }).then(function (result) {
+            self.region = result.data;
+            self.isLoadRegion = true;
+          })
+        },
+        // 获取数据
+        getInfo: function () {
+          var self = this;
+          setTimeout(function () {
+            var info = {
+              "city": "",//"string,市",
+              "city_id": "0",//"string",
+              "area": "",//"string",
+              "area_id": "0",//"string",
+              "country": "",//"string",
+              "country_id": "",//"string",
+              "province_id": "0",//"string",
+              "province": "",//"string",
+            }
+            self.info = info;
+          }, 800)
+        },
+        // 动态修改值
+        changeRegion: function () {
+          this.info.country = '中国'
+          this.info.country_id = '0'
+          this.info.province = '天津市'
+          this.info.province_id = '120000'
+          this.info.city = '天津市'
+          this.info.city_id = '820345'
+          this.info.area = '和平区'
+          this.info.area_id = '820346'
+        }
+      }
+    })
+  </script>
+</block>

@@ -2,26 +2,28 @@
 <!-- template -->
 <script type="x-template" id="diy_table_component">
   <!--region 模版-->
-  <div class="table-eldiy">
+  <div class="table-eldiy" :id="'table-eldiy__'+tableType">
     <div class="el-table-diy">
       <div style="position: relative;" :class="{'table-loading': query.load}">
         <el-table
-            :ref="'elTable'+tableType"
-            :data="tableData.list"
-            border
-            v-bind="tableHeightStyle"
-            :show-summary="+is_show_total === 1"
-            :summary-method="getSummaries"
-            :row-class-name="tableRowClassName"
-            :empty-text="query.load ? '{:L('LOADING2')}' : '{:L('EMPTY2')}'">
+          v-if="loadCompleted"
+          :ref="'elTable'+tableType"
+          :data="tableData.list"
+          border
+          v-bind="tableHeightStyle"
+          :show-summary="+is_show_total === 1"
+          :summary-method="getSummaries"
+          :row-class-name="tableRowClassName"
+          @header-dragend="headerDragend"
+          :empty-text="query.load ? '数据加载中...' : '数据为空哦~'">
 
           <!--多选，设置显示隐藏弹框按钮-->
           <template v-if="+is_show_checkbox === 1 || +is_show_menu === 1">
             <el-table-column
-                :width="+is_show_checkbox === 1 && +is_show_menu === 1 ? '76' : '60'"
-                :align="+is_show_checkbox === 1 && +is_show_menu === 1 ? 'left' : 'center'"
-                fixed="left"
-                class-name="row-menu">
+              :width="+is_show_checkbox === 1 && +is_show_menu === 1 ? '76' : '60'"
+              :align="+is_show_checkbox === 1 && +is_show_menu === 1 ? 'left' : 'center'"
+              fixed="left"
+              class-name="row-menu">
 
               <template slot="header" slot-scope="scope">
                 <template v-if="+is_show_checkbox === 1">
@@ -58,15 +60,15 @@
             </el-table-column>
           </template>
 
-          <template v-for="th in tableFiled">
+          <template v-for="th in tableFiledObj.tableFiled">
             <el-table-column
-                v-if="isShowRow(th)"
-                :prop="th.th_val[0]"
-                :label="th.th_name"
-                :show-overflow-tooltip="showOverflowTooltip(th)"
-                :align="th.filed_val === 'action' ? 'right' : 'left'"
-                :fixed="isFixed(th)"
-                :width="tableRowWidth(th)">
+              v-if="isShowRow(th)"
+              :prop="th.th_val[0]"
+              :label="th.th_name"
+              :show-overflow-tooltip="showOverflowTooltip(th)"
+              :align="tableColumnAlign(th)"
+              :fixed="isFixed(th)"
+              :width="tableRowWidth(th)">
               <template slot="header" slot-scope="scope">
                 <div @click="changeSort(th)" :style="isSortable(th) ? 'cursor: pointer;' : ''">
                   <template v-if="th.is_th_slot && +th.is_th_slot === 1">
@@ -77,7 +79,7 @@
                       <i class="sort-t"></i>
                       <i class="sort-b"></i>
                   </span>
-  
+
                   <el-popover placement="top" trigger="hover" v-if="th.tip_text">
                     <div v-html="th.tip_text"></div>
                     <a slot="reference" class="xxicon-warning-tip el-icon-warning" style="margin-left: -3px"></a>
@@ -92,8 +94,8 @@
           </template>
         </el-table>
 
-        <table-setting ref="settingLayer" :query="query" :table-filed="tableFiled"
-                       @sync-table-auto="init"></table-setting>
+        <table-setting ref="settingLayer" :query="query" :table-filed="tableFiled" :table-filed-obj="tableFiledObj"
+                       @sync-table-auto="init" @load-completed="loadTableSettingCompleted"></table-setting>
       </div>
     </div>
     <div class="table-bottom flex-between">
@@ -101,7 +103,7 @@
       <div class="table-bottom-left" v-if="+is_show_checkbox === 1 && tableData.list.length > 0">
         <label class="diy-checkbox display-align" style="margin-bottom: 5px;">
           <input type="checkbox" lay-ignore  @click="checkAllChange" :checked="isCheckAll" />
-          <font v-if="isShowCheckAllText">{:L('SELECT_ALL')}<!--全选--></font>
+          <font v-if="isShowCheckAllText">全选</font>
         </label>
         <div class="table-batch-action">
           <slot name="table-batch-action"></slot>
@@ -112,6 +114,7 @@
       <pagination v-if="+is_show_page === 1 && tableData.list.length > 0"
                   :is-show-page-sizes="isShowPageSizes"
                   :query="query"
+                  :is-fixed-bottom="isFixedBottom"
                   :table-total="tableData.total"
                   @temp-page-event="getTableData"></pagination>
       <!--endregion-->
@@ -141,7 +144,6 @@
        query:{
         page: 1,
         limit: 20,
-        field_val_arr: '',//显示的表格项json串：'filed_val, filed_val,...',   ''||undefined默认全部
         checkedIds: [], //选择得表格项，checkedParam值
         load: false, // 数据是否加载中
       }*/
@@ -188,10 +190,27 @@
         type: Boolean,
         default: true
       }, // 是否显示分页切换条数【assign的表格数据不显示】
+      isSortDiy: {
+        type: [String, Number],
+        default: 0,
+      }, // 是否父组件自定义排序规则。$emit
       menuParam: {
         type: String,
         default: 'index'
       }, //列表筛选字段，默认递增
+      isFixedBottom: {
+        type: Boolean,
+        default: true,
+      }, // 底部分页等信息是否可置底，当一个页面多个表格时，=》false
+      tablePageType: {
+        type: String,
+        default: ''
+      }, // string, 表格组件唯一标识,用于表格项存储识别，为空时不保存Common/saveTableSetting
+      tablePageVersion: {
+        type: String,
+        default: ''
+      }, // string, 用于表格项存储版本号
+      // 默认的表格配置项【包含全部表格项(is_setting_show=3:无权限显示的内容[外部修改导致],具体示例查看goodsList.html)】
       tableFiled: {
         type: Array,
         default: function () {
@@ -202,17 +221,22 @@
                 th_val: ['id'], // 当前表格显示的字段内容,数组，默认数组长度=1
                 th_name: '序号', // 当前表格项th名称
                 is_th_slot: 0, // 当前表格项th是否使用slot赋值，默认0
+                align: 'left', // 表格内容文字对齐方式 'left'-(默认)，'center'，'right'
                 is_fixed_left: 1,//是否固定在左侧0/1
                 is_fixed_right: 0,//是否固定在右侧0/1
                 t_width: 60, //列宽初始值
-                is_setting_show: 1, //是否可设置显示或不显示，1[undefined]-显示；0-不显示；2-一直显示，不可再切换成0
-                drag: {
-                  is_drag: 0, //是否可拖拽字段顺序,0-不可拖拽，一直显示
-                  drag_sort: 1, //拖拽字段顺序,数值越大越靠后
-                },
+                is_setting_show: 1,
+                             // Number 是否可设置显示或不显示，外部修改导致is_setting_show=3改变，setting-layer弹框关闭，修改显示的default值
+                             1[undefined]-显示；
+                             0-不显示[setting-layer弹框显示未选中]；
+                             2-一直显示，不可再切换成0[setting-layer弹框显示选中disabled]
+                             3-无权限显示[setting-layer弹框未显示]
+
+
+                drag_sort: 0, // 表格项拖拽字段顺序,数值越大越靠后，默认key
                 sort: {
                   is_sort: 0,  //该字段是否可排序
-                  sort_type: 'desc' //该字段排序值，desc/asc
+                  sort_type: 'desc' //该字段排序值，desc/asc/''
                   sort_param: '' //该字段对应query的参数
                 }, //该字段是否有排序
                tip_text: '',//该字段的提示
@@ -272,32 +296,69 @@
       }
     },
     mounted: function () {
-      var self = this
-      self.$nextTick(function () {
-        self.syncTableAuto()
-        window.onresize = function () {
-          self.syncTableAuto()
-        }
-      })
     },
     data: function () {
       return {
         tableHeight: 500,
-        isInit: true
+        isInit: true, // 是否是第一次初始化
+        loadCompleted: false,
+        tableFiledObj: {
+          tablePageVersion: this.tablePageVersion,
+          tablePageType: this.tablePageType,
+          tableFiled: JSON.parse(JSON.stringify(this.tableFiled)),
+        }, // 新的表格配置项+页面标识
       }
     },
     methods: {
+      // 表格配置项数据加载完成，再渲染页面
+      loadTableSettingCompleted: function () {
+        var self = this
+        self.syncTableFiled();
+        self.loadCompleted = true;
+        self.$nextTick(function () {
+          self.syncTableAuto()
+          window.onresize = function () {
+            self.syncTableAuto()
+          }
+        })
+      },
+      // 当拖动表头改变了列的宽度的时候会触发该事件
+      headerDragend: function (newWidth, oldWidth, column) {
+        var self = this;
+        self.tableFiledObj.tableFiled.forEach(function (value) {
+          if (value.th_val[0] === column.property) {
+            self.$set(value, 't_width', column.width);
+          }
+        })
+        self.$refs.settingLayer.changeWidth(column);
+      },
+      // 根据其他外部参数修改表格配置项
+      syncTableFiled: function () {
+        var self = this
+        this.loadCompleted = false; // 表格重新渲染前隐藏
+        self.$nextTick(function () {
+          self.$refs.settingLayer.hideLayer();
+          // 父页面获取配置项权限验证数据
+          self.$emit('sync-table-filed', self.tableFiledObj.tableFiled, function (result) {
+            // self.tableFiledObj.tableFiled = result;
+            self.$refs.settingLayer.syncTableFiledValue(result);
+            self.loadCompleted = true;
+          });
+        })
+      },
       init: function () {
         var self = this
-        self.$nextTick(function () {
-          if (self.isInit) {
-            self.tableHeight = self.tableHeight + 1
-            self.isInit = false;
-          }
-          var el = self.$refs['elTable'+self.tableType].$el;
-          el.querySelector('.el-table__body-wrapper').scrollTop = 0;
-          self.paginationTop();
-        })
+        if (self.loadCompleted) {
+          self.$nextTick(function () {
+            if (self.isInit) {
+              self.tableHeight = self.tableHeight + 1
+              self.isInit = false;
+            }
+            var el = self.$refs['elTable'+self.tableType].$el;
+            el.querySelector('.el-table__body-wrapper').scrollTop = 0;
+            self.paginationTop();
+          })
+        }
       },
       tableHeightLess: function () {
         var self = this
@@ -353,7 +414,7 @@
         }
       },
       /**region 全选*/
-      checkAllChange() {
+      checkAllChange: function () {
         var self = this
         var allIds = []
         if (!self.isCheckAll) {
@@ -412,27 +473,31 @@
       changeSort: function (th) {
         var self = this
         if (self.isSortable(th)) {
-          self.query.page = 1
-          var sort_result = th.sort.sort_type === 'desc' ? 'asc' : (th.sort.sort_type === 'asc' ? '' : 'desc')
-          th.sort.sort_type = sort_result
-          if (typeof self.query.sort_field !== 'undefined') {
-            var i = 0;
-            var json = {};
-            self.query.sort_field.forEach(function (val, index) {
-              if (th.sort.sort_param === val.label) {
-                val.value = th.sort.sort_type
-                i = index;
-                json = val;
-              }
-            })
-            var arr = JSON.parse(JSON.stringify(self.query.sort_field));
-            arr.splice(i , 1);
-            arr.push(json);
-            self.query.sort_field = arr;
+          if (+self.isSortDiy === 1) {
+            self.$emit('change-sort', th);
           } else {
-            self.query[th.sort.sort_param] = th.sort.sort_type
+            self.query.page = 1
+            var sort_result = th.sort.sort_type === 'desc' ? 'asc' : (th.sort.sort_type === 'asc' ? '' : 'desc')
+            th.sort.sort_type = sort_result
+            if (typeof self.query.sort_field !== 'undefined') {
+              var i = 0;
+              var json = {};
+              self.query.sort_field.forEach(function (val, index) {
+                if (th.sort.sort_param === val.label) {
+                  val.value = th.sort.sort_type
+                  i = index;
+                  json = val;
+                }
+              })
+              var arr = JSON.parse(JSON.stringify(self.query.sort_field));
+              arr.splice(i , 1);
+              arr.push(json);
+              self.query.sort_field = arr;
+            } else {
+              self.query[th.sort.sort_param] = th.sort.sort_type
+            }
+            self.getTableData()
           }
-          self.getTableData()
         }
       },
       //当内容过长被隐藏时显示 tooltip
@@ -440,18 +505,30 @@
         return (typeof th.show_overflow_tooltip === 'undefined' && th.filed_val !== 'action')
           || (typeof th.show_overflow_tooltip !== 'undefined' && th.show_overflow_tooltip === 1);
       },
+      tableColumnAlign: function (th) {
+        var align = 'left';
+        if (th.filed_val === 'action') {
+          align = 'right';
+        }
+        if (typeof th.align !== 'undefined') {
+          align = th.align;
+        }
+        return align;
+      },
       // 表格底部全选、分页是否置底,
       paginationTop: function () {
         var self = this;
-        self.$nextTick(function () {
-          var availHeight  = window.screen.availHeight ;
-          var scrollHeight = document.body.scrollHeight;
-          if (scrollHeight > (availHeight - 60)) {
-            $('.table-eldiy').addClass('fixed-bottom');
-          } else {
-            $('.table-eldiy').removeClass('fixed-bottom');
-          }
-        })
+        if (self.isFixedBottom) {
+          self.$nextTick(function () {
+            var availHeight  = window.screen.availHeight ;
+            var scrollHeight = document.body.scrollHeight;
+            if (scrollHeight > (availHeight - 60)) {
+              $('#table-eldiy__'+self.tableType).addClass('fixed-bottom');
+            } else {
+              $('#table-eldiy__'+self.tableType).removeClass('fixed-bottom');
+            }
+          })
+        }
       }
     },
     directives: {}

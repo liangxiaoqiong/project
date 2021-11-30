@@ -9,15 +9,15 @@
       <div v-for="tool in toolList" class="tool-list" :class="'tool-list__'+tool.btn_type">
         <template v-if="tool.btn_type === 'select'">
           <template v-if="checkedDragKeyArr.length === 1">
-          <el-select v-model="info.tpl_content[checkedDragKeyArr[0]][tool.style_type]" placeholder="请选择">
-            <el-option
+            <el-select v-model="info.tpl_content[checkedDragKeyArr[0]][tool.style_type]" placeholder="请选择">
+              <el-option
                 v-for="option in tool.options"
                 :key="option.value"
                 :label="option.label"
                 :value="option.style_val">
-              <span :style="optionSelectStyle(tool, option)">{{ option.label }}</span>
-            </el-option>
-          </el-select>
+                <span :style="optionSelectStyle(tool, option)">{{ option.label }}</span>
+              </el-option>
+            </el-select>
           </template>
           <template v-else>
             <el-select value="" disabled></el-select>
@@ -40,11 +40,11 @@
         </template>
       </div>
       <template v-if="checkedDragKeyArr.length > 0">
-      <el-color-picker
-        v-model="toolColorModel"
-        show-alpha
-        :predefine="predefineColors">
-      </el-color-picker>
+        <el-color-picker
+          v-model="toolColorModel"
+          show-alpha
+          :predefine="predefineColors">
+        </el-color-picker>
       </template>
       <div class="tool-list">
         <a class="tool-item tool-icon icon-upload-img" title="添加图片">
@@ -52,7 +52,9 @@
         </a>
       </div>
       <div class="tool-list"><a class="tool-item tool-icon icon-add" title="添加元素" @click="addParam({type: 'custom-text'})"></a></div>
-      <div class="tool-list"><a class="tool-item tool-icon icon-close" title="移除元素" @click="deleteParam"></a></div>
+      <div class="tool-list"><a class="tool-item tool-icon icon-close" title="删除元素" @click="deleteParam"></a></div>
+      <div class="tool-list"><a class="tool-item xxbtn-white" @click="copyTpl">复制</a></div>
+      <div class="tool-list"><a class="tool-item xxbtn-white" @click="pasteTpl">黏贴</a></div>
     </div>
     <!--endregion-->
 
@@ -66,23 +68,23 @@
           <!--region 表格-->
           <template v-if="item.type === 'order-table'">
             <template v-if="+tableCheckedItemLen(item) > 0">
-              <div class="dragresize-content" :style="drsContentStyle(item)">
+              <div class="dragresize-content" :style="drsContentStyle(item)"
+                   :class="'print-table__'+item.tableBorderWidth">
                 <template v-if="+info.tpl_type === 4">
                   <editor-table-mini :info="info" :item="item"></editor-table-mini>
                 </template>
                 <template v-else>
-                  <editor-table-default :info="info" :item="item"></editor-table-default>
+                  <div :class="'table-box__num'+info.tpl_config.table_num">
+                    <editor-table-default
+                      v-for="(num, i) in +info.tpl_config.table_num"
+                      :key="i"
+                      :table-index="i"
+                      :info="info"
+                      :item="item"></editor-table-default>
+                  </div>
                 </template>
               </div>
-              <template v-if="+info.tpl_type !== 4">
-                <!--region 额外新增的空白行【该功能暂隐藏】-->
-                <template v-if="false">
-                  <div class="table-reduce" @click="tableTrAction('reduce')"><i class="el-icon-minus"></i></div>
-                  <div class="table-add" @click="tableTrAction('add')"><i class="el-icon-plus"></i></div>
-                </template>
-                <!--endregion-->
-                <div class="table-setting" @click="tableTrAction('setting')"><i class="el-icon-setting"></i></div>
-              </template>
+              <div class="table-setting" @click="tableTrAction('setting')"><i class="el-icon-setting"></i></div>
             </template>
           </template>
           <!--endregion-->
@@ -678,6 +680,28 @@
       },
       /**endregion*/
 
+      // 复制模板
+      copyTpl: function () {
+        localStorage.setItem('printTpl_Data', JSON.stringify(this.info));
+        publicWap.layerMsg('复制模板成功', 1);
+      },
+      // 黏贴模板
+      pasteTpl: function () {
+        var self = this;
+        var copyTplString = localStorage.getItem("printTpl_Data");
+        if (typeof copyTplString !== 'undefined' && copyTplString !== 'null' && copyTplString !== null) {
+          var copyTplData = JSON.parse(copyTplString);
+          localStorage.removeItem("printTpl_Data");
+          if (+copyTplData.tpl_type !== +self.info.tpl_type || +copyTplData.type !== +self.info.type) {
+            // 同个打印类型 && 同个模板类型
+            publicWap.layerMsg('所复制的模板不适用于当前模板！');
+            return false;
+          }
+          self.info.tpl_content = copyTplData.tpl_content;
+          self.info.tpl_config = copyTplData.tpl_config;
+          publicWap.layerMsg('黏贴模板成功', 1);
+        }
+      }
     },
     directives: {}
   }

@@ -25,6 +25,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.xxicon-stock-max:before {
+  content: "\e903";
+  color: #003cff;
+}
+.xxicon-stock-min:before {
+  content: "\e906";
+  color: #003cff;
+}
+.xxicon-order-0:before {
+  content: "\e909";
+  color: #fe4b4b;
+}
 .xxicon-menu-hezuo:before {
   content: "\e902";
 }
@@ -83,10 +95,6 @@
 .xxicon-ruku:before {
   content: "\e91f";
   color: #003cff;
-}
-.xxicon-order-0:before {
-  content: "\e920";
-  color: #f75353;
 }
 .xxicon-msg-1:before {
   content: "\e921";
@@ -163,12 +171,15 @@
 }
 .xxicon-import:before {
   content: "\e90a";
+  color: #fff;
 }
 .xxicon-save:before {
   content: "\e907";
+  color: #fff;
 }
 .xxicon-checked-2:before {
   content: "\e908";
+  color: #fff;
 }
 .xxicon-search:before {
   content: "\e905";

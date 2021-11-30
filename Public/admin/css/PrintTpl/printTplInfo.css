@@ -161,3 +161,66 @@ html, body {
 .row2-list li .el-select .el-input__inner {
   margin: 5px 0!important;
 }
+.other-setting-list {
+  display: inline-block;
+  width: 100%;
+}
+.other-setting-list li {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  float: left;
+  height: 40px;
+}
+.other-setting-list li > label {
+  display: inline-block;
+  text-align: right;
+  margin-right: 5px;
+}
+.other-setting-list li .slider-gap {
+  width: inherit;
+  margin-left: 7px;
+}
+.other-setting-list li .slider-gap>div{
+  width: 155px;
+}
+.other-setting-list li .slider-gap .el-slider__button-wrapper {
+  top: -16px;
+}
+.other-setting-list li .slider-gap .el-slider__runway.show-input {
+  width: 100px;
+}
+.other-setting-list li .slider-gap .el-slider__input {
+  left: 110px;
+}
+.table-box__num1,
+.table-box__num2 {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: space-between;
+}
+.table-box__num2 table {
+  width: calc(50% - 5px);
+}
+
+/*region 当编辑框宽度>794时，A4横向*/
+.contract-tpl-main.contract-tpl-main-2 {
+  height: inherit;
+  overflow-y: auto;
+}
+.contract-tpl-main.contract-tpl-main-2 .tpl-left {
+  overflow-y: hidden;
+  height: auto;
+  width: 100%;
+  margin-right: 0;
+  float: inherit;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+.contract-tpl-main.contract-tpl-main-2 .tpl-right {
+  width: 1123px;
+  height: 794px;
+}
+/*endregion*/

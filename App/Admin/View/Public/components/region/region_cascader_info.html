@@ -4,26 +4,41 @@
   @date 2021/3/1
   -->
 <!-- template 地址级联选择器-->
-<script type="x-template" id="cascader_region">
+<script type="x-template" id="region_cascader_info">
   <!--region 模版-->
   <el-cascader
+    :key="cascaderKey"
     v-bind="$attrs"
     ref="cascaderHandle"
-    v-model="region_value"
+    v-model="regionValue"
     separator=""
     :options="regionList"
-    :props="cascaderProps"
-    @change="changeRegion"></el-cascader>
+    :props="cascaderProps"></el-cascader>
   <!--endregion-->
 </script>
 
 <!-- JS -->
 <script>
-  AppUtil.COMPONENTS.CASCADER_REGION = {
-    template: '#cascader_region',
+  AppUtil.COMPONENTS.REGION_CASCADER_INFO = {
+    template: '#region_cascader_info',
     props: {
       placeholder: String,
       info: Object,
+      param: {
+        type: Object,
+        default: function () {
+          return {
+            country_id: 'country_id',
+            country: 'country',
+            province_id: 'province_id',
+            province: 'province',
+            city_id: 'city_id',
+            city: 'city',
+            area_id: 'area_id',
+            area: 'area',
+          }
+        }
+      }, // info变量名称
       // 可通过 props.checkStrictly = true 来设置父子节点取消选中关联，从而达到选择任意一级选项的目的。
       cascaderProps: {
         type: Object,
@@ -33,68 +48,88 @@
           }
         }
       },
-      isGetArea: {
-        type: Boolean,
-        default: true
-      }, // 是否在当前加载地址接口数据,主要用于一个页面循环多个该组件时，
-      propsRegion: Object //isGetArea===false时，父组件传递的地址区域信息
+      region: {
+        type: Object,
+        default: function () {
+          return {
+            countryList: [],
+            provinceList: [],
+            cityList: [],
+            areaList: [],
+          }
+        }
+      } //父组件传递的地址区域信息
     },
     data: function () {
       return {
-        isLoadRegion: false, // 是否已加载了地址信息，true-不请求接口，false-请求接口
-        region_value: [],
-        region: {
-          countryList: [],
-          provinceList: [],
-          cityList: [],
-          areaList: [],
-        },
+        cascaderKey: 1,
         regionList: []
       }
     },
+    computed: {
+      regionValue: {
+        set: function (value) {
+          var self = this;
+          if (value.length === 0) {
+            self.info[self.param.country_id] = '';
+            self.info[self.param.country] = '';
+            self.info[self.param.province_id] = '';
+            self.info[self.param.province] = '';
+            self.info[self.param.city_id] = '';
+            self.info[self.param.city] = '';
+            self.info[self.param.area_id] = '';
+            self.info[self.param.area] = '';
+          } else {
+            self.info[self.param.country_id] = value[0];
+            self.info[self.param.country] = self.getRegionName(0, 'country', self.param.country);
+            self.info[self.param.province_id] = value[1];
+            self.info[self.param.province] = self.getRegionName(1, 'province', self.param.province);
+            self.info[self.param.city_id] = value[2];
+            self.info[self.param.city] = self.getRegionName(2, 'city', self.param.city);
+            self.info[self.param.area_id] = value[3];
+            self.info[self.param.area] = self.getRegionName(3, 'area', self.param.area);
+          }
+        },
+        get: function () {
+          var self = this;
+          var region_value = []
+          if (this.info[self.param.country_id] != null) {
+            region_value.push(this.info[self.param.country_id] + '');
+          }
+          if (this.info[self.param.province_id] != null && +this.info[self.param.province_id] !== 0) {
+            region_value.push(this.info[self.param.province_id] + '');
+          }
+          if (this.info[self.param.city_id] != null && +this.info[self.param.city_id] !== 0) {
+            region_value.push(this.info[self.param.city_id] + '');
+          }
+          if (this.info[self.param.area_id] != null && +this.info[self.param.area_id] !== 0) {
+            region_value.push(this.info[self.param.area_id] + '');
+          }
+          return region_value;
+        }
+      }
+    },
+    watch: {
+      'regionValue': function () {
+        if (!this.cascaderProps.checkStrictly) {
+          // 给cascader设置一个key，改变类型时也改变key值，key值改变了，cascader弹框就会重新渲染
+          // =>修复同个组件，info值改变，弹框高亮bug
+          this.cascaderKey++;
+        } else {
+          if (this.$refs.cascaderHandle) {
+            this.$refs.cascaderHandle.dropDownVisible = false;
+            // 清空级联选择器选中状态
+            this.$refs.cascaderHandle.$refs.panel.clearCheckedNodes();
+            // 清除高亮
+            this.$refs.cascaderHandle.$refs.panel.activePath = [];
+          }
+        }
+      }
+    },
     mounted: function () {
+      this.initRegionData();
     },
     methods: {
-      init: function () {
-        var self = this
-        if (this.isGetArea) {
-          if (!self.isLoadRegion) {
-            self.getArea()
-          }
-        } else {
-          self.region = JSON.parse(JSON.stringify(self.propsRegion));
-          self.initRegionData();
-          self.$emit('region-loaded'); // 获取地址数据后执行；获取页面数据
-          self.isLoadRegion = true;
-        }
-      },
-      setRegionVal: function (item) {
-        var region_value = []
-        if (item.country_id != null) {
-          region_value.push(item.country_id + '');
-        }
-        if (item.province_id != null && +item.province_id !== 0) {
-          region_value.push(item.province_id + '');
-        }
-        if (item.city_id != null && +item.city_id !== 0) {
-          region_value.push(item.city_id + '');
-        }
-        if (item.area_id != null && +item.area_id !== 0) {
-          region_value.push(item.area_id + '');
-        }
-        this.region_value = region_value;
-      },
-      getArea: function () {
-        var self = this
-        AppUtil.ajaxRequest({
-          url: '/Public/json/common/region.json'
-        }).then(function (result) {
-          self.region = result.data;
-          self.initRegionData();
-          self.$emit('region-loaded');
-          self.isLoadRegion = true;
-        })
-      },
       initRegionData: function () {
         var self = this;
         var regionList = JSON.parse(JSON.stringify(self.region.countryList));
@@ -168,30 +203,18 @@
         }
         return list;
       },
-      getRegionName: function (level, type) {
+      getRegionName: function (level, type, infoParam) {
         var self = this;
         var area_name = '';
         try {
           self.region[type + 'List'].find((list)=> {
-            if (list.area_id === self.info[type + '_id']) {
+            if (list.area_id === self.info[infoParam + '_id']) {
               area_name = list.area_name;
               throw Error;
             }
           })
         }catch (e) {}
         return area_name;
-      },
-      changeRegion: function (value) {
-        var self = this;
-        self.info.country_id = value[0];
-        self.info.country = self.getRegionName(0, 'country');
-        self.info.province_id = value[1];
-        self.info.province = self.getRegionName(1, 'province');
-        self.info.city_id = value[2];
-        self.info.city = self.getRegionName(2, 'city');
-        self.info.area_id = value[3];
-        self.info.area = self.getRegionName(3, 'area');
-        self.$refs.cascaderHandle.dropDownVisible = false;
       },
     }
   }

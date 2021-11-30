@@ -130,6 +130,29 @@
   padding: 2px;
 }
 
+.dragresize-direct .print-table__undefined table,
+.dragresize-direct .print-table__undefined td,
+.dragresize-direct .print-table__0 table,
+.dragresize-direct .print-table__0 td {
+  border: none!important;
+}
+.print-table__2 table,
+.print-table__2 td {
+  border: 2px solid #333;
+}
+.print-table__3 table,
+.print-table__3 td {
+  border: 3px solid #333;
+}
+.print-table__4 table,
+.print-table__4 td {
+  border: 4px solid #333;
+}
+.print-table__5 table,
+.print-table__5 td {
+  border: 4px solid #333;
+}
+
 /*region 热敏打印*/
 .dragresize-direct .drsElement {
   background-color: #ffffff;
@@ -137,11 +160,7 @@
 .dragresize-direct .drsElement .dragresize-content {
   white-space: inherit;
 }
-.dragresize-direct .editor-order-table {
-  border: none;
-}
 .dragresize-direct .editor-order-table td {
-  border: none;
   text-align: center;
   vertical-align: top;
 }

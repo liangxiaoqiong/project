@@ -79,8 +79,8 @@ class IndexController extends Controller {
     public function select () {
         $this->display('Select/index');
     }
-    public function selectText () {
-        $this->display('Select/text');
+    public function selectText1 () {
+        $this->display('Select/text/disabledFake');
     }
     public function switch () {
         $this->display('Form/baseComponent/switch');
@@ -91,12 +91,20 @@ class IndexController extends Controller {
     public function cascaderIndex () {
         $this->display('Cascader/index');
     }
+    // region 日期
     public function date () {
-        $this->display('Form/baseComponent/date');
+        $this->display('Date/index');
     }
     public function dateGranularity () {
-        $this->display('Form/baseComponent/dateGranularity');
+        $this->display('Date/dateGranularity');
     }
+    // endregion
+
+    // region 区域地址
+    public function region () {
+        $this->display('Region/index');
+    }
+    // endregion
     public function upload () {
         $this->display('Form/baseComponent/upload');
     }
@@ -150,6 +158,7 @@ class IndexController extends Controller {
     public function tabBox () {
         $this->display('Nav/tabBox');
     }
+    // region 表格
     public function tableDefault () {
         $this->display('Table/tableDefault');
     }
@@ -159,6 +168,10 @@ class IndexController extends Controller {
     public function tableDefaultPageSearch () {
         $this->display('Table/tableDefaultPageSearch');
     }
+    public function tableElDiy () {
+        $this->display('Table/elTable/index');
+    }
+    // endregion
 
     // region 编辑器[富文本编辑器、自定义diy编辑器]
     public function ueditorDemo () {
@@ -184,5 +197,8 @@ class IndexController extends Controller {
 
     public function addTab () {
         $this->display('Component/addTab');
+    }
+    public function changeHash () {
+        $this->display('Href/change_hash');
     }
 }

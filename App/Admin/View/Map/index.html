@@ -17,10 +17,10 @@
           </a>
         </dd>
       </dl>
-      <dl class="basic-dl" v-show="loadCompleted">
+      <dl class="basic-dl">
         <dt><b class="color-red">*</b>联系地址:</dt>
-        <dd>
-          <cascader-region style="width: 400px;" ref="casaderRegion" :is-get-area="false" :props-region="region" :info="info"></cascader-region>
+        <dd v-if="isLoadRegion">
+          <cascader-region style="width: 400px;" placeholder="请选择地址" :region="region" :info="info"></cascader-region>
         </dd>
       </dl>
       <dl class="basic-dl">
@@ -34,19 +34,19 @@
     <map-layer ref="mapLayer" page-source="pick_store_info" :map-info="info"></map-layer>
   </div>
   <include file="Public/components/base_input"/>
-  <include file="Public/components/cascader/cascader_region" />
+  <include file="Public/components/region/region_cascader_info" />
   <include file="Public/components/map_layer"/>
   <script>
     var vm = new Vue({
       el: '#app',
       components: {
         'base-input': AppUtil.COMPONENTS.BASE_INPUT_COMPONENT,
-        'cascader-region': AppUtil.COMPONENTS.CASCADER_REGION,
+        'cascader-region': AppUtil.COMPONENTS.REGION_CASCADER_INFO,
         'map-layer': AppUtil.COMPONENTS.MAP_LAYER,
       },
       data: function () {
         return {
-          loadCompleted: false,
+          isLoadRegion: false, // 区域地址是否加载完
           region: {},
           info: {
             address: '',
@@ -74,11 +74,7 @@
             url: '/Public/json/common/region.json'
           }).then(function (result) {
             self.region = result.data;
-            self.loadCompleted = true;
-            self.$nextTick(function () {
-              self.$refs.casaderRegion.init();
-              self.$refs.casaderRegion.setRegionVal(self.info);
-            })
+            self.isLoadRegion = true;
           })
         },
         //显示地图

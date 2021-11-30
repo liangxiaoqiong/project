@@ -1,0 +1,163 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main" id="app" v-cloak="">
+    <diy-table
+      ref="diyTable"
+      :query="query"
+      :table-total-filed="tableTotalFiled"
+      :table-filed="tableFiled"
+      :no-check-list="noCheckList"
+      :table-row-class="tableRowClass"
+      :table-data="tableData"
+      :is_diy_menu="1"
+      :is_show_checkbox="1"
+      is_show_total="1"
+      checked-param="goods_id"
+      @get-table-data="getTableData">
+      <!--region td-val-->
+      <template v-slot:td-val="slotData">
+        <template v-if="slotData.th.filed_val === 'action'">
+          <div class="table-action">
+            <a>编辑</a>
+            <a>删除</a>
+          </div>
+        </template>
+        <template v-else>
+          {{ slotData.item[slotData.th.th_val[0]] }}
+        </template>
+      </template>
+      <!--endregion-->
+
+      <!--region 表头自定义，用于显示变量参数-->
+      <template v-slot:th-val="thSlotData">
+        <template v-if="thSlotData.th.filed_val === 'money'">
+          提现(总额：9990.99)
+        </template>
+      </template>
+      <!--endregion-->
+
+      <!--region menu-val-->
+      <template v-slot:menu-val="slotData">
+        <template v-if="+slotData.index === 1">
+          <span class="color-red">已作废</span>
+        </template>
+        <template v-else>
+          {{ (query.page - 1) * query.limit + (slotData.index + 1) }}
+        </template>
+      </template>
+      <!--endregion-->
+
+      <!--region 左下角批量操作键-->
+      <template v-slot:table-batch-action>
+        <a class="xxbtn-white" @click="batch">批量删除</a>
+      </template>
+      <!--endregion-->
+    </diy-table>
+  </div>
+  <!--region diy-table引入-->
+  <include file="Public/components/diy_table/table_setting"/>
+  <include file="Public/components/diy_table/pagination"/>
+  <include file="Public/components/diy_table/table_content" />
+  <!--endregion-->
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'diy-table': AppUtil.COMPONENTS.DIY_TABLE_COMPONENT,
+      },
+      data: function () {
+        return {
+          query: {
+            page: 1,
+            limit: 20,
+            checkedIds: [],
+            sort_field: [
+              {value: '', label: 'price'},
+              {value: '', label: 'stock'},
+            ], // 可实现多字段排序
+            load: false
+          },
+          tableFiled: [
+            {filed_val: 'goods_name', th_val: ['goods_name'], th_name: "商品名称", t_width: 300, tip_text: '商品名称商品名称<div>不错的商品</div>'},
+            {filed_val: 'goods_price', th_val: ['goods_price'], th_name: "价格", t_width: 90, align: 'right', sort: {is_sort: 1, sort_type: '', sort_param: 'price'}},
+            {filed_val: 'money', th_val: ['goods_price'], th_name: "", is_th_slot: 1, t_width: 150, align: 'right',},
+            {filed_val: 'goods_spec', th_val: ['goods_spec'], th_name: "规格", t_width: 120},
+            {filed_val: 'goods_unit_name', th_val: ['goods_unit_name'], th_name: "单位", t_width: 90},
+            {filed_val: 'gc_text', th_val: ['gc_text'], th_name: "商品分类", t_width: 120},
+            {filed_val: 'stock', th_val: ['stock'], th_name: "库存", t_width: 120, align: 'right', sort: {is_sort: 1, sort_type: '', sort_param: 'stock'}},
+            {filed_val: 'sale_num', th_val: ['sale_num'], th_name: "销量", align: 'right', t_width: 120},
+            {filed_val: 'goods_state_text', th_val: ['goods_state_text'], th_name: "商品状态", t_width: 120},
+            {filed_val: 'create_time_text', th_val: ['create_time_text'], th_name: "创建时间", t_width: 150},
+            {filed_val: 'action', th_val: ['action'], th_name: "操作", t_width: 100, is_setting_show: 2, is_fixed_right: 1},
+          ],
+          tableTotalFiled: [
+            {property: 'sale_num', meta_param: 'sale_num_total'},
+            {property: 'stock', meta_param: 'stock_total'},
+          ],
+          noCheckList: [],
+          tableRowClass: [],
+          tableData: {
+            list: [],
+            total: 0,
+            meta: {}
+          }
+        }
+      },
+      mounted: function () {
+        this.getTableData();
+      },
+      methods: {
+        getTableData:function (current) {
+          var self = this;
+          self.query.load = true;
+          self.query.checkedIds = [];
+          self.tableData.list = [];
+          self.tableData.total = 0;
+          if (typeof current !== "undefined") {
+            if (typeof current.page !== 'undefined') {
+              self.query.page = current.page;
+            }
+            if (typeof current.limit !== 'undefined') {
+              self.query.limit = current.limit;
+            }
+          }
+          AppUtil.ajaxRequest({
+            url: '/Public/json/common/goodsList.json',
+            data: self.query
+          }).then(function (result) {
+            self.tableData = result.data
+            var noCheckList = [];
+            var tableRowClass = [];
+            result.data.list.forEach(function (value, index) {
+              if (+index === 1 || +index === 3) {
+                noCheckList.push(value.goods_id);
+                tableRowClass.push({
+                  rowIndex: index,
+                  rowName: 'bg-danger'
+                });
+              }
+              if (+index === 8 || +index === 9) {
+                tableRowClass.push({
+                  rowIndex: index,
+                  rowName: 'bg-danger'
+                });
+              }
+            })
+            self.noCheckList = noCheckList;
+            self.tableRowClass = tableRowClass;
+            self.query.load = false;
+            self.$nextTick(function () {
+              self.$refs.diyTable.init();
+            })
+          }).catch(function () {
+            self.query.load = false
+          })
+        },
+        // 批量操作
+        batch: function () {
+
+        }
+      }
+    })
+  </script>
+</block>

@@ -3,9 +3,9 @@
 <block name="content">
   <div class="admin-main admin-main-form" id="app" v-cloak="">
     <el-cascader ref="cascaderClassroom" v-model="value" :options="optionsList"
-                 :props="{ multiple: true}" collapse-tags></el-cascader>
+                 :props="{ multiple: false}" collapse-tags></el-cascader>
     <button @click="setValue(['zhinan', 'shejiyuanze', 'kekong'])">设置值[可控]</button>
-    <button @click="setValue(['ziyuan', 'jiaohu'])">设置值[交互]</button>
+  <!--  <button @click="setValue(['ziyuan', 'jiaohu'])">设置值[交互]</button>-->
     <button @click="setValue(['zujian', 'form', 'cascader'])">设置值[级联]</button>
   </div>
   <script>
@@ -14,7 +14,6 @@
       components: {},
       data: function () {
         return {
-          value: [],
           optionsList: [
             {
               value: 'zhinan',
@@ -224,7 +223,31 @@
                 label: '组件交互文档'
               }]
             }
-          ]
+          ],
+          info: {
+            value1: '',
+            value2: '',
+            value3: '',
+          },
+        }
+      },
+      computed: {
+        value: {
+          set: function (val) {
+            console.log('val')
+            if (val.length > 0) {
+              this.info.value1 = val[0]
+              this.info.value2 = val[1]
+              this.info.value3 = val[2]
+            }
+          },
+          get: function () {
+            var arr = [];
+            arr.push(this.info.value1)
+            arr.push(this.info.value2)
+            arr.push(this.info.value3)
+            return arr;
+          }
         }
       },
       mounted: function () {
@@ -235,7 +258,10 @@
           this.$refs.cascaderClassroom.$refs.panel.clearCheckedNodes()
           // 清除高亮
           this.$refs.cascaderClassroom.$refs.panel.activePath = []
-          this.value = val;
+          this.info.value1 = val[0];
+          this.info.value2 = val[1];
+          this.info.value3 = val[2];
+          //this.value = val;
         }
       }
     })

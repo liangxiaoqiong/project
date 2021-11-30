@@ -3,6 +3,251 @@
   "msg": "",
   "data": {
     "total": 100,
-    "list": [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
+    "list": [
+      {
+        "goods_id": 1,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 2,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 3,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 4,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 5,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 6,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 7,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 8,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 9,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 10,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 11,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 12,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 13,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 14,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 15,
+        "goods_name": "好看又好吃的芒果芝士",
+        "goods_spec": "5寸，6寸，8寸",
+        "goods_unit_name": "个",
+        "gc_text": "蛋糕",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 16,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 17,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 18,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 19,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      },
+      {
+        "goods_id": 20,
+        "goods_name": "白猫无磷配方洁衣用漂水",
+        "goods_spec": "",
+        "goods_unit_name": "包",
+        "gc_text": "清洁用品",
+        "stock": 300,
+        "sale_num": 999,
+        "goods_price": 65.99,
+        "goods_state_text": "热卖",
+        "create_time_text": "2021-11-17 14:39:45"
+      }
+    ],
+    "meta": {
+      "sale_num_total": 86000,
+      "stock_total": 999999
+    }
   }
 }

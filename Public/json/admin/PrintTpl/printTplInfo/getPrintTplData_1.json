@@ -1,0 +1,507 @@
+{
+  "code": 200,
+  "msg": "",
+  "data": {
+    "id": "1",
+    "type": "0",
+    "tpl_name": "A4-默认-单表格",
+    "tpl_type": "0",
+    "status": "1",
+    "tpl_content": [
+      {
+        "type": "order-table",
+        "id": "1",
+        "left": "47px",
+        "top": "164px",
+        "width": "639px",
+        "height": "95px",
+        "zIndex": "78",
+        "checkedItem": [
+          {
+            "type": "id",
+            "value": "{column_id}",
+            "default_name": "序号",
+            "diy_name": "序号",
+            "is_checked": "1",
+            "sort": "1"
+          },
+          {
+            "type": "goods_name",
+            "value": "{column_goods_name}",
+            "default_name": "品名",
+            "diy_name": "品名",
+            "is_checked": "1",
+            "sort": "2"
+          },
+          {
+            "type": "goods_spec",
+            "value": "{column_goods_spec}",
+            "default_name": "规格",
+            "diy_name": "规格",
+            "is_checked": "1",
+            "sort": "3"
+          },
+          {
+            "param_id": "2",
+            "param_name": "净含量",
+            "param_desc": "180ml|200ml|360ml",
+            "param_sort": "50",
+            "is_show": "1",
+            "is_checked": "1",
+            "value": "{column_param_8-2}",
+            "default_name": "净含量",
+            "diy_name": "净含量",
+            "sort": "4"
+          },
+          {
+            "type": "goods_barcode",
+            "value": "{column_goods_barcode}",
+            "default_name": "商品条码",
+            "diy_name": "商品条码",
+            "is_checked": "1",
+            "sort": "5"
+          },
+          {
+            "type": "goods_number",
+            "value": "{column_goods_number}",
+            "default_name": "商品货号",
+            "diy_name": "商品货号",
+            "is_checked": "1",
+            "sort": "6"
+          },
+          {
+            "type": "num",
+            "value": "{column_num}",
+            "default_name": "数量",
+            "diy_name": "数量",
+            "is_checked": "1",
+            "sort": "7"
+          },
+          {
+            "type": "goods_price",
+            "value": "{column_goods_price}",
+            "default_name": "单价",
+            "diy_name": "单价",
+            "is_checked": "1",
+            "sort": "8"
+          },
+          {
+            "type": "total_price",
+            "value": "{column_total_price}",
+            "default_name": "金额",
+            "diy_name": "金额",
+            "is_checked": "1",
+            "sort": "9"
+          },
+          {
+            "type": "remark",
+            "value": "{column_remark}",
+            "default_name": "备注",
+            "diy_name": "备注",
+            "is_checked": "1",
+            "sort": "10"
+          },
+          {
+            "default_name": "空白列3",
+            "diy_name": "空白列3",
+            "is_checked": "1",
+            "type": "other_3",
+            "value": "{column_other_3}",
+            "value_data": {
+              "value_type": "2",
+              "default_value": "66"
+            },
+            "sort": "11"
+          }
+        ],
+        "otherTableItem": [],
+        "content": "",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "lineHeight": "115%",
+        "tableBorderWidth": "1"
+      },
+      {
+        "type": "ORDER_QR_CODE",
+        "left": "422px",
+        "top": "65px",
+        "width": "85px",
+        "height": "85px",
+        "zIndex": "75",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "订单二维码：<a contenteditable=\"false\">{订单二维码}<\/a>",
+        "contentImg": "\/Public\/pc\/imgs\/QRcode.jpg"
+      },
+      {
+        "type": "CUSTOMER_NAME",
+        "left": "43px",
+        "top": "88px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "10",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "客户名：<a contenteditable=\"false\">{客户名}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "CUSTOMER_OTHER_NAME",
+        "left": "43px",
+        "top": "114px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "11",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "客户备注名：<a contenteditable=\"false\">{客户备注名}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "CUSTOMER_PHONE",
+        "left": "43px",
+        "top": "138px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "12",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "客户电话：<a contenteditable=\"false\">{客户电话}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "ORDER_ID",
+        "left": "531px",
+        "top": "79px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "13",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "right",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "单号：<a contenteditable=\"false\">{单号}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "STORE_NAME",
+        "left": "138px",
+        "top": "7px",
+        "width": "436px",
+        "height": "39px",
+        "zIndex": "77",
+        "isFontBold": "1",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "center",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "24px",
+        "color": "",
+        "content": "商家名称：<a contenteditable=\"false\">{商家名称}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "ORDER_CREATE_TIME",
+        "left": "531px",
+        "top": "107px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "16",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "right",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "下单时间：<a contenteditable=\"false\">{下单时间}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "SELLER_ADDRESS",
+        "left": "531px",
+        "top": "134px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "17",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "right",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "商家地址：<a contenteditable=\"false\">{商家地址}<\/a>",
+        "contentImg": ""
+      },
+      {
+        "type": "custom-img",
+        "left": "43px",
+        "top": "14px",
+        "width": "60px",
+        "height": "60px",
+        "zIndex": "18",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "图片",
+        "contentImg": "http:\/\/dl.duinin.com\/data\/advert\/20201223\/06620639826915783.jpg"
+      },
+      {
+        "type": "GOODS_TOTAL",
+        "left": "49px",
+        "top": "268px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "19",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "商品总额：<a contenteditable=\"false\">{商品总额}<\/a>",
+        "contentImg": "",
+        "lineHeight": "100%"
+      },
+      {
+        "type": "MEMBER_TAG_TEXT",
+        "left": "195px",
+        "top": "111px",
+        "width": "150px",
+        "height": "16px",
+        "zIndex": "2",
+        "isFontBold": "0",
+        "isFontSlant": "0",
+        "isFontUnderline": "0",
+        "textAlign": "left",
+        "fontFamily": "arial, helvetica, sans-serif",
+        "fontSize": "12px",
+        "color": "",
+        "content": "<a contenteditable=\"false\">{会员标签}<\/a>",
+        "contentImg": ""
+      }
+    ],
+    "tpl_config": {
+      "base_data": [
+        {
+          "type": "id",
+          "value": "{column_id}",
+          "default_name": "序号",
+          "diy_name": "序号",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_name",
+          "value": "{column_goods_name}",
+          "default_name": "品名",
+          "diy_name": "品名",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_spec",
+          "value": "{column_goods_spec}",
+          "default_name": "规格",
+          "diy_name": "规格",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_barcode",
+          "value": "{column_goods_barcode}",
+          "default_name": "商品条码",
+          "diy_name": "商品条码",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_number",
+          "value": "{column_goods_number}",
+          "default_name": "商品货号",
+          "diy_name": "商品货号",
+          "is_checked": "1"
+        },
+        {
+          "type": "num",
+          "value": "{column_num}",
+          "default_name": "数量",
+          "diy_name": "数量",
+          "is_checked": "1"
+        },
+        {
+          "type": "goods_units_name",
+          "value": "{column_goods_units_name}",
+          "default_name": "单位",
+          "diy_name": "单位",
+          "is_checked": "0"
+        },
+        {
+          "type": "goods_price",
+          "value": "{column_goods_price}",
+          "default_name": "单价",
+          "diy_name": "单价",
+          "is_checked": "1"
+        },
+        {
+          "type": "total_price",
+          "value": "{column_total_price}",
+          "default_name": "金额",
+          "diy_name": "金额",
+          "is_checked": "1"
+        },
+        {
+          "type": "sale_price",
+          "value": "{column_sale_price}",
+          "default_name": "零售价",
+          "diy_name": "零售价",
+          "is_checked": "0"
+        },
+        {
+          "type": "goods_tag_text",
+          "value": "{column_goods_tag_text}",
+          "default_name": "商品标签",
+          "diy_name": "商品标签",
+          "is_checked": "0"
+        },
+        {
+          "type": "remark",
+          "value": "{column_remark}",
+          "default_name": "备注",
+          "diy_name": "备注",
+          "is_checked": "1"
+        }
+      ],
+      "params_tpl": [
+        {
+          "tpl_id": "8",
+          "tpl_name": "通用",
+          "tpl_params": [
+            {
+              "param_id": "1",
+              "param_name": "品牌",
+              "param_desc": "一叶子|御泥坊",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "value": "{column_param_8-1}",
+              "default_name": "品牌",
+              "diy_name": "品牌"
+            },
+            {
+              "param_id": "2",
+              "param_name": "净含量",
+              "param_desc": "180ml|200ml|360ml",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "1",
+              "value": "{column_param_8-2}",
+              "default_name": "净含量",
+              "diy_name": "净含量"
+            }
+          ]
+        },
+        {
+          "tpl_id": "14",
+          "tpl_name": "手机",
+          "tpl_params": [
+            {
+              "param_id": "1",
+              "param_name": "运存",
+              "param_desc": "4G|8G",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "value": "{column_param_14-1}",
+              "default_name": "运存",
+              "diy_name": "运存"
+            },
+            {
+              "param_id": "2",
+              "param_name": "内存",
+              "param_desc": "32G|64G|128G",
+              "param_sort": "50",
+              "is_show": "1",
+              "is_checked": "0",
+              "value": "{column_param_14-2}",
+              "default_name": "内存",
+              "diy_name": "内存"
+            }
+          ]
+        }
+      ],
+      "dragSizeBoxHeight": "284",
+      "is_show_subtotal": "0",
+      "pre_page_row": "",
+      "page_width": "794px",
+      "tableOtherData": [
+        {
+          "default_name": "空白列1",
+          "diy_name": "空白列1",
+          "is_checked": "0",
+          "type": "other_1",
+          "value": "{column_other_1}",
+          "value_data": {
+            "value_type": "1",
+            "default_value": ""
+          }
+        },
+        {
+          "default_name": "空白列2",
+          "diy_name": "空白列2",
+          "is_checked": "0",
+          "type": "other_2",
+          "value": "{column_other_2}",
+          "value_data": {
+            "value_type": "1",
+            "default_value": ""
+          }
+        },
+        {
+          "default_name": "空白列3",
+          "diy_name": "空白列3",
+          "is_checked": "1",
+          "type": "other_3",
+          "value": "{column_other_3}",
+          "value_data": {
+            "value_type": "2",
+            "default_value": "66"
+          },
+          "sort": "11"
+        }
+      ],
+      "table_num": "1",
+      "table_gap": "10"
+    }
+  }
+}

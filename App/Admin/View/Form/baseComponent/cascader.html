@@ -10,29 +10,14 @@
         <div>select-cascader【v-model=绑定值含有的1或者'1'都等于'1'】</div>
         <select-cascader v-model="goodsClassId" :has-all="1" :list="treeList" :props-item="{value: 'class_id', label: 'class_name', children: 'child'}"></select-cascader>
       </li>
-      <li class="mt-10">
-        <div>地址级联选择器【cascader-region】</div>
-        <el-radio-group v-model="cascader_region_type">
-          <el-radio label="1">必须选中最后一级选项才能更改值</el-radio>
-          <el-radio label="2">可选择任意一级选项</el-radio>
-        </el-radio-group>
-        <template v-if="+cascader_region_type === 1">
-          <cascader-region ref="casaderRegion" placeholder="请选择地址" :info="info" class="width-400" @region-loaded="getInfo"></cascader-region>
-        </template>
-        <template v-else>
-          <cascader-region ref="casaderRegion" placeholder="请选择地址" :info="info" :cascader-props="{checkStrictly: true}" class="width-400" @region-loaded="getInfo"></cascader-region>
-        </template>
-      </li>
     </ul>
   </div>
   <include file="Public/components/cascader/select_cascader" />
-  <include file="Public/components/cascader/cascader_region" />
   <script>
     var vm = new Vue({
       el: '#app',
       components: {
         'select-cascader': AppUtil.COMPONENTS.SELECT_CASCADER_COMPONENT,
-        'cascader-region': AppUtil.COMPONENTS.CASCADER_REGION
       },
       data: function () {
         return {
@@ -59,42 +44,11 @@
               ],
             },
           ],
-          cascader_region_type: '1',
-          info: {
-            "city": "",//"string,市",
-            "city_id": "0",//"string",
-            "area": "",//"string",
-            "area_id": "0",//"string",
-            "country": "",//"string",
-            "country_id": "",//"string",
-            "province_id": "0",//"string",
-            "province": "",//"string",
-          },
         }
       },
       mounted: function () {
-        // 第一步：初始化<cascader-region>组件，第二部：<cascader-region>组件中获取地址数据
-        this.$refs.casaderRegion.init();
       },
       methods: {
-        // 获取数据
-        getInfo: function () {
-          var self = this;
-          setTimeout(function () {
-            var info = {
-              "city": "",//"string,市",
-              "city_id": "0",//"string",
-              "area": "",//"string",
-              "area_id": "0",//"string",
-              "country": "",//"string",
-              "country_id": "",//"string",
-              "province_id": "0",//"string",
-              "province": "",//"string",
-            }
-            self.info = info;
-            self.$refs.casaderRegion.setRegionVal(self.info);
-          }, 800)
-        },
       }
     })
   </script>

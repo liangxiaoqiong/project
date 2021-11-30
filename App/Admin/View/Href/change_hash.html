@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS修改地址栏参数</title>
+</head>
+<body>
+<button onclick="changeUrlHash()">修改地址栏参数</button>
+</body>
+<script type="text/javascript" src="__JQUERY__"></script>
+<script>
+  function changeUrlHash() {
+    var urlSearch = location.href;
+    var unformatStr = changeURLArg(urlSearch, "is_show_Layer", '10');
+    if (!!(window.history && history.pushState)) {
+      history.replaceState(null, "", unformatStr); // 黏贴替换地址栏数据
+    }
+  }
+  //定义替换参数的方法
+  function changeURLArg(destiny,par,par_value){
+    var pattern = par+'=([^&]*)';
+    var replaceText = par+'='+par_value;
+    if (destiny.match(pattern))
+    {
+      var tmp = '/\\'+par+'=[^&]*/';
+      tmp = destiny.replace(eval(tmp), replaceText);
+      return (tmp);
+    }
+    else
+    {
+      if (destiny.match('[\?]'))
+      {
+        return destiny+'&'+ replaceText;
+      }
+      else
+      {
+        return destiny+'?'+replaceText;
+      }
+    }
+    return destiny+'\n'+par+'\n'+par_value;
+  }
+</script>
+</html>
