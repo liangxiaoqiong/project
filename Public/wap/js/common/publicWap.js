@@ -461,50 +461,37 @@ var publicWap = new Object({
      arrSort.sort(function(a, b){return a - b});
    }*/
   /**选择时间切换*/
-  dayToTime: function (type, date_type) {
-    var forT,//相隔毫秒数
-      startT = 0, endT = 0;
+  dayToTime: function (type) {
+    var startT = 0, endT = 0;
     var nextMonth, lastMonth, nextMonthFirstDay;
     var myDate = new Date();
     myDate.setHours(0);
     myDate.setMinutes(0);
     myDate.setSeconds(0);
     myDate.setMilliseconds(0);
-    var oneDay = 24 * 60 * 60 * 1000 - 1;//当天23:59:59
+    var oneDayTime = 86400000; // 1天时间长度
+    var oneDayEnd = oneDayTime - 1;//当天23:59:59
+    endT = myDate.getTime() + oneDayEnd; // 默认查询当前12点以前的时间
     switch (+type) {
-      case 1:
+      case 1: // 今天
         startT = myDate.getTime();
-        endT = startT + oneDay;
+        endT = startT + oneDayEnd;
         break;
       case -1:
-        forT = 86400000;//昨天
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay;
+        endT = myDate.getTime() - 1;
+        startT = endT - (oneDayEnd * 1);
         break;
-      case 7:
-        forT = 604800000;//前7天
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 7;
+      case 7: // 最近7天
+        startT = endT - (oneDayEnd * 7);
         break;
-      case 15:
-        forT = 1296000000;//前15天
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 15;
+      case 15: // 最近15天
+        startT = endT - (oneDayEnd * 15);
         break
-      case 30:
-        forT = 2592000000;//前30天
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 30;
+      case 30: // 最近30天
+        startT = endT - (oneDayEnd * 30);
         break;
       case 90: //最近90天
-        forT = 2592000000 * 3;
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 90;
+        startT = endT - (oneDayEnd * 90);
         break;
       case 1001: // 本月
         myDate.setDate(1);
@@ -528,37 +515,25 @@ var publicWap = new Object({
         startT = new Date().setDate(new Date().getDate() - weekday - 7);
         endT = new Date().setDate(new Date().getDate() - weekday - 1);
         break;
-      case 1004: // 最近三个月
-        forT = 2592000000 * 3;
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 90;
+      case 1004: // 最近三个月=90天
+        startT = endT - (oneDayEnd * 90);
         break;
-      case 1005: // 最近六个月
-        forT = 2592000000 * 6;
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 180;
+      case 1005: // 最近六个月=180天
+        startT = endT - (oneDayEnd * 90);
         break;
       case 1006: // 近四周=28天
-        forT = 604800000 * 4;
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 4;
+        startT = endT - (oneDayEnd * 28);
         break;
       case 1007: // 近八周=56天
-        forT = 604800000 * 8;
-        var t = new Date(myDate - forT);
-        startT = t.getTime();
-        endT = startT + oneDay * 8;
+        startT = endT - (oneDayEnd * 56);
         break;
       default:
         break;
     }
     var val1 = new Date(startT);
-    var val1_ = publicWap.dateTime_Str(val1, date_type);
+    var val1_ = publicWap.dateTime_Str(val1);
     var val2 = new Date(endT);
-    var val2_ = publicWap.dateTime_Str(val2, date_type);
+    var val2_ = publicWap.dateTime_Str(val2);
     if(+type === 0){
       val1_ = '';val2_ = '';
     }
