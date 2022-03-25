@@ -1,0 +1,119 @@
+<!--表格自定义合并列样式-->
+<extend name="Public:base"/>
+<block name="content">
+  <style>
+    .cell-row {
+      padding: 0!important;
+    }
+    .cell-row .cell {
+      padding: 0!important;
+    }
+    .cell-row .cell .tr-box .tr {
+      padding: 9px 12px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-break: break-all;
+      border-bottom: 1px solid #E0E0E0;
+    }
+    .cell-row .cell .tr-box .tr:last-child {
+      border-bottom: none;
+    }
+  </style>
+  <div class="admin-main" id="app" v-cloak="">
+    <diy-table
+      ref="diyTable"
+      :query="query"
+      :table-filed="tableFiled"
+      :table-data="tableData"
+      checked-param="goods_id">
+      <!--region td-val-->
+      <template v-slot:td-val="slotData">
+        <template v-if="slotData.th.filed_val === 'action'">
+          <div class="table-action">
+            <a>编辑</a>
+            <a>删除</a>
+          </div>
+        </template>
+        <template v-else-if="slotData.th.filed_val === 'goods_name' || slotData.th.filed_val === 'goods_price'">
+          <div class="tr-box">
+            <div class="tr" v-for="i in 3">{{ slotData.item[slotData.th.th_val[0]] }}</div>
+          </div>
+        </template>
+        <template v-else>
+          {{ slotData.item[slotData.th.th_val[0]] }}
+        </template>
+      </template>
+      <!--endregion-->
+    </diy-table>
+  </div>
+  <!--region diy-table引入-->
+  <include file="Public/components/diy_table/table_setting"/>
+  <include file="Public/components/diy_table/pagination"/>
+  <include file="Public/components/diy_table/table_content" />
+  <!--endregion-->
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'diy-table': AppUtil.COMPONENTS.DIY_TABLE_COMPONENT,
+      },
+      data: function () {
+        return {
+          query: {
+            page: 1,
+            limit: 20,
+            checkedIds: [],
+            sort_field: [
+              {value: '', label: 'price'},
+              {value: '', label: 'stock'},
+            ], // 可实现多字段排序
+            load: false
+          },
+          tableFiled: [
+            {filed_val: 'goods_name', th_val: ['goods_name'], th_name: "商品名称", t_width: 300, tip_text: '商品名称商品名称<div>不错的商品</div>', show_overflow_tooltip: 0},
+            {filed_val: 'create_time_text', th_val: ['create_time_text'], th_name: "创建时间", t_width: 150},
+            {filed_val: 'goods_price', th_val: ['goods_price'], th_name: "价格", t_width: 90, align: 'right', show_overflow_tooltip: 0},
+            {filed_val: 'create_time_text', th_val: ['create_time_text'], th_name: "创建时间", t_width: 150},
+            {filed_val: 'create_time_text', th_val: ['create_time_text'], th_name: "创建时间", t_width: 150},
+            {filed_val: 'create_time_text', th_val: ['create_time_text'], th_name: "创建时间", t_width: 150},
+            {filed_val: 'create_time_text', th_val: ['create_time_text'], th_name: "创建时间", t_width: 150},
+            {filed_val: 'action', th_val: ['action'], th_name: "操作", t_width: 100, is_setting_show: 2},
+          ],
+          tableData: {
+            total: 5,
+            list: [
+              {
+                "goods_id": 20,
+                "goods_name": "1白猫无磷配方洁衣用漂水1白猫无磷配方洁衣用漂水1白猫无磷配方洁衣用漂水1白猫无磷配方洁衣用漂水1白猫无磷配方洁衣用漂水",
+                "goods_price": 65.99,
+                "create_time_text": "2021-11-17 14:39:45",
+                spec_list: [
+                  {
+                    spec_id: '',
+                  }
+                ]
+              },
+              {
+                "goods_id": 20,
+                "goods_name": "2白猫无磷配方洁衣用漂水",
+                "goods_price": 65.99,
+                "create_time_text": "2021-11-17 14:39:45"
+              },
+              {
+                "goods_id": 20,
+                "goods_name": "3白猫无磷配方洁衣用漂水",
+                "goods_price": 65.99,
+                "create_time_text": "2021-11-17 14:39:45"
+              },
+            ]
+          }
+        }
+      },
+      mounted: function () {
+      },
+      methods: {
+      }
+    })
+  </script>
+</block>

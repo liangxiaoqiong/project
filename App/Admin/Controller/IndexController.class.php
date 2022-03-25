@@ -171,6 +171,10 @@ class IndexController extends Controller {
     public function tableElDiy () {
         $this->display('Table/elTable/index');
     }
+    // 自定义合并列样式
+    public function tableElMergeColumns () {
+        $this->display('Table/elTable/index_merge_columns');
+    }
     // endregion
 
     // region 编辑器[富文本编辑器、自定义diy编辑器]

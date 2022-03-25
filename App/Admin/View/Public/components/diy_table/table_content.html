@@ -14,6 +14,7 @@
           :show-summary="+is_show_total === 1"
           :summary-method="getSummaries"
           :row-class-name="tableRowClassName"
+          :cell-class-name="cellClassName"
           @header-dragend="headerDragend"
           :empty-text="query.load ? '数据加载中...' : '数据为空哦~'">
 
@@ -514,6 +515,11 @@
           align = th.align;
         }
         return align;
+      },
+      cellClassName: function ({row, column, rowIndex, columnIndex}) {
+        if (column.property === 'goods_name' || column.property === 'goods_price') {
+          return 'cell-row'
+        }
       },
       // 表格底部全选、分页是否置底,
       paginationTop: function () {
