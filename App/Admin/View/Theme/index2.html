@@ -1,0 +1,254 @@
+<extend name="Public:base"/>
+<block name="content">
+  <link rel="stylesheet" href="http://dev.duinin.com/Public/common/icon/styleicon/style.css?v=47.2">
+  <link rel="stylesheet" href="http://dev.duinin.com/Public/wap/css/common/public.css?v=47.15">
+  <link rel="stylesheet" href="http://dev.duinin.com/Public/admin/css/Diy/diy.css?v={$V}">
+  <link rel="stylesheet" href="__VANT_CSS__">
+  <link rel="stylesheet" href="__SWIPERCSS__">
+  <link rel="stylesheet" href="/Public/wap/theme/theme_diy/style.css">
+  <style>
+    html {
+      font-size: 20px;
+    }
+  </style>
+  <div class="admin-main" id="app" v-cloak="">
+    <div style="margin: 50px;">
+      <color-picker :info="info" param="color1" default-color="#09BB07" :is-show-alpha="false" @change="diyTheme"></color-picker>
+      <color-picker :info="info" param="color2" default-color="#333333" :is-show-alpha="false" @change="diyTheme"></color-picker>
+    </div>
+
+    <div style="padding: 20px 50px;">
+      <div class="border-box-list">
+        <div class="title">文字</div>
+        <div class="list-item">
+          <a class="color-diy">color-diy：字体颜色</a>
+          <a class="styleicon-33">styleicon-33</a>
+          <a class="position-r"><span class="num-circle-diy">1</span></a>
+        </div>
+      </div>
+
+      <div class="border-box-list">
+        <div class="title">边框</div>
+        <div class="list-item">
+          <a>
+            <div class="border-diy">border-diy：字体颜色,边框颜色</div>
+          </a>
+        </div>
+      </div>
+      <div class="border-box-list">
+        <div class="title">背景颜色</div>
+        <div class="list-item">
+          <a class="bg-diy">bg-diy：背景颜色</a>
+          <a class="bg-opacity01-diy">bg-opacity01-diy</a>
+          <a class="bg-opacity02-diy">bg-opacity02-diy</a>
+          <a class="bg-opacity05-diy">bg-opacity05-diy</a>
+          <a class="bg-diy-sub">bg-diy-sub</a>
+        </div>
+      </div>
+      <div class="border-box-list">
+        <div class="title">按钮</div>
+        <div class="list-item">
+          <a>
+            <button class="xxbtn-shadow-diy">xxbtn-shadow-diy</button>
+          </a>
+          <a>
+            <button class="btn-diy">btn-diy</button>
+          </a>
+          <a>
+            <button class="xxbtn-primary-diy">xxbtn-primary-diy</button>
+          </a>
+          <a>
+            <button class="xxbtn-plain-diy">xxbtn-plain-diy</button>
+          </a>
+          <a>
+            <button class="btn-gradient-diy">btn-gradient-diy</button>
+          </a>
+          <a>
+            <span class="switch-diy display-align">
+              <input type="checkbox" id="default_address" class="cbx hidden">
+              <label for="default_address" class="lbl"></label>
+            </span>
+          </a>
+          <a>
+
+            <div class="radio-diy">
+              <label class="radio-item active">
+                <span>批发</span><i class="styleicon-selected2"></i>
+              </label>
+              <label class="radio-item">
+                <span>会员</span><i class="styleicon-selected2"></i>
+              </label>
+            </div>
+          </a>
+          <a>
+            <!--加载条-->
+            <div class="progress-default">
+              <progress :value="4" :max="10"></progress>
+              <font>40%</font>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="border-box-list">
+        <div class="title">点击事件</div>
+        <div class="list-item">
+          <a>
+            <button @click="layerConfirm">layer.confirm</button>
+          </a>
+          <a>
+            <button @click="vantDialog">vant-dialog-confirm</button>
+          </a>
+          <a>
+            <button @click="vantPicker">vant-picker-confirm</button>
+          </a>
+          <a>
+            <button @click="toAjax">触发ajax事件</button>
+          </a>
+        </div>
+      </div>
+      <div class="border-box-list">
+        <div class="title">轮播</div>
+        <div class="design-preview-item" style="width: 750px;margin: auto">
+          <div class="design-preview-controller">
+            <div class="cap-goods-list goods-waterfall m10-list_style__2 m10-show_style__2 m10-show_goods_name__1 m10-show_goods_price__1 m10-show_goods_desc__0 m10-show_goods_spec__0 m10-show_goods_other__0 m10-buy_btn_style__1 m10-corner_mark_type__0">
+              <div class="cap-goods-box">
+                <div class="swiper-box swiper-container-horizontal" ref="swiper-div">
+                  <ul class="goods-ul swiper-wrapper">
+                    <li class="swiper-slide" v-for="i in 10">
+                      <a>
+                        <!--region 商品图片-->
+                        <div class="cap-goods-list__img">
+                          <div class="bg-img">
+                            <img src="">
+                          </div>
+                        </div>
+                        <!--endregion-->
+
+                        <!--region 商品名称和价格的区域 -->
+                        <div class="cap-goods-list__info">
+                          <div class="info-top">
+                            <p class="goods-name">商品名称商品名称商品名称</p>
+                            <p class="goods-desc line-one">详情详情</p>
+                            <p class="goods-spec line-one">规格</p>
+                          </div>
+                        </div>
+                        <!--endregion-->
+
+                      </a>
+                    </li>
+                  </ul>
+                  <div class="swiper-pagination swiper-pagination-progress"
+                       ref="swiper-pageination">
+                    <span class="swiper-pagination-progressbar"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="border-box-list">
+        <div class="title">vant-tab</div>
+        <div style="">
+          <van-tabs v-model="vantTabId" sticky swipeable :swipe-threshold="4">
+            <van-tab title="标签 1" :name="1">内容 1</van-tab>
+            <van-tab title="标签 2" :name="2">内容 2</van-tab>
+            <van-tab title="标签 3" :name="3">内容 3</van-tab>
+            <van-tab title="标签 4" :name="4">内容 4</van-tab>
+            <van-tab title="标签 5" :name="5">内容 5</van-tab>
+            <van-tab title="标签 6" :name="6">内容 6</van-tab>
+          </van-tabs>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <vant-dialog-confirm ref="vantDialogConfirm"></vant-dialog-confirm>
+    <list-picker-layer ref="listPickerLayer"></list-picker-layer>
+  </div>
+  <script src="__VANT_JS__"></script>
+  <script src="__SWIPERJS__"></script>
+  <include file="Public/components/picker/color_picker"/>
+  <include file="Theme/components/vant_dialog_confirm"/>
+  <include file="Theme/components/list_picker_layer"/>
+  <script>
+    var allStyle = {
+      selectedScheme: '{$allStyle["selectedScheme"]}' || '1', // 1-11,diy
+      type: '{$allStyle["type"]}', // wx
+      class: '{$allStyle["class"]}', // store-style-selectedScheme
+      mainColor: '{$allStyle["mainColor"]}', // 主色【selectedScheme===diy】
+      secondaryColor: '{$allStyle["secondaryColor"]}', // 副色【selectedScheme===diy】
+    }
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'color-picker': AppUtil.COMPONENTS.COLOR_PICKER_COMPONENT,
+        'vant-dialog-confirm': AppUtil.COMPONENTS.VANT_DIALOG_CONFIRM,
+        'list-picker-layer': AppUtil.COMPONENTS.LIST_PICKER_LAYER,
+      },
+      data: function () {
+        return {
+          info: {
+            color1: '#09BB07', // 主色
+            color2: '#333333', // 副色
+          },
+          check: '',
+          checkList: [],
+          vantTabId: 1,
+        }
+      },
+      mounted: function () {
+       // this.diyTheme();
+       // this.initSwiper();
+      },
+      methods: {
+        diyTheme: function () {
+          var self = this;
+          self.$nextTick(function () {
+            // 修改变量中的颜色
+            wapObj.changeThemeCss(self.info.color1, self.info.color2);
+          })
+        },
+        layerConfirm: function () {
+          wapObj.layerConfirm({
+            title: '这个是什么弹框啊啊？'
+          })
+        },
+        vantDialog: function () {
+          this.$refs.vantDialogConfirm.init();
+        },
+        vantPicker: function () {
+          this.$refs.listPickerLayer.init();
+        },
+
+        initSwiper: function () {
+          var self = this;
+          var el = self.$refs['swiper-div'];
+          var swiperPage = self.$refs['swiper-pageination'];
+          self.swiper = new Swiper(el, {
+            speed: 350,//速度
+            slidesPerView: 3,
+            paginationClickable: true,
+            spaceBetween: 10,//每个间隔的宽度（单位px）
+            autoplayDisableOnInteraction: false,
+            // autoplay: 1800,//自动播放
+            pagination: swiperPage,
+            paginationType: 'progress',
+          });
+        },
+        // 触发ajax，查看load样式
+        toAjax: function () {
+          AppUtil.requestApi({
+            url: AppUtil.getAPIUrl('Cart', 'index'),
+          }).then(function (result) {
+          }).finally(function () {
+
+          })
+        }
+      }
+    })
+  </script>
+</block>
+

@@ -1,0 +1,318 @@
+:root {
+  --main-color: #09BB07;
+  --main-color-opacity003: rgba(9, 187, 7, 0.03);
+  --main-color-opacity005: rgba(9, 187, 7, 0.05);
+  --main-color-opacity008: rgba(9, 187, 7, 0.08);
+  --main-color-opacity01: rgba(9, 187, 7, 0.1);
+  --main-color-opacity018: rgba(9, 187, 7, 0.18);
+  --main-color-opacity02: rgba(9, 187, 7, 0.2);
+  --main-color-opacity03: rgba(9, 187, 7, 0.3);
+  --main-color-opacity04: rgba(9, 187, 7, 0.4);
+  --main-color-opacity05: rgba(9, 187, 7, 0.5);
+  --main-color-opacity09: rgba(9, 187, 7, 0.9);
+  --secondary-color: #333333;
+}
+/*region ===字体颜色*/
+[class*="styleicon-"],
+.style-text-color,
+.color-diy,
+.color-diy:active,
+.color-diy:hover,
+.color-diy:visited,
+.color-diy:focus,
+.van-picker__confirm,
+.van-dialog__confirm, .van-dialog__confirm:active {
+  color: var(--main-color);
+}
+[class*="styleicon-"].color-diy {
+  color: var(--main-color)!important;
+}
+/*endregion*/
+
+/*region ===背景颜色*/
+.bg-diy {
+  background-color: var(--main-color)!important;
+}
+.bg-opacity01-diy {
+  background-color: var(--main-color-opacity01);
+}
+.bg-opacity02-diy {
+  background-color: var(--main-color-opacity02);
+}
+.bg-opacity05-diy {
+  background-color: var(--main-color-opacity03);
+}
+/*副色*/
+.bg-diy-sub {
+  background-color: var(--secondary-color);
+}
+/*endregion*/
+
+/*region ===边框主色*/
+.border-diy {
+  color: var(--main-color);border:1px solid var(--main-color)!important;
+}
+.border-opacity05-diy {
+  border: 1px solid var(--main-color-opacity05)!important;
+}
+.border-color-diy,
+.border-color-diy:before {
+  border-color: var(--main-color);
+}
+/*endregion*/
+
+/*region ===圆点数字*/
+.num-circle-diy {
+  background-color: var(--main-color);
+}
+/*endregion*/
+
+/*region ===按钮*/
+/*默认按钮*/
+.xxbtn-primary-diy {
+  background-color: var(--main-color);
+}
+/*朴素按钮*/
+.xxbtn-plain-diy,
+.xxbtn-plain-diy:active,
+.xxbtn-plain-diy:hover,
+.xxbtn-plain-diy:visited,
+.xxbtn-plain-diy:focus {
+  border: 1px solid var(--main-color);
+  color: var(--main-color);
+}
+/*diy透明阴影按钮*/
+.xxbtn-shadow-diy,
+.btn-diy {
+  background-image: linear-gradient(0deg, var(--main-color-opacity02) 0%, rgba(255, 255, 255, 0.5) 100%), linear-gradient(#ffffff, #ffffff);
+  background-blend-mode: normal, normal;
+  box-shadow: 0rem 0rem 0.4rem 0rem var(--main-color);
+}
+/*endregion*/
+/*region diy渐变按钮*/
+.btn-gradient-diy {
+  background: linear-gradient(149deg, var(--main-color-opacity03) 0%, var(--main-color) 100%);
+}
+/*endregion*/
+
+/*region ===switch*/
+.switch-diy .cbx:checked~label {
+  background: var(--main-color);
+}
+/*endregion*/
+
+/*region ===radio diy[配送方式切换、绑定会员卡方式切换]*/
+.radio-diy .radio-item.active {
+  color: var(--main-color);border:1px solid var(--main-color)!important;
+}
+.radio-diy .radio-item.active span {color: var(--main-color);}
+/*endregion*/
+
+/*region ===进度条 progress*/
+/*region 通用进度条*/
+.progress-default progress {
+  border: 1px solid var(--main-color-opacity03);
+}
+.progress-default progress::-moz-progress-bar{ background: var(--main-color-opacity04);border-radius: 13px;  }
+.progress-default progress::-webkit-progress-bar { background: var(--main-color-opacity04);border-radius: 13px;  }
+.progress-default progress::-webkit-progress-value  { background: var(--main-color);  border-radius: 13px;}
+/*endregion*/
+.progress-diy{
+  background-color: var(--main-color-opacity01)!important;
+  color: var(--main-color-opacity03)!important;
+}
+.progress-diy::-moz-progress-bar{
+  background:url('/Public/admin/img/Diy/progress_bg/1.png')center center no-repeat!important;background-size: 100% 100%!important;
+}
+.progress-diy::-webkit-progress-bar {
+  background:url('/Public/admin/img/Diy/progress_bg/1.png')center center no-repeat!important;background-size: 100% 100%!important;
+}
+.progress-diy::-webkit-progress-value{
+  background: var(--main-color-opacity03)!important;
+  color: var(--main-color-opacity03)!important;
+}
+/*region 个人中心进度条*/
+.user-vip-info progress::-webkit-progress-value{
+  background-blend-mode: normal, normal;
+  background-image: linear-gradient(-90deg, #ffffff 0%, var(--main-color) 50%), linear-gradient(#ffdedc, #ffdedc);
+}
+/*endregion*/
+/*endregion*/
+
+/*region ===layer.confirm*/
+.layer-skin-confirm .layui-layer-btn a.layui-layer-btn0 {
+  color: var(--main-color);
+}
+/*endregion*/
+
+/*region ===swiper 分页圆点*/
+.swiper-pagination-progress .swiper-pagination-progressbar {
+  background: var(--main-color)!important;
+}
+.cap-goods-list.m10-list_style__2 .swiper-pagination.swiper-pagination-progress {
+  background: var(--main-color-opacity04);
+}
+/*endregion*/
+
+/*region ===layer.loading 动画样式*/
+.layui-layer-loading0 > div {
+  background: var(--main-color);
+}
+/*endregion*/
+
+/*region ===head-tab 选中样式*/
+.van-tabs--line .van-tabs__wrap .van-tabs__nav--line .van-tabs__line,
+.head-tab a.color-diy:after {
+  background-image: linear-gradient(270deg, var(--main-color-opacity02) 0%, var(--main-color) 100%),
+  linear-gradient(#ffffff, #ffffff);
+  background-blend-mode: normal, normal;
+}
+.head-tab.tab-style-2 a.color-diy:after {background: var(--main-color)!important;}
+.van-tabs--line .van-tabs__wrap .van-tabs__nav--line .van-tab--active {
+  color: var(--main-color);
+}
+/*endregion*/
+
+/*region ===商城个人中心 全部订单 icon*/
+.styleicon-order-all [class*="path"]:before {
+  color: var(--main-color);
+}
+/*endregion*/
+
+/*region balance-head*/
+.balance-head a {
+  background-image: linear-gradient(0deg, var(--main-color-opacity02) 0%, var(--main-color-opacity05) 100%),
+  linear-gradient(#ffffff, #ffffff);
+  background-blend-mode: normal, normal;
+  box-shadow: 0px 0px 8px 0px var(--main-color);
+}
+/*endregion*/
+
+
+/*region 迅信 充值卡 在线充值 Balance/rechargeCardList.html start*/
+.recharge-card-page .rC ul li.active {
+  background-color: var(--main-color-opacity005);
+  border: 1px solid var(--main-color);
+}
+/*endregion*/
+
+.cap-header-buying .swiper-slide .item-list .list-text .goods-price font:before {
+  border-color: transparent var(--main-color) transparent transparent;
+}
+
+/*region ==Agent/components/update_success_component.html*/
+.diystyle-btn {
+  border: 1px solid var(--main-color);
+  color: var(--main-color);
+  box-shadow:0px 0px 15px 0px var(--main-color-opacity018);
+  background-color: var(--main-color-opacity01);
+}
+/*endregion*/
+
+/*region ===商品多规格弹框 Goods/components/goods_spec_layer.html*/
+.spec-more-layer .spec-list li>div .spec-name.border-diy,
+.select-spec .unit-num .goods-unit>span.border-diy {
+  background: var(--main-color-opacity008)
+}
+.spec-list-wholesale .spec-head a.color-diy:before {
+  background-color: var(--main-color);
+}
+/*endregion*/
+
+/*region diy-list-box 我的优惠券，我的奖礼品页面*/
+.diy-list-box.box-type__0 .box-up,
+.diy-list-box.box-type__0 .box-more {
+  border: 1px solid var(--main-color-opacity03);
+  background-color: var(--main-color-opacity003);
+}
+/*endregion*/
+
+
+/*region ===底部导航栏*/
+.footer .color-diy {
+  color: var(--main-color);
+}
+/*endregion*/
+
+/*region ===商品详情页*/
+.menu-tip:before{border-color: transparent transparent var(--main-color) transparent;}
+.goods-info-foot .foot-right a.bg-diy-sub {
+  color: #ffffff;
+}
+/*endregion*/
+
+/*region ===商品多规格弹框*/
+.spec-more-layer .xxbtn-submit-box a.bg-diy-sub {
+  color: #ffffff;
+}
+/*endregion*/
+
+/*region ===商品数量快捷弹框*/
+.input-layer .input-layer-content .hot-key button:active,
+.input-layer .input-layer-content .hot-key button:hover{
+  background-color: var(--main-color);
+  border-color: var(--main-color)}
+/*endregion*/
+
+/*region ===选择优惠券弹框,结算页*/
+.coupon-center-layer .coupon-item li {
+  border: 1px solid var(--main-color-opacity03);
+}
+.coupon-center-layer .coupon-item li .coupon-tip {
+  border-top: 1px solid var(--main-color-opacity03);
+}
+.coupon-center-layer .coupon-item li .coupon-right {
+  background-color: var(--main-color-opacity003)!important;
+}
+/*endregion*/
+
+/*region ===退款详情*/
+.refund-info .info-title {
+  background:linear-gradient(-43deg,var(--main-color-opacity09),var(--main-color));
+}
+/*endregion*/
+
+/*region ===首页diy*/
+.cap-header-buying .swiper-slide .item-list .list-text .goods-price font:before {
+  border-color: transparent var(--main-color) transparent transparent;
+}
+/*region 商品分组*/
+.cap-goods-group .goods-group-tab.m14-menu_style__1 li.active{color: var(--main-color);}
+.cap-goods-group .goods-group-tab.m14-menu_style__1 li.active:after{background-color: var(--main-color);}
+.cap-goods-group .goods-group-tab.m14-menu_style__2 li.active span{background-color: var(--main-color);}
+.cap-goods-group .goods-group-tab.m14-menu_style__3 li.active span {color: var(--main-color);}
+.cap-goods-group .goods-group-tab.m14-menu_style__3 li.active font {background-color: var(--main-color);}
+/*endregion*/
+/*endregion*/
+
+/*region 开关滑块主题式额*/
+.self-delivery-head .tab-btn .switch-div:before {
+  background-color: var(--main-color);
+}
+/*endregion*/
+
+
+/*region ===夏商电子提货券:XsAuth/XsBalance.html*/
+.balance-page .balance-content {
+  box-shadow: inset 0rem -0.87rem 2.53rem 0rem var(--main-color-opacity02);
+}
+/*endregion*/
+
+/*region ===每日任务 Marketing/dailyMarket.html*/
+.plan-sign .sign-day>a button.signed,
+.plan-today ul li .plan-icon i:before{
+  background-image: linear-gradient(135deg, var(--main-color-opacity05) 0%, var(--main-color) 100%), linear-gradient( #ffffff, #ffffff);
+  background-blend-mode: normal, normal;
+}
+.plan-today ul li.finished .finished-icon {
+  background-image: linear-gradient(135deg, var(--main-color-opacity05) 0%, var(--main-color) 50%, #fff 50%, #fff 100%), linear-gradient( #ffffff, #ffffff);
+  background-blend-mode: normal, normal;
+}
+/*endregion*/
+
+/*region ==mobiscroll_red时间组件弹框*/
+.android-ics .dw .dwb.color-diy {
+  color: var(--main-color);
+}
+/*endregion*/
+

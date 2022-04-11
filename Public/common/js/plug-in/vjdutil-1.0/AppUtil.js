@@ -479,8 +479,12 @@ var AppUtil = new Object({
 
         if (typeof (layer) !== 'undefined' && self.showLoad) {
           if (self.ajaxLoadLayer === -1) {
-            self.ajaxLoadLayer = layer.load(0, {time: 2000, offset: ['30%', ''], shade: 0});
-            $('.layui-layer-loading0').html('<div></div><div></div><div></div>')
+            if (typeof wapObj !== 'undefined') {
+              self.ajaxLoadLayer = wapObj.layerLoading();
+            } else {
+              self.ajaxLoadLayer = layer.load(0, {time: 2000, offset: ['30%', ''], shade: 0});
+              $('.layui-layer-loading0').html('<div></div><div></div><div></div>')
+            }
           }
         }
       },

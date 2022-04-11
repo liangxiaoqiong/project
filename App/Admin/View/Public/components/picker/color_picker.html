@@ -3,8 +3,8 @@
   <div class="display-align">
     <el-color-picker
         v-model="info[param]"
-        show-alpha
-        :predefine="predefineColors">
+        :show-alpha="isShowAlpha"
+        :predefine="isShowAlpha ? predefineColors : predefineColors2" @change="changeColor">
     </el-color-picker>
     <a class="color-primary" @click="resetColor">重置</a>
   </div>
@@ -18,7 +18,11 @@
       defaultColor: {
         type: String,
         default: ''
-      } //默认颜色
+      }, //默认颜色
+      isShowAlpha: {
+        type: Boolean,
+        default: true
+      }, // 是否显示透明度
     },
     data: function () {
       return {
@@ -47,13 +51,43 @@
           'hsla(209, 100%, 56%, 0.73)',
           '#c7158577'
         ],
+        predefineColors2: [
+          '#ffffff',
+          '#f8f8f8',
+          '#f2f2f2',
+          '#999999',
+          '#444444',
+          '#FF4444',
+          '#ff4500',
+          '#FF6500',
+          '#FF884D',
+          '#FFCD00',
+          '#3FBD00',
+          '#3FBC87',
+          '#00CD98',
+          '#5197FF',
+          '#BADCFF',
+          '#c71585',
+        ], // 没有透明度的
       }
     },
     methods: {
       //重置颜色
       resetColor: function () {
         this.info[this.param] = this.defaultColor
+      },
+      changeColor: function () {
+        this.$emit('change');
       }
     },
   }
 </script>
+<style>
+  .el-input--mini .el-input__inner{width: initial}
+  .el-color-dropdown__btns button{min-width: initial}
+  .el-color-picker{height: 26px;vertical-align: middle;margin-right: 5px;}
+  .el-color-picker__trigger{background-color: #FFFFff;border: 1px solid #E0E0E0;width: 42px;height: 26px;border-radius: 4px!important;}
+  .el-color-picker__color{border: none;}
+  .el-color-picker__color.is-alpha .el-color-picker__color-inner{border-radius: 2px;}
+  .el-color-picker__trigger .el-icon-arrow-down{display: none}
+</style>
