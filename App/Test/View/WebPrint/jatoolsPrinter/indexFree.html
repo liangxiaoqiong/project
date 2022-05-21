@@ -1,0 +1,1289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>打印预览、选择打印机打印、直接打印</title>
+  <style>
+    body {
+      overflow-y: auto;
+      padding: 0;
+      margin: 0;
+    }
+    .drsElement {
+      position: absolute;
+      background-color: transparent;
+    }
+    .editor-order-table {
+      width: 100%;
+      background: #FFFFff;
+      border: 1px solid #000!important;
+      border-collapse: collapse;
+    }
+    .editor-order-table td {
+      border: 1px solid #000!important;
+      min-width: 24px;
+    }
+    .tr-total-chinese {
+      border-collapse: collapse;
+    }
+    .tr-total-chinese,
+    .tr-total-chinese td {
+      border: none!important;
+    }
+    .tr-total-chinese td.border-r {
+      border-right: 1px solid #333!important;
+      padding: 0;
+    }
+    .dragresize-direct .print-table__undefined table,
+    .dragresize-direct .print-table__undefined td,
+    .dragresize-direct .print-table__0 table,
+    .dragresize-direct .print-table__0 td,
+    .dragresize-direct .print-table__0 .tr-total-chinese td.border-r {
+      border: none!important;
+    }
+    .print-table__1-25 table,
+    .print-table__1-25 td,
+    .print-table__1-25 td .tr-total-chinese td.border-r {
+      border-width: 1.25px!important;
+    }
+    .print-table__1-5 table,
+    .print-table__1-5 td,
+    .print-table__1-5 td .tr-total-chinese td.border-r {
+      border-width: 1.5px!important;
+    }
+    .print-table__2 table,
+    .print-table__2 td,
+    .print-table__2 td .tr-total-chinese td.border-r {
+      border-width: 2px!important;
+    }
+    .print-table__3 table,
+    .print-table__3 td,
+    .print-table__3 td .tr-total-chinese td.border-r {
+      border-width: 3px!important;
+    }
+    .print-table__4 table,
+    .print-table__4 td,
+    .print-table__4 td .tr-total-chinese td.border-r {
+      border-width: 4px!important;
+    }
+    .print-table__5 table,
+    .print-table__5 td,
+    .print-table__5 td .tr-total-chinese td.border-r {
+      border-width: 5px!important;
+    }
+    .drsElement.drs__order-table {
+      z-index: 1!important;
+    }
+
+    .drsElement .dragresize-content {
+      overflow: hidden;
+      max-height: 100%;
+    }
+    .drsElement .dragresize-content .custom-img {
+      width: 100%;
+      height: 100%;
+      vertical-align: middle;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+    }
+    /*region 热敏打印*/
+    .dragresize-direct .editor-order-table td {
+      text-align: center;
+    }
+    #print-content-html .dragresize-box {
+      position: relative;
+      height: calc(100% - 76px);
+      overflow-y: hidden;
+    }
+    .table-bottom .flex-between {
+      line-height: 20px;
+      font-size: 12px;
+    }
+    .flex-between {
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .editor-order-table td {
+      word-break: break-all;
+    }
+    .position-r {
+      position: relative;
+    }
+    .table-box__num1,
+    .table-box__num2 {
+      display: flex;
+      display: -webkit-flex;
+      justify-content: space-between;
+    }
+    .table-box__num2 table {
+      width: calc(50% - 5px);
+    }
+  </style>
+  <script type="text/javascript" src="/Public/common/js/plug-in/jcp/jcpfree.js"></script>
+  <script>
+    function doPrint(how) {
+      var myDoc = {
+        documents : document, // 打印页面(div)们在本文档中
+        copyrights : '杰创软件拥有版权  www.jatools.com' // 版权声明必须
+      };
+      var jcp = getJCP();
+      // 调用打印方法
+      if (how == '打印预览')
+        jcp.printPreview(myDoc, false);
+      else if (how == '弹出打印机选择对话框打印') {
+        jcp.print(myDoc, true);
+      } else
+        jcp.print(myDoc, false); // 不弹出对话框打印
+    }
+  </script>
+</head>
+<body>
+<h1>打印预览、选择打印机打印、直接打印</h1>
+<br />
+<div id="page1" break-window='#break-table'>
+  <div class="dragresize-box breakable" style="border: none; break-after: page; overflow-y: hidden;"><div class="position-r" style="height: 164px;"><!----><div class="drsElement" style="top: 65px; height: 85px; left: 422px; width: 85px; z-index: 75; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><img src="/admin.php?c=Public&amp;a=getQRCode&amp;url=aHR0cDovL2hkZXYuZHVpbmluLmNvbS9pbmRleC5waHA/bT1XYXAmYz1EZWxpdmVyeSZhPW9yZGVyRGVsaXZlcnkmc2U9MTY3OTkmb3JkZXJfaWQ9MjQxMjA=" class="custom-img" style="width: 100%; height: 100%;"></div><div class="drsElement" style="top: 88px; height: 16px; left: 43px; width: 150px; z-index: 10; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><div>客户名：张三</div></div><div class="drsElement" style="top: 114px; height: 16px; left: 43px; width: 150px; z-index: 11; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><div>客户备注名：我是大帅哥</div></div><div class="drsElement" style="top: 138px; height: 16px; left: 43px; width: 150px; z-index: 12; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><div>客户电话：18050117125</div></div><div class="drsElement" style="top: 79px; height: 16px; left: 531px; width: 150px; z-index: 13; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: right; overflow: hidden;"><div>单号：24120</div></div><div class="drsElement" style="top: 7px; height: 39px; left: 213px; width: 308px; z-index: 77; font-family: arial, helvetica, sans-serif; font-size: 24px; font-weight: 900; text-align: center; overflow: hidden;"><div>商家名称：工厂版测试环境</div></div><div class="drsElement" style="top: 107px; height: 16px; left: 531px; width: 150px; z-index: 16; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: right; overflow: hidden;"><div>下单时间：2022-01-24 11:54:26</div></div><div class="drsElement" style="top: 134px; height: 16px; left: 531px; width: 150px; z-index: 17; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: right; overflow: hidden;"><div>商家地址：枋湖四海智慧园</div></div><div class="drsElement" style="top: 14px; height: 60px; left: 43px; width: 60px; z-index: 18; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><img src="http://dl.duinin.com/data/advert/20201223/06620639826915783.jpg" class="custom-img" style="width: 100%; height: 100%;"></div><!----><div class="drsElement" style="top: 111px; height: 16px; left: 195px; width: 150px; z-index: 2; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><div>湖里客户,客户</div></div></div> <div class="position-r"><div class="print-table__1-5" style="margin-left: 47px; width: 639px; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; line-height: 115%;"><div class="table-box__num1"><table id="editor-order-table0" class="editor-order-table print-table__1-5"  headerRows='1' style="width: 100%; font-size: 12px;"><thead><tr><td width="NaNpx">
+    序号
+  </td><td width="199px">
+    品名
+  </td><td width="NaNpx">
+    规格
+  </td><td width="NaNpx">
+    单位
+  </td><td width="NaNpx">
+    零售价
+  </td><td width="NaNpx">
+    发货数量
+  </td><td width="NaNpx">
+    实收数量
+  </td><td width="NaNpx">
+    单价
+  </td><td width="NaNpx">
+    金额
+  </td><td width="NaNpx">
+    备注
+  </td></tr></thead> <tbody><tr><td>
+    1
+  </td><td>
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    75.31
+  </td><td>
+    1
+  </td><td></td><td>
+    52.72
+  </td><td>
+    52.72
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    2
+  </td><td>
+    美的（Midea）16寸 三叶落地扇/电风扇立式静音大风力/定时白色家用摇头俯仰升降 三叶落地扇 F
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    209.00
+  </td><td>
+    2
+  </td><td></td><td>
+    146.30
+  </td><td>
+    292.60
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    3
+  </td><td>
+    厨房碗筷收纳篮
+  </td><td>
+    粉色+S
+  </td><td>
+
+  </td><td>
+
+  </td><td>
+    1
+  </td><td></td><td>
+
+  </td><td>
+
+  </td><td>
+    赠品
+  </td></tr> <!----> <!----><tr><td>
+    4
+  </td><td>
+    配送模板-可下单
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    80.00
+  </td><td>
+    1
+  </td><td></td><td>
+    56.00
+  </td><td>
+    56.00
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    5
+  </td><td>
+    不可下单2
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    0.10
+  </td><td>
+    3
+  </td><td></td><td>
+    0.07
+  </td><td>
+    0.21
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    6
+  </td><td>
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td>
+    BCD-518WGPM
+  </td><td>
+    件
+  </td><td>
+    10999.00
+  </td><td>
+    1
+  </td><td></td><td>
+    7699.30
+  </td><td>
+    7699.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    7
+  </td><td>
+    不可下单
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    15.10
+  </td><td>
+    19
+  </td><td></td><td>
+    10.57
+  </td><td>
+    200.83
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    8
+  </td><td>
+    美的（Midea）电磁炉 家用2200W大火力匀火188mm大线圈盘 电磁灶四重防水 C22-RH2
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    329.00
+  </td><td>
+    1
+  </td><td></td><td>
+    230.30
+  </td><td>
+    230.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    9
+  </td><td>
+    美的（Midea）16寸 三叶落地扇/电风扇立式静音大风力/定时白色家用摇头俯仰升降 三叶落地扇 F
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    209.00
+  </td><td>
+    1
+  </td><td></td><td>
+    146.30
+  </td><td>
+    146.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    10
+  </td><td>
+    美的（Midea）电磁炉 家用2200W大火力匀火188mm大线圈盘 电磁灶四重防水 C22-RH2
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    329.00
+  </td><td>
+    1
+  </td><td></td><td>
+    230.30
+  </td><td>
+    230.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    11
+  </td><td>
+    小天鹅（LittleSwan)滚筒洗衣机全自动 节能变频 物理去渍 水魔方智能家电 纳米银离子除菌
+  </td><td>
+    TG100-1436MUADT
+  </td><td>
+    件
+  </td><td>
+    6199.00
+  </td><td>
+    1
+  </td><td></td><td>
+    4339.30
+  </td><td>
+    4339.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    12
+  </td><td>
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    719.00
+  </td><td>
+    1
+  </td><td></td><td>
+    503.30
+  </td><td>
+    503.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    13
+  </td><td>
+    美的（Midea）16寸 三叶落地扇/电风扇立式静音大风力/定时白色家用摇头俯仰升降 三叶落地扇 F
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    209.00
+  </td><td>
+    1
+  </td><td></td><td>
+    146.30
+  </td><td>
+    146.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    14
+  </td><td>
+    美的（Midea）油烟机CXW-280-B63S
+  </td><td>
+    CXW-280-B63S
+  </td><td>
+    件
+  </td><td>
+    2199.00
+  </td><td>
+    1
+  </td><td></td><td>
+    1539.30
+  </td><td>
+    1539.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    15
+  </td><td>
+    COLMO油烟机CXJP924W-8
+  </td><td>
+    CXJP924W-8
+  </td><td>
+    件
+  </td><td>
+    5999.00
+  </td><td>
+    1
+  </td><td></td><td>
+    4199.30
+  </td><td>
+    4199.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    16
+  </td><td>
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td>
+    BCD-518WGPM
+  </td><td>
+    件
+  </td><td>
+    10999.00
+  </td><td>
+    1
+  </td><td></td><td>
+    7699.30
+  </td><td>
+    7699.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    17
+  </td><td>
+    美的（Midea）23L家用微波炉烤箱一体机 智能湿度感应 平板加热微波炉 智能菜单 易清洁面板 大
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    899.00
+  </td><td>
+    1
+  </td><td></td><td>
+    629.30
+  </td><td>
+    629.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    18
+  </td><td>
+    美的（Midea）家用微波炉 微蒸烤一体机 电蒸箱电烤箱 变频大火力 立体烘烤 食品级304不锈钢内
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    2899.00
+  </td><td>
+    1
+  </td><td></td><td>
+    2029.30
+  </td><td>
+    2029.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    19
+  </td><td>
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    719.00
+  </td><td>
+    1
+  </td><td></td><td>
+    503.30
+  </td><td>
+    503.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    20
+  </td><td>
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td>
+    BCD-518WGPM
+  </td><td>
+    件
+  </td><td>
+    10999.00
+  </td><td>
+    1
+  </td><td></td><td>
+    7699.30
+  </td><td>
+    7699.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    21
+  </td><td>
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    719.00
+  </td><td>
+    1
+  </td><td></td><td>
+    503.30
+  </td><td>
+    503.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    22
+  </td><td>
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td>
+    BCD-518WGPM
+  </td><td>
+    件
+  </td><td>
+    10999.00
+  </td><td>
+    1
+  </td><td></td><td>
+    7699.30
+  </td><td>
+    7699.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    23
+  </td><td>
+    小天鹅（LittleSwan)滚筒洗衣机全自动 节能变频 物理去渍 水魔方智能家电 纳米银离子除菌
+  </td><td>
+    TG100-1436MUADT
+  </td><td>
+    件
+  </td><td>
+    6199.00
+  </td><td>
+    1
+  </td><td></td><td>
+    4339.30
+  </td><td>
+    4339.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    24
+  </td><td>
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    719.00
+  </td><td>
+    1
+  </td><td></td><td>
+    503.30
+  </td><td>
+    503.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    25
+  </td><td>
+    小天鹅（LittleSwan)滚筒洗衣机全自动 节能变频 物理去渍 水魔方智能家电 纳米银离子除菌
+  </td><td>
+    TG100-1436MUADT
+  </td><td>
+    件
+  </td><td>
+    6199.00
+  </td><td>
+    1
+  </td><td></td><td>
+    4339.30
+  </td><td>
+    4339.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    26
+  </td><td>
+    美的（Midea）电磁炉 家用2200W大火力匀火188mm大线圈盘 电磁灶四重防水 C22-RH2
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    329.00
+  </td><td>
+    1
+  </td><td></td><td>
+    230.30
+  </td><td>
+    230.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    27
+  </td><td>
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td>
+    BCD-518WGPM
+  </td><td>
+    件
+  </td><td>
+    10999.00
+  </td><td>
+    1
+  </td><td></td><td>
+    7699.30
+  </td><td>
+    7699.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    28
+  </td><td>
+    美的（Midea）家用微波炉 微蒸烤一体机 电蒸箱电烤箱 变频大火力 立体烘烤 食品级304不锈钢内
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    2899.00
+  </td><td>
+    1
+  </td><td></td><td>
+    2029.30
+  </td><td>
+    2029.30
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    29
+  </td><td>
+    法国香水
+  </td><td>
+    蓝色
+  </td><td>
+    瓶
+  </td><td>
+    100.00
+  </td><td>
+    2
+  </td><td></td><td>
+    70.00
+  </td><td>
+    140.00
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    30
+  </td><td>
+    防晒霜
+  </td><td>
+    蓝色
+  </td><td>
+    件
+  </td><td>
+    70.00
+  </td><td>
+    1
+  </td><td></td><td>
+    0.90
+  </td><td>
+    0.90
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    31
+  </td><td>
+    非常非常好用的进口保湿乳
+  </td><td>
+    红色+250ML+小样1
+  </td><td>
+    件
+  </td><td>
+    99.00
+  </td><td>
+    1
+  </td><td></td><td>
+    88.00
+  </td><td>
+    88.00
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    32
+  </td><td>
+    防晒霜
+  </td><td>
+    黑色
+  </td><td>
+    件
+  </td><td>
+    1.00
+  </td><td>
+    1
+  </td><td></td><td>
+    1.00
+  </td><td>
+    1.00
+  </td><td>
+
+  </td></tr> <!----> <!----><tr><td>
+    33
+  </td><td>
+    高跟鞋
+  </td><td>
+
+  </td><td>
+    件
+  </td><td>
+    99.00
+  </td><td>
+    1
+  </td><td></td><td>
+    69.30
+  </td><td>
+    69.30
+  </td><td>
+
+  </td></tr> <!----> <!----><!----> <!----> <tr class="tr-total"><td colspan="4" class="td-total-chinese"><div style="text-align: left;"><table class="tr-total-chinese"><tbody><tr><td class="border-r">合计金额（大写）</td> <td style="padding-left: 4px;"><div class="line-one">陆万伍仟捌佰叁拾玖元壹角陆分</div></td></tr></tbody></table></div> <!----> <!----> <!----></td><td colspan="1" class="td-total-chinese"><!----> <!----> <!----> <!----></td><td colspan="2" class="td-total-chinese"><!----> <!----> <!----> <!----></td><td colspan="1" class="td-total-chinese"><!----> <!----> <!----> <!----></td><td colspan="1" class="td-total-chinese"><!----> <!----> <!----> 65839.16</td><td colspan="1" class="td-total-chinese"><!----> <!----> <!----> <!----></td></tr></tbody></table></div></div> <div class="table-bottom"><!----></div> <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></div> <div class="position-r" style="height: 25px;"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><div class="drsElement" style="top: 9px; height: 16px; left: 49px; width: 150px; z-index: 19; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>商品总额：65839.16</div></div><!----></div></div></div>
+<div id="page2">
+  <div class="dragresize-box breakable" style="border: none; break-after: page; overflow-y: hidden;"><div class="position-r" style="height: 126px;"><!----><div class="drsElement" style="top: 9px; height: 31px; left: 291px; width: 242px; z-index: 3; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 24px; font-weight: bold; text-align: left; overflow: hidden;"><div>不错的商城A4打印</div></div><!----><div class="drsElement" style="top: 11px; height: 92.96px; left: 205px; width: 60px; z-index: 6; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><img src="http://dl.duinin.com/data/advert/20210630/06783853054933301.png" class="custom-img" style="width: 100%; height: 100%;"></div><div class="drsElement" style="top: 15px; height: 32px; left: 14px; width: 190px; z-index: 48; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>客户888888888888888888888名：张三</div></div><div class="drsElement" style="top: 60px; height: 16px; left: 21px; width: 150px; z-index: 7; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>客户电话：18050117125</div></div><div class="drsElement" style="top: 38px; height: 16px; left: 481px; width: 278px; z-index: 9; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>客户地址：北京市北京市东城区23</div></div><div class="drsElement" style="top: 15px; height: 16px; left: 515px; width: 150px; z-index: 9; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>单号：24120</div></div><div class="drsElement" style="top: 59px; height: 16px; left: 479px; width: 280px; z-index: 11; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>客户备注：[余额支付] </div></div><div class="drsElement" style="top: 80px; height: 16px; left: 20px; width: 150px; z-index: 20; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>客服电话：18046143448</div></div><div class="drsElement" style="top: 99px; height: 16px; left: 21px; width: 261px; z-index: 22; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>商家地址：枋湖四海智慧园</div></div><!----><div class="drsElement" style="top: 80px; height: 16px; left: 473px; width: 289px; z-index: 27; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>门店名称：</div></div><div class="drsElement" style="top: 100px; height: 16px; left: 493px; width: 269px; z-index: 31; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>商家名称：工厂版测试环境</div></div><div class="drsElement" style="top: 46px; height: 60px; left: 343px; width: 60px; z-index: 43; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><img src="/admin.php?c=Public&amp;a=getQRCode&amp;url=aHR0cDovL2hkZXYuZHVpbmluLmNvbS9pbmRleC5waHA/bT1XYXAmYz1EZWxpdmVyeSZhPW9yZGVyRGVsaXZlcnkmc2U9MTY3OTkmb3JkZXJfaWQ9MjQxMjA=" class="custom-img" style="width: 100%; height: 100%;"></div></div> <div class="position-r"><div class="print-table__1" style="margin-left: 11px; width: 765px; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: center;"><div class="table-box__num2"><table id="editor-order-table0" class="editor-order-table print-table__1" style="width: calc(50% - 5px); font-size: 12px;"><thead><tr><td width="39px" style="height: 31px;">
+    序号
+  </td><td width="139px" style="height: 31px;">
+    名称规格
+  </td><td width="34px" style="height: 31px;">
+    发货数量
+  </td><td width="19px" style="height: 31px;">
+    单位
+  </td><td width="59px" style="height: 31px;">
+    金额
+  </td><td width="39px" style="height: 31px;">
+    单价
+  </td><td width="19px" style="height: 31px;">
+    备注
+  </td></tr></thead> <tbody><tr><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    52.72
+  </td><td style="height: 72px;">
+    52.72
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    2
+  </td><td style="height: 72px;">
+    美的（Midea）16寸 三叶落地扇/电风扇立式静音大风力/定时白色家用摇头俯仰升降 三叶落地扇 F
+  </td><td style="height: 72px;">
+    2
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    292.60
+  </td><td style="height: 72px;">
+    146.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 31px;">
+    3
+  </td><td style="height: 31px;">
+    厨房碗筷收纳篮
+  </td><td style="height: 31px;">
+    1
+  </td><td style="height: 31px;">
+
+  </td><td style="height: 31px;">
+
+  </td><td style="height: 31px;">
+
+  </td><td style="height: 31px;">
+    赠品
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    4
+  </td><td style="height: 72px;">
+    配送模板-可下单
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    56.00
+  </td><td style="height: 72px;">
+    56.00
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    5
+  </td><td style="height: 72px;">
+    不可下单2
+  </td><td style="height: 72px;">
+    3
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    0.21
+  </td><td style="height: 72px;">
+    0.07
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    6
+  </td><td style="height: 72px;">
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 58px;">
+    7
+  </td><td style="height: 58px;">
+    不可下单
+  </td><td style="height: 58px;">
+    19
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    200.83
+  </td><td style="height: 58px;">
+    10.57
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    8
+  </td><td style="height: 72px;">
+    美的（Midea）电磁炉 家用2200W大火力匀火188mm大线圈盘 电磁灶四重防水 C22-RH2
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    230.30
+  </td><td style="height: 72px;">
+    230.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    9
+  </td><td style="height: 72px;">
+    美的（Midea）16寸 三叶落地扇/电风扇立式静音大风力/定时白色家用摇头俯仰升降 三叶落地扇 F
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    146.30
+  </td><td style="height: 72px;">
+    146.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    10
+  </td><td style="height: 72px;">
+    美的（Midea）电磁炉 家用2200W大火力匀火188mm大线圈盘 电磁灶四重防水 C22-RH2
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    230.30
+  </td><td style="height: 72px;">
+    230.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 58px;">
+    11
+  </td><td style="height: 58px;">
+    小天鹅（LittleSwan)滚筒洗衣机全自动 节能变频 物理去渍 水魔方智能家电 纳米银离子除菌
+  </td><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    4339.30
+  </td><td style="height: 58px;">
+    4339.30
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 58px;">
+    12
+  </td><td style="height: 58px;">
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    503.30
+  </td><td style="height: 58px;">
+    503.30
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></tbody></table><table id="editor-order-table1" class="editor-order-table print-table__1" style="width: calc(50% - 5px); font-size: 12px;"><thead><tr><td width="39px" style="height: 31px;">
+    序号
+  </td><td width="139px" style="height: 31px;">
+    名称规格
+  </td><td width="34px" style="height: 31px;">
+    发货数量
+  </td><td width="19px" style="height: 31px;">
+    单位
+  </td><td width="59px" style="height: 31px;">
+    金额
+  </td><td width="39px" style="height: 31px;">
+    单价
+  </td><td width="19px" style="height: 31px;">
+    备注
+  </td></tr></thead> <tbody><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><tr><td style="height: 72px;">
+    13
+  </td><td style="height: 72px;">
+    美的（Midea）16寸 三叶落地扇/电风扇立式静音大风力/定时白色家用摇头俯仰升降 三叶落地扇 F
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    146.30
+  </td><td style="height: 72px;">
+    146.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    14
+  </td><td style="height: 72px;">
+    美的（Midea）油烟机CXW-280-B63S
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    1539.30
+  </td><td style="height: 72px;">
+    1539.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 31px;">
+    15
+  </td><td style="height: 31px;">
+    COLMO油烟机CXJP924W-8
+  </td><td style="height: 31px;">
+    1
+  </td><td style="height: 31px;">
+    件
+  </td><td style="height: 31px;">
+    4199.30
+  </td><td style="height: 31px;">
+    4199.30
+  </td><td style="height: 31px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    16
+  </td><td style="height: 72px;">
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    17
+  </td><td style="height: 72px;">
+    美的（Midea）23L家用微波炉烤箱一体机 智能湿度感应 平板加热微波炉 智能菜单 易清洁面板 大
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    629.30
+  </td><td style="height: 72px;">
+    629.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    18
+  </td><td style="height: 72px;">
+    美的（Midea）家用微波炉 微蒸烤一体机 电蒸箱电烤箱 变频大火力 立体烘烤 食品级304不锈钢内
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    2029.30
+  </td><td style="height: 72px;">
+    2029.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 58px;">
+    19
+  </td><td style="height: 58px;">
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    503.30
+  </td><td style="height: 58px;">
+    503.30
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    20
+  </td><td style="height: 72px;">
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    21
+  </td><td style="height: 72px;">
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    503.30
+  </td><td style="height: 72px;">
+    503.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    22
+  </td><td style="height: 72px;">
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 58px;">
+    23
+  </td><td style="height: 58px;">
+    小天鹅（LittleSwan)滚筒洗衣机全自动 节能变频 物理去渍 水魔方智能家电 纳米银离子除菌
+  </td><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    4339.30
+  </td><td style="height: 58px;">
+    4339.30
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><!----> <!----> <tr class="tr-total"><td colspan="4" style="height: 58px;">合计 <!----> <!----></td><td colspan="1" style="height: 58px;"><!----> 50738.46 <!----></td><td colspan="2" style="height: 58px;"><!----> <!----> <!----></td></tr></tbody></table></div></div> <div class="table-bottom"><!----></div> <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></div> <div class="position-r" style="height: 26px;"><!----><!----><div class="drsElement" style="top: 10px; height: 16px; left: 595px; width: 150px; z-index: 2; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; overflow: hidden;"><div>签字位置：这是签字的</div></div><!----><!----><!----><!----><!----><!----><!----><!----><div class="drsElement" style="top: 5px; height: 16px; left: 12px; width: 150px; z-index: 24; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>商品总额：65839.16</div></div><!----><!----><!----></div></div>
+</div>
+<div id="page3">
+  <div class="dragresize-box breakable" style="border: none; break-after: page; overflow-y: hidden;"><div class="position-r" style="height: 126px;"><!----><div class="drsElement" style="top: 9px; height: 31px; left: 291px; width: 242px; z-index: 3; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 24px; font-weight: bold; text-align: left; overflow: hidden;"><div>不错的商城A4打印</div></div><!----><div class="drsElement" style="top: 11px; height: 92.96px; left: 205px; width: 60px; z-index: 6; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; overflow: hidden;"><img src="http://dl.duinin.com/data/advert/20210630/06783853054933301.png" class="custom-img" style="width: 100%; height: 100%;"></div><div class="drsElement" style="top: 15px; height: 32px; left: 14px; width: 190px; z-index: 48; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>客户888888888888888888888名：张三</div></div><div class="drsElement" style="top: 60px; height: 16px; left: 21px; width: 150px; z-index: 7; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>客户电话：18050117125</div></div><div class="drsElement" style="top: 38px; height: 16px; left: 481px; width: 278px; z-index: 9; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>客户地址：北京市北京市东城区23</div></div><div class="drsElement" style="top: 15px; height: 16px; left: 515px; width: 150px; z-index: 9; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>单号：24120</div></div><div class="drsElement" style="top: 59px; height: 16px; left: 479px; width: 280px; z-index: 11; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>客户备注：[余额支付] </div></div><div class="drsElement" style="top: 80px; height: 16px; left: 20px; width: 150px; z-index: 20; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>客服电话：18046143448</div></div><div class="drsElement" style="top: 99px; height: 16px; left: 21px; width: 261px; z-index: 22; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>商家地址：枋湖四海智慧园</div></div><!----><div class="drsElement" style="top: 80px; height: 16px; left: 473px; width: 289px; z-index: 27; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>门店名称：</div></div><div class="drsElement" style="top: 100px; height: 16px; left: 493px; width: 269px; z-index: 31; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: right; line-height: 100%; overflow: hidden;"><div>商家名称：工厂版测试环境</div></div><div class="drsElement" style="top: 46px; height: 60px; left: 343px; width: 60px; z-index: 43; font-family: arial, helvetica, sans-serif; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><img src="/admin.php?c=Public&amp;a=getQRCode&amp;url=aHR0cDovL2hkZXYuZHVpbmluLmNvbS9pbmRleC5waHA/bT1XYXAmYz1EZWxpdmVyeSZhPW9yZGVyRGVsaXZlcnkmc2U9MTY3OTkmb3JkZXJfaWQ9MjQxMjA=" class="custom-img" style="width: 100%; height: 100%;"></div></div> <div class="position-r"><div class="print-table__1" style="margin-left: 11px; width: 765px; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: center;"><div class="table-box__num2"><table id="editor-order-table0" class="editor-order-table print-table__1" style="width: calc(50% - 5px); font-size: 12px;"><thead><tr><td width="39px" style="height: 31px;">
+    序号
+  </td><td width="139px" style="height: 31px;">
+    名称规格
+  </td><td width="34px" style="height: 31px;">
+    发货数量
+  </td><td width="19px" style="height: 31px;">
+    单位
+  </td><td width="59px" style="height: 31px;">
+    金额
+  </td><td width="39px" style="height: 31px;">
+    单价
+  </td><td width="19px" style="height: 31px;">
+    备注
+  </td></tr></thead> <tbody><tr><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    美的（Midea）加湿器卧室办公室加湿 除菌空气消毒机 加湿净化 空气加湿 WIFI遥控操作 SPW
+  </td><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    503.30
+  </td><td style="height: 58px;">
+    503.30
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 58px;">
+    2
+  </td><td style="height: 58px;">
+    小天鹅（LittleSwan)滚筒洗衣机全自动 节能变频 物理去渍 水魔方智能家电 纳米银离子除菌
+  </td><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    4339.30
+  </td><td style="height: 58px;">
+    4339.30
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 58px;">
+    3
+  </td><td style="height: 58px;">
+    美的（Midea）电磁炉 家用2200W大火力匀火188mm大线圈盘 电磁灶四重防水 C22-RH2
+  </td><td style="height: 58px;">
+    1
+  </td><td style="height: 58px;">
+    件
+  </td><td style="height: 58px;">
+    230.30
+  </td><td style="height: 58px;">
+    230.30
+  </td><td style="height: 58px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    4
+  </td><td style="height: 72px;">
+    美的（Midea）法式多门冰箱 518升智能家用冰箱 微晶一周鲜 大容量 双变频 电冰箱 除菌净味
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+    7699.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 72px;">
+    5
+  </td><td style="height: 72px;">
+    美的（Midea）家用微波炉 微蒸烤一体机 电蒸箱电烤箱 变频大火力 立体烘烤 食品级304不锈钢内
+  </td><td style="height: 72px;">
+    1
+  </td><td style="height: 72px;">
+    件
+  </td><td style="height: 72px;">
+    2029.30
+  </td><td style="height: 72px;">
+    2029.30
+  </td><td style="height: 72px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 18px;">
+    6
+  </td><td style="height: 18px;">
+    法国香水
+  </td><td style="height: 18px;">
+    2
+  </td><td style="height: 18px;">
+    瓶
+  </td><td style="height: 18px;">
+    140.00
+  </td><td style="height: 18px;">
+    70.00
+  </td><td style="height: 18px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 18px;">
+    7
+  </td><td style="height: 18px;">
+    防晒霜
+  </td><td style="height: 18px;">
+    1
+  </td><td style="height: 18px;">
+    件
+  </td><td style="height: 18px;">
+    0.90
+  </td><td style="height: 18px;">
+    0.90
+  </td><td style="height: 18px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 31px;">
+    8
+  </td><td style="height: 31px;">
+    非常非常好用的进口保湿乳
+  </td><td style="height: 31px;">
+    1
+  </td><td style="height: 31px;">
+    件
+  </td><td style="height: 31px;">
+    88.00
+  </td><td style="height: 31px;">
+    88.00
+  </td><td style="height: 31px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 18px;">
+    9
+  </td><td style="height: 18px;">
+    防晒霜
+  </td><td style="height: 18px;">
+    1
+  </td><td style="height: 18px;">
+    件
+  </td><td style="height: 18px;">
+    1.00
+  </td><td style="height: 18px;">
+    1.00
+  </td><td style="height: 18px;">
+
+  </td></tr> <!----> <!----><tr><td style="height: 18px;">
+    10
+  </td><td style="height: 18px;">
+    高跟鞋
+  </td><td style="height: 18px;">
+    1
+  </td><td style="height: 18px;">
+    件
+  </td><td style="height: 18px;">
+    69.30
+  </td><td style="height: 18px;">
+    69.30
+  </td><td style="height: 18px;">
+
+  </td></tr> <!----> <!----><!----> <tr><td style="height: 18px;"><div style="display: inline-block;">11</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 18px;"><div style="display: inline-block;">12</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></tbody></table><table id="editor-order-table1" class="editor-order-table print-table__1" style="width: calc(50% - 5px); font-size: 12px;"><thead><tr><td width="39px" style="height: 31px;">
+    序号
+  </td><td width="139px" style="height: 31px;">
+    名称规格
+  </td><td width="34px" style="height: 31px;">
+    发货数量
+  </td><td width="19px" style="height: 31px;">
+    单位
+  </td><td width="59px" style="height: 31px;">
+    金额
+  </td><td width="39px" style="height: 31px;">
+    单价
+  </td><td width="19px" style="height: 31px;">
+    备注
+  </td></tr></thead> <tbody><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----> <tr><td style="height: 58px;"><div style="display: inline-block;">13</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 58px;"><div style="display: inline-block;">14</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 58px;"><div style="display: inline-block;">15</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 58px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 72px;"><div style="display: inline-block;">16</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 72px;"><div style="display: inline-block;">17</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 72px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 18px;"><div style="display: inline-block;">18</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 18px;"><div style="display: inline-block;">19</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 31px;"><div style="display: inline-block;">20</div></td><td style="height: 31px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 31px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 31px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 31px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 31px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 31px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 18px;"><div style="display: inline-block;">21</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 18px;"><div style="display: inline-block;">22</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <tr><td style="height: 18px;"><div style="display: inline-block;">23</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td><td style="height: 18px;"><div style="display: inline-block;">&nbsp;</div></td></tr> <!----><!----> <!----> <tr class="tr-total"><td colspan="4" style="height: 18px;">合计 <!----> <!----></td><td colspan="1" style="height: 18px;"><!----> 15100.70 <!----></td><td colspan="2" style="height: 18px;"><!----> <!----> <!----></td></tr></tbody></table></div></div> <div class="table-bottom"><!----></div> <!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></div> <div class="position-r" style="height: 26px;"><!----><!----><div class="drsElement" style="top: 10px; height: 16px; left: 595px; width: 150px; z-index: 2; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; overflow: hidden;"><div>签字位置：这是签字的</div></div><!----><!----><!----><!----><!----><!----><!----><!----><div class="drsElement" style="top: 5px; height: 16px; left: 12px; width: 150px; z-index: 24; font-family: 楷体, 楷体_GB2312, SimKai; font-size: 12px; text-align: left; line-height: 100%; overflow: hidden;"><div>商品总额：65839.16</div></div><!----><!----><!----></div></div></div>
+<br />
+<input type="button" value="打印预览" onClick="doPrint('打印预览')">
+<input type="button" value="弹出打印机选择对话框打印" onClick="doPrint('弹出打印机选择对话框打印')">
+<input type="button" value="无对话框直接打印" onClick="doPrint('无对话框直接打印')">
+</body>
+</html>
