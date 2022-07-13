@@ -5,72 +5,115 @@
     <div class="color-orange mb-10">
       文件上传功能，主要是图片上传
     </div>
-    <ul>
-      <li class="mt-10">
-        <div>单图上传【只能上传一张】</div>
-        <div>
-          <upload-img-box
-            :info="info"
-            param="img1"
-            img-tip="建议尺寸: 200 * 200, 比例: 1:1"></upload-img-box>
-        </div>
-        <div>【带有重置按钮】</div>
-        <div>
-          <upload-img-box
-            :info="info"
-            param="img2"
-            :is-reset="true"
-            img-tip="建议尺寸: 200 * 200, 比例: 1:1"></upload-img-box>
-        </div>
-        <div>【图片尺寸可自定义】</div>
-        <div>
-          <upload-img-box
-            :info="info"
-            param="img3"
-            img-scale="2"
-            img-tip="建议尺寸: 400 * 200, 比例: 2:1"></upload-img-box>
-        </div>
-        <div>
-          <div>【公共上传图片区域】</div>
-          <div class="upload-box">
-            <template v-if="info.img4 !== ''">
-              <img :src="info.img4">
-            </template>
-            <template v-else>
-              <div class="btn-text">视频封面</div>
-            </template>
-            <upload-file v-model="info.img4" upload-type="1" accept="image/*"
-                         :check-file="checkImg"></upload-file>
-          </div>
-        </div>
-      </li>
-      <li class="mt-10">
-        <div>多图【可上传多张】</div>
-        <div>【默认可拖拽排序】</div>
-        <upload-multi-img-drag
-          img-tip="建议尺寸: 200 * 200, 比例: 1:1"
-          :img-list="info.imgList" max-img-len="5"></upload-multi-img-drag>
-        【不可拖拽排序】【设置最多上传图片数量】
-        <upload-multi-img-drag
-          :is-drag="false"
-          :img-list="info.imgList1" max-img-len="5"></upload-multi-img-drag>
-        【可设置文字说明】
-        <upload-multi-img-drag
-          :is-img-text="true"
-          :img-list="info.imgList2"></upload-multi-img-drag>
-      </li>
-    </ul>
+    <div class="border-box-list">
+      <div class="title">单图上传【只能上传一张】</div>
+      <div>
+        <dl class="basic-dl">
+          <dt></dt>
+          <dd>
+            <upload-img-box
+              :info="info"
+              param="img1"
+              img-tip="建议尺寸: 200 * 200, 比例: 1:1"></upload-img-box>
+          </dd>
+        </dl>
+        <dl class="basic-dl">
+          <dt>【带有重置按钮】</dt>
+          <dd>
+            <upload-img-box
+              :info="info"
+              param="img2"
+              :is-reset="true"
+              img-tip="建议尺寸: 200 * 200, 比例: 1:1"></upload-img-box>
+          </dd>
+        </dl>
+        <dl class="basic-dl">
+          <dt>【图片尺寸可自定义】</dt>
+          <dd>
+            <upload-img-box
+              :info="info"
+              param="img3"
+              img-scale="2"
+              img-tip="建议尺寸: 400 * 200, 比例: 2:1"></upload-img-box>
+          </dd>
+        </dl>
+        <dl class="basic-dl">
+          <dt>【公共上传图片区域】</dt>
+          <dd>
+            <div class="upload-box">
+              <template v-if="info.img4 !== ''">
+                <img :src="info.img4">
+              </template>
+              <template v-else>
+                <div class="btn-text">视频封面</div>
+              </template>
+              <upload-file v-model="info.img4" upload-type="1" accept="image/*"
+                           :check-file="checkImg"></upload-file>
+            </div>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="border-box-list">
+      <div class="title">多图【可上传多张】</div>
+      <div>
+        <dl class="basic-dl">
+          <dt>【默认可拖拽排序】</dt>
+          <dd>
+            <upload-multi-img-drag
+              img-tip="建议尺寸: 200 * 200, 比例: 1:1"
+              :img-list="info.imgList" max-img-len="5"></upload-multi-img-drag>
+          </dd>
+        </dl>
+        <dl class="basic-dl">
+          <dt>【不可拖拽排序】【设置最多上传图片数量】</dt>
+          <dd>
+            <upload-multi-img-drag
+              :is-drag="false"
+              :img-list="info.imgList1" max-img-len="5"></upload-multi-img-drag>
+          </dd>
+        </dl>
+        <dl class="basic-dl">
+          <dt>【可设置文字说明】</dt>
+          <dd>
+            <upload-multi-img-drag
+              :is-img-text="true"
+              :img-list="info.imgList2"></upload-multi-img-drag>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="border-box-list">
+      <div class="title">附件上传【可上传多文件】</div>
+      <dl class="basic-dl">
+        <dt>附件上传</dt>
+        <dd>
+          <upload-multi-file upload-type="12" :file-list="info.attachment" max-file-len="5"></upload-multi-file>
+        </dd>
+      </dl>
+      <dl class="basic-dl">
+        <dt>附件编辑弹框</dt>
+        <dd>
+          <a class="color-link" @click="modifyFileLayer">编辑附件</a>
+        </dd>
+      </dl>
+      <modify-multi-file-layer ref="modifyMultiFileLayer"></modify-multi-file-layer>
+    </div>
   </div>
   <include file="Public/components/upload_box/upload_file"/>
   <include file="Public/components/upload_box/upload_img_box"/>
   <include file="Public/components/upload_box/upload_multi_img_drag" />
+  <include file="Public/components/upload_box/upload_multi_file" />
+  <include file="Public/components/upload_box/modify_multi_file_layer" />
   <script>
     var vm = new Vue({
       el: '#app',
       components: {
         'upload-file': AppUtil.COMPONENTS.UPLOAD_FILE_COMPONENT,
         'upload-img-box': AppUtil.COMPONENTS.UPLOAD_IMG_BOX,
-        'upload-multi-img-drag': AppUtil.COMPONENTS.UPLOAD_MULTI_IMG_DRAG
+        'upload-multi-img-drag': AppUtil.COMPONENTS.UPLOAD_MULTI_IMG_DRAG,
+        'upload-multi-file': AppUtil.COMPONENTS.UPLOAD_MULTI_FILE,
+        'modify-multi-file-layer': AppUtil.COMPONENTS.MODIFY_MULTI_FILE_LAYER
       },
       data: function () {
         return {
@@ -81,7 +124,24 @@
             imgList: [],
             imgList1: [],
             imgList2: [],
-            img4: ''
+            img4: '',
+            attachment: [{
+              "url": "http://dl.duinin.com/data/upload/20220713/07110390951999161.xls",
+              "size": 18.17,
+              "name": "2022-07-11.xls"
+            }, {
+              "url": "http://dl.duinin.com/data/upload/20220713/07110390952262029.xlsx",
+              "size": 8.52,
+              "name": "批量导入出库单.xlsx"
+            }, {
+              "url": "http://dl.duinin.com/data/upload/20220713/07110390952034759.doc",
+              "size": 9.5,
+              "name": "发货备注.doc"
+            }, {
+              "url": "http://dl.duinin.com/data/upload/20220713/07110390952837535.xlsx",
+              "size": 9.05,
+              "name": "批量导入订单模板.xlsx"
+            }],
           }
         }
       },
@@ -94,6 +154,9 @@
           }
           return true;
         },
+        modifyFileLayer: function () {
+          this.$refs.modifyMultiFileLayer.init(this.info.attachment);
+        }
       }
     })
   </script>

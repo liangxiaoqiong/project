@@ -1,0 +1,130 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/12/6
+  -->
+<!-- template 附件预览、下载-->
+<script type="x-template" id="preview_multi_file">
+  <!--region 模版-->
+  <div class="preview-multi-file">
+    <ul class="file-list">
+      <li class="flex-between" v-for="(file, index) in fileList">
+        <div class="file-content flex-left">
+          <img class="file-icon" :src="fileIcon(file)">
+          <div class="file-text">
+            <div class="file-name">{{ file.name }}</div>
+          </div>
+        </div>
+        <div>
+          <a class="el-icon-close font-14 color-gray" v-if="hasDel" @click="delFile(index)"></a>
+          <a class="el-icon-download font-14 color-gray ml-10" :href="fileUrl(file)" :download="file.name" target="_blank"></a>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.PREVIEW_MULTI_FILE = {
+    template: '#preview_multi_file',
+    components: {},
+    props: {
+      fileList: {
+        type: Array,
+        default: function () {
+          return [
+            /*{
+              "url": "https://file.duinin.com/data/upload/91da3b64bdddafe7d3b4d414e5cbe47a.jpg",
+              "name": "漂白剂.jpg",
+              "size": "", // 文件大小，KB单位
+            }*/
+          ]
+        }
+      },
+      hasDel: {
+        type: Boolean,
+        default: false, // 是否显示删除按钮
+      }
+    },
+    data: function () {
+      return {
+        // 文件图标
+        fileIconList: [
+          {value: 'img', suffix: ['gif', 'png', 'jpeg', 'jpg']},
+          {value: 'doc', suffix: ['doc', 'docx']},
+          {value: 'xls', suffix: ['xls', 'xlsx']},
+          {value: 'rar', suffix: ['zip', 'rar']},
+          {value: 'pdf', suffix: ['pdf']},
+          {value: 'txt', suffix: ['txt']},
+        ]
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      fileIcon: function (file) {
+        var self = this;
+        var iconName = 'other';
+        self.fileIconList.forEach(function (icon) {
+          if (icon.suffix.indexOf(self.getFileSuffix(file.name)) > -1) {
+            iconName = icon.value;
+          }
+        })
+        return '/Public/common/img/icon_img/annex_img/' + iconName + '.png';
+      },
+      fileUrl: function (file) {
+        var url = file.url;
+        if (['txt', 'doc'].indexOf(this.getFileSuffix(file.name)) > -1) {
+          // 重命名下载的文件名
+          url += '?n='+this.getFileName(file.name)
+        }
+        return url;
+      },
+      // 获取文件后缀
+      getFileSuffix: function (fileName) {
+        var suffix = '';
+        var fileType = fileName.split('.');
+        if (fileType.length > 1) {
+          suffix = fileType[fileType.length - 1];
+        }
+        return suffix;
+      },
+      getFileName: function (fileName) {
+        var fileType = fileName.split('.');
+        var name = '';
+        if (fileType.length > 1) {
+          fileType.forEach(function (value, index) {
+            if (index < fileType.length - 1) {
+              name += value;
+            }
+          })
+          return name;
+        }
+      },
+      delFile: function (index) {
+        this.fileList.splice(index, 1);
+      }
+    }
+  }
+</script>
+<style>
+  .preview-multi-file .file-list li {
+    background-color: #FAFAFA;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .preview-multi-file .file-list li:last-child {
+    margin-bottom: 0;
+  }
+  .preview-multi-file .file-list .file-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  .preview-multi-file .file-list .file-name {
+    margin-bottom: 3px;
+  }
+</style>

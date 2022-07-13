@@ -1,0 +1,82 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2022/5/30
+  -->
+<!-- template 附件查看弹框、重新上传-->
+<script type="x-template" id="modify_multi_file_layer">
+  <!--region 模版-->
+  <div>
+    <el-dialog
+      title="{:L('VIEW_ANNEX')}"
+      :close-on-click-modal="false"
+      :visible.sync="isShowLayer">
+      <div class="dialog-scroll">
+        <preview-multi-file :file-list="info.attachment" :has-del="true"></preview-multi-file>
+        <div class="mt-10" v-if="5 - info.attachment.length > 0">
+          <upload-multi-file :upload-type="uploadType" :file-list="uploadFileList" :max-file-len="5 - info.attachment.length" upload-text="重新上传"></upload-multi-file>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <a class="xxbtn-white" @click="isShowLayer = false">取消</a>
+        <a class="xxbtn-primary" @click="submit">确定</a>
+      </div>
+    </el-dialog>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<include file="Public/components/upload_box/preview_multi_file" />
+<include file="Public/components/upload_box/upload_multi_file" />
+<script>
+  AppUtil.COMPONENTS.MODIFY_MULTI_FILE_LAYER = {
+    template: '#modify_multi_file_layer',
+    components: {
+      'preview-multi-file': AppUtil.COMPONENTS.PREVIEW_MULTI_FILE,
+      'upload-multi-file': AppUtil.COMPONENTS.UPLOAD_MULTI_FILE
+    },
+    props: {
+      uploadType: {
+        type: [String, Number],
+        default: AppUtil.TYPE_DEFAULT,
+      }
+    },
+    data: function () {
+      return {
+        isShowLayer: false,
+        info: {
+          attachment: [
+           /* {
+              "url": "https://file.duinin.com/data/upload/91da3b64bdddafe7d3b4d414e5cbe47a.jpg",
+              "name": "漂白剂.jpg",
+              "size": "", // 文件大小，KB单位
+            },
+            {
+              "url": "https://file.duinin.com/data/upload/91da3b64bdddafe7d3b4d414e5cbe47a.jpg",
+              "name": "漂白剂.jpg",
+              "size": "", // 文件大小，KB单位
+            },*/
+          ]
+        },
+        uploadFileList: []
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      init: function (fileList) {
+        this.info.attachment = JSON.parse(JSON.stringify(fileList));
+        this.uploadFileList = [];
+        this.isShowLayer = true;
+      },
+      submit: function () {
+        this.isShowLayer = false;
+        var list = JSON.parse(JSON.stringify(this.info.attachment));
+        list = list.concat(JSON.parse(JSON.stringify(this.uploadFileList)));
+        this.$emit('submit', list);
+      }
+    }
+  }
+</script>

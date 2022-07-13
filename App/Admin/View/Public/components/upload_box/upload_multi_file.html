@@ -1,0 +1,243 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/12/3
+  -->
+<!-- template 上传附件[多文件]-->
+<script type="x-template" id="upload_multi_file">
+  <!--region 模版-->
+  <div class="upload-multi-file">
+    <ul class="file-list">
+      <li class="flex-between" v-for="(file, index) in fileList">
+        <div class="file-content flex-left">
+          <img class="file-icon" :src="fileIcon(file)">
+          <div class="file-text">
+            <div class="file-name">{{ file.name }}</div>
+            <div class="file-desc">
+              <span>{{ file.size }}KB</span>
+              <span style="color: #2BC02D;">上传成功</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <a class="el-icon-close font-14 color-gray" @click="removeFile(index)"></a>
+          <a class="el-icon-download font-14 color-gray ml-10" :href="fileUrl(file)" :download="file.name" target="_blank"></a>
+        </div>
+      </li>
+    </ul>
+    <div v-show="fileList.length < maxFileLen">
+      <a class="upload-btn color-link">{{ uploadText }}
+        <input type="file" multiple title=" " @change="upload($event)" :accept="fileAccept">
+      </a>
+    </div>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.UPLOAD_MULTI_FILE = {
+    template: '#upload_multi_file',
+    components: {},
+    props: {
+      uploadType: {
+        type: [String, Number],
+        default: AppUtil.TYPE_DEFAULT,
+      },
+      fileList: {
+        type: Array,
+        default: function () {
+          return [
+            /*{
+              "url": "https://file.duinin.com/data/upload/91da3b64bdddafe7d3b4d414e5cbe47a.jpg",
+              "name": "漂白剂.jpg",
+              "size": "", // 文件大小，KB单位
+            }*/
+          ]
+        }
+      },
+      maxFileLen: {
+        type: [String, Number],
+        default: 20
+      }, //最多上传的数量，
+      uploadText: {
+        type: String,
+        default: '上传附件', //
+      }
+    },
+    data: function () {
+      return {
+        // 文件图标
+        fileIconList: [
+          {value: 'img', suffix: ['gif', 'png', 'jpeg', 'jpg']},
+          {value: 'doc', suffix: ['doc', 'docx']},
+          {value: 'xls', suffix: ['xls', 'xlsx']},
+          {value: 'rar', suffix: ['zip', 'rar']},
+          {value: 'pdf', suffix: ['pdf']},
+          {value: 'txt', suffix: ['txt']},
+        ],
+        fileAccept: 'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*'
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      upload: function (event) {
+        var self = this;
+        var load = layer.load(0);
+        var el = event.currentTarget;
+        var form = new FormData();
+        var limitLen = +self.maxFileLen - self.fileList.length;
+        var exceedFileNum = el.files.length <= limitLen ? el.files.length : limitLen;
+        if (exceedFileNum <= 0) {
+          publicWap.layerMsg('最多只能上传'+self.maxFileLen);
+          $(el).val('');//input 清空
+          layer.close(load);
+          return false;
+        }
+        for (var i = 0; i < exceedFileNum; i++) {
+          if (el.files[i].size > 10 * 1024 * 1024) {
+            AppUtil.alert('文件大小不能超过10MB');
+            return false;
+          }
+          form.append('file', el.files[i]);
+          var file = el.files[i];
+          self.submitUpload(form, file, i, exceedFileNum, el, load);
+        }
+      },
+      submitUpload: function (form, file, i, exceedFileNum, el, load) {
+        var self = this;
+        $.ajax({
+          url: '//file.duinin.com/upload.php?i='+i,
+         // url: '//file.duinin.com/upload.php?i='+i + '&type=' + self.uploadType,
+          data: form,
+          type:'post',
+          processData: false,
+          contentType: false,
+          dataType:'JSON',
+          success: function (result) {
+            if (result.result === 0) {
+              self.$nextTick(function () {
+                var arr = {
+                  url: result.datas.ori_url,
+                  size: commonObj.digitalFloatSync(file.size/1024, 2),
+                  name: file.name
+                }
+                self.fileList.push(arr)
+                if (self.fileList.length >= self.maxFileLen) {
+                  publicWap.layerMsg('最多只能上传'+self.maxFileLen)
+                }
+                if (i >= exceedFileNum) {
+                  $(el).val('');//input 清空
+                  layer.close(load);
+                }
+              })
+            } else {
+              publicWap.layerMsg(result.debug);
+            }
+          }
+        })
+      },
+      removeFile: function (index) {
+        this.fileList.splice(index, 1);
+      },
+      fileIcon: function (file) {
+        var self = this;
+        var iconName = 'other';
+        self.fileIconList.forEach(function (icon) {
+          var fileType = file.name.split('.');
+          if (fileType.length > 1) {
+            if (icon.suffix.indexOf(fileType[fileType.length - 1]) > -1) {
+              iconName = icon.value;
+            }
+          }
+        })
+        return '/Public/common/img/icon_img/annex_img/' + iconName + '.png';
+      },
+      // 获取文件后缀
+      getFileSuffix: function (fileName) {
+        var suffix = '';
+        var fileType = fileName.split('.');
+        if (fileType.length > 1) {
+          suffix = fileType[fileType.length - 1];
+        }
+        return suffix;
+      },
+      getFileName: function (fileName) {
+        var fileType = fileName.split('.');
+        var name = '';
+        if (fileType.length > 1) {
+          fileType.forEach(function (value, index) {
+            if (index < fileType.length - 1) {
+              name += value;
+            }
+          })
+          return name;
+        }
+      },
+      fileUrl: function (file) {
+        var url = file.url;
+        if (['txt', 'doc'].indexOf(this.getFileSuffix(file.name)) > -1) {
+          // 重命名下载的文件名
+          url += '?n='+this.getFileName(file.name)
+        }
+        return url;
+      },
+    }
+  }
+</script>
+<style>
+  .upload-multi-file .file-list li {
+    background-color: #FAFAFA;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .upload-multi-file .file-list .file-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  .upload-multi-file .file-list .file-name {
+    margin-bottom: 3px;
+  }
+  .upload-multi-file .file-list .file-desc span {
+    position: relative;
+    padding-right: 10px;
+    margin-right: 3px;
+  }
+  .upload-multi-file .file-list .file-desc span:after {
+    position: absolute;
+    z-index: 1;
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 10px;
+    top: calc(50% - 4px);
+    right: 0;
+    background-color: #999999;
+  }
+  .upload-multi-file .file-list .file-desc span:last-child:after {
+    display: none;
+  }
+  .upload-multi-file .file-list .file-del {
+    width: 20px;
+    height: 20px;
+    background: url('/Public/common/img/close_grey.png')center center no-repeat;
+    background-size: 9px auto;
+  }
+  .upload-multi-file .upload-btn {
+    position: relative;
+  }
+  .upload-multi-file .upload-btn input[type=file] {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    opacity: 0;
+    cursor: pointer;
+  }
+</style>
