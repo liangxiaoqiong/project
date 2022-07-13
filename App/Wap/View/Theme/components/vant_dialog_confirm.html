@@ -1,0 +1,49 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/9/18
+  -->
+<!-- template -->
+<script type="x-template" id="vant_dialog_confirm">
+  <!--region 模版-->
+  <van-dialog
+    v-model="isShowLayer"
+    title="vant-dialog-confirm"
+    show-cancel-button
+    get-container="body"
+    @cancel="isShowLayer = false"
+    @confirm="submit">
+    <input type="number" style="width: 100%;" class="input-border" v-model="num" ref="input">
+  </van-dialog>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.VANT_DIALOG_CONFIRM = {
+    template: '#vant_dialog_confirm',
+    components: {},
+    props: {},
+    data: function () {
+      return {
+        isShowLayer: false,
+        num: '',
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      init: function () {
+        var self = this;
+        this.isShowLayer = true;
+        self.$nextTick(function () {
+          self.$refs['input'].focus()
+        })
+      },
+      submit: function () {
+        this.isShowLayer = false;
+      }
+    }
+  }
+</script>

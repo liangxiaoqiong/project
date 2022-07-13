@@ -199,14 +199,6 @@ class IndexController extends Controller {
     }
     // endregion
 
-    public function diyTheme () {
-        $this->display('Theme/index');
-
-    }
-    public function diyTheme2 () {
-        $this->display('Theme/index2');
-    }
-
     public function addTab () {
         $this->display('Component/addTab');
     }

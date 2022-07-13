@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>定向横向滚动条-xx商城后台</title>
+  <!--
+  菜单开满的时候显示左右翻页键，未满隐藏翻页键。
+  当前菜单栏必须显示出来。
+  -->
+  <link rel="stylesheet" href="__ELEMENTUI_CSS_NEWEST__" media="all"/>
+  <style>
+    /*region 原始*/
+    .layui-tab-title {
+      position: fixed;
+      z-index: 991;
+      width: calc(100% - 400px);
+      left: 220px;
+      top: 0;
+      right: 0;
+      min-height: 60px;
+      border-bottom: none;
+      background: #fff;
+      height: 40px;
+      white-space: nowrap;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+    }
+    .layui-tab-title li {
+      display: inline-block;
+      line-height: 60px;
+      padding: 0 20px;
+    }
+    .layui-tab-title li:hover {
+      background-color: #DDDDDD;
+    }
+    /*endregion*/
+
+    /*region 新增css*/
+    .layui-tab-title {
+      /*overflow-x: auto;*/
+    }
+    .layui-this {
+      background-color: red;
+    }
+    /*endregion*/
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="">
+  <div>
+    <ul class="layui-tab-title" id="layui-tab-list">
+      <li :class="{'layui-this': index === tabKey}" v-for="(tab, index) in tabList" @click="clickTab(tab, index)"><a>{{ tab }}</a></li>
+    </ul>
+  </div>
+  <a onclick="prev()">向左</a>
+  <a onclick="next()">向右</a>
+  <div style="margin-top: 200px">
+    <el-tabs v-model="activeName" type="card">
+      <el-tab-pane v-for="(tab, i) in 200" :label="'菜单菜单菜单菜单菜单菜单' + i+''" :name="i+''"></el-tab-pane>
+    </el-tabs>
+  </div>
+</div>
+</body>
+<script type="text/javascript" src="/Public/common/js/plug-in/jquery/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="__VUE_NEWEST__"></script>
+<script type="text/javascript" src="__ELEMENTUI_JS_NEWEST__"></script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        tabList: ['菜单1', '菜单2', '菜单3', '菜单4', '菜单5', '菜单6', '菜单7', '菜单8', '菜单9', '菜单10', '菜单11', '菜单12',  '菜单13',  '菜单14',],
+        tabKey: 0,
+
+
+        activeName: '4',
+      }
+    },
+    mounted: function () {
+      this.clickTab('', 3);
+    },
+    methods: {
+      /**
+       * 切换tab标签页
+       **/
+      clickTab: function (tab, index) {
+        this.tabKey = index;
+        this.$nextTick(function () {
+          changeScroll(tab, index);
+        })
+      }
+    }
+  })
+  var moveX = 0;
+  function changeScroll(tab, index) {
+    var tabDom = document.getElementById('layui-tab-list');
+
+    // 获取包裹盒子 tabDom.offsetWidth
+    var tabDomOffsetWidth = tabDom.offsetWidth;
+    var tabDomScrollWidth = tabDom.scrollWidth;
+    console.log('tabDomOffsetWidth', tabDomOffsetWidth)
+    console.log('tabDomScrollWidth', tabDomScrollWidth)
+    $('#layui-tab-list').find('li').each(function (index, element) {
+      var isActive = $(this).hasClass('layui-this');
+      if (isActive) {
+        // 获取到当前点击元素的 offsetLeft  - 包裹盒子 offsetWidth 的一半 + 当前点击元素 offsetWidth 的一半
+        var scrollLeftNum = element.offsetLeft - tabDomOffsetWidth / 2 + element.offsetWidth / 2;
+        // 赋值
+        tabDom.scrollLeft = scrollLeftNum;
+      }
+    })
+  }
+  function prev() {
+
+  }
+  function next() {
+
+  }
+</script>
+</html>

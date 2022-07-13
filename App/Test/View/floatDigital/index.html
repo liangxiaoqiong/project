@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>浮点数保留N位小数，不足位是否补0</title>
+</head>
+<body>
+
+</body>
+<script>
+  /*
+  //精确小数点
+  //number：为你要转换的数字
+  //format：要保留几位小数；譬如要保留2位，则值为2
+  //zerFill:是否补零。不需要补零可以不填写此参数,[true/false],默认:false
+* */
+  console.log(digitalFloatSync(388.568, 2, true))
+  console.log(digitalFloatSync(388.955, 1, true))
+
+  function  digitalFloatSync(number,format,zeroFill){
+
+    var format = typeof digitalNum !== 'undefined' ? digitalNum : 2;
+    //判断非空
+    if (!this.isEmpty(number)) {
+      //正则匹配:正整数，负整数，正浮点数，负浮点数
+      if (!/^\d+(\.\d+)?$|^-\d+(\.\d+)?$/.test(number))
+        return number;
+      var n=1;
+      for(var i=0;i<format;i++){
+        n=n*10;
+      }
+
+      //四舍五入
+      number=Math.round(number*n)/n;
+
+      //是否补零
+      if(zeroFill){
+        return number.toFixed(format);
+        /*var str=number.toString();
+        var index;
+        if(str.indexOf(".")==-1){
+          index=format;
+          str+='.';
+        }else{
+          index=format-((str.length-1)-str.indexOf("."));
+        }
+
+        for(var i=0;i<index;i++){
+
+          str+='0';
+        }*/
+      }
+      return number;
+    }
+    return number;
+  }
+
+
+  //非空验证
+  function isEmpty(ObjVal) {
+    if ((ObjVal == null || typeof (ObjVal) == "undefined") || (typeof (ObjVal) == "string" && ObjVal == "" && ObjVal != "undefined")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+</script>
+</html>

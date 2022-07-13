@@ -1,0 +1,13 @@
+整体项目使用：thinkPhp框架
+
+一、后台：admin.php
+1、使用组件：element-ui【https://element.eleme.cn/#/zh-CN/component/installation】
+2、页面框架：layui【http://www.layui.fans/】
+
+二、前台wap端：index.php
+1、使用组件：vant【https://vant-contrib.gitee.io/vant/v2/#/zh-CN/】
+2、主要内容：
+（1）基于手机端写一些demo
+
+三、测试端：test.php【用于写一些js、html简单demo】
+

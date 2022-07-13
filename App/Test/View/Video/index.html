@@ -1,0 +1,29 @@
+<html>
+<head>
+  <title>video视频第一帧截取</title></head>
+<body>
+<div id="myDiv">
+  <video id="myVideo" src="http://dl.duinin.com/data/video/20220613/07084457809208976.mp4" width="400" height="600" controls preload="auto" poster=""></video>
+<!--  <video src="./test.mp4" width="400" height="600" controls preload="auto"></video>-->
+</div>
+<script>
+  //获取dom节点
+  let oDiv = document.getElementById('myDiv');
+  let canvas = document.createElement('canvas');
+  let video = document.getElementById('myDiv').getElementsByTagName('video')[0];
+  let img = new Image();
+  // 绑定监听事件，当video资源加载完毕时截取第一帧
+  video.addEventListener('loadeddata', () => {
+//设定canvas宽高
+    // ios真机不会预加载视频，解决办法【暂未实施以下解决办法】：
+    // 1、https://blog.csdn.net/Umbrella_Um/article/details/123913306
+    // 2、https://blog.csdn.net/qq_36651686/article/details/119143160?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1-119143160-blog-117883351.pc_relevant_multi_platform_whitelistv1&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-1-119143160-blog-117883351.pc_relevant_multi_platform_whitelistv1&utm_relevant_index=1
+    canvas.width = video.width;
+    canvas.height = video.height;//绘制视频第一帧图像到canvas中
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);//将图像转为base64编码格式添加到页面
+    img.src = canvas.toDataURL('image/png');
+    oDiv.appendChild(img);
+  });
+</script>
+</body>
+</html>

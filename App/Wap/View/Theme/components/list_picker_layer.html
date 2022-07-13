@@ -1,0 +1,63 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2021/9/8
+  -->
+<!-- template picker 列表选择器弹框【单选】-->
+<script type="x-template" id="list_picker_layer">
+  <!--region 模版-->
+  <div>
+    <van-popup
+      position="bottom" round
+      v-model="isShowLayer">
+      <van-picker
+        show-toolbar=""
+        toolbar-position="bottom"
+        confirm-button-text="确定"
+        cancel-button-text="取消"
+        visible-item-count="4"
+        item-height="1.5rem"
+        :columns="columns"
+        @cancel="isShowLayer = false"
+        @confirm="confirm">
+        <div slot="columns-top" class="picker-title">请选择</div>
+      </van-picker>
+    </van-popup>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.LIST_PICKER_LAYER = {
+    template: '#list_picker_layer',
+    components: {},
+    props: {
+    },
+    data: function () {
+      return {
+        isShowLayer: false,
+        columns: [
+          {value: 0, text: '数据1'}, {value: 1, text: '数据2'},
+          {value: 2, text: '数据3'}, {value: 3, text: '数据4'},
+          {value: 4, text: '数据5'}, {value: 5, text: '数据6'}],
+      }
+    },
+    computed: {
+    },
+    mounted: function () {
+    },
+    methods: {
+      init: function () {
+        this.showLayer();
+      },
+      showLayer: function () {
+        var self = this;
+        this.isShowLayer = true;
+      },
+      confirm: function () {
+        this.isShowLayer = false;
+      }
+    }
+  }
+</script>
