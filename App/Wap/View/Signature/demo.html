@@ -1,0 +1,93 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2023/4/3
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <title>h5手写签名</title>
+</head>
+<body>
+<!-- 项目的html页面 -->
+<style>
+  .popverBox{
+    position: relative;
+    height: 500px;
+  }
+  .signSure{
+   /* position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    background: #fff;
+    border-radius: 16px;*/
+    /*padding: 20px 12px 28px 12px;*/
+  }
+  .topTitle{
+    margin: 20px 0 12px 12px;
+    font-size: 16px;
+  }
+  .whiteBord{
+    width: 300px;
+    height: 400px;
+    border: 1px solid #eee;
+  /*  background: #f6f6f6;
+    background: #f6f6f6;
+    margin: 0 auto;
+    border-radius: 4px;
+    margin-bottom: 12px;*/
+  }
+  .bottomBtnBox{
+    padding: 0 7px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .primaryBtn{
+    width: 48%;
+    height: 40px;
+    color: #666;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+  }
+  .activeBtn{
+    background: #315294;
+    color: #fff;
+    border: none;
+  }
+</style>
+<div class="popverBox">
+  <div id="signSure" class="signSure">
+    <!--<div class="topTitle">请写下您的名字</div>-->
+    <div style="height: 100px;width: 100%"></div>
+    <canvas class="whiteBord" id="whiteBord">
+      您的浏览器不支持canvas技术,请升级浏览器!
+    </canvas>
+    <div class="bottomBtnBox">
+      <button class="primaryBtn" id="againWrite">重写</button>
+      <button class="primaryBtn activeBtn" id="sureWrite">确定</button>
+    </div>
+  </div>
+</div>
+<script src="/Public/common/js/plug-in/signature/signature.js"></script>
+<script>
+  function sureWriteCallback(imageBase64){
+    console.log(imageBase64)
+    // 签名完成后的的逻辑代码...
+  }
+  let params = {
+    whiteBord:'whiteBord',//canvas标签的id名称
+    againWrite:'againWrite',//重写按钮id名
+    sureWrite:'sureWrite',//确认按钮id名
+    whiteBordPtions:{},//白板的配置项（空对象时取默认值）
+    sureWriteCallback,// 签名完成后的回调函数
+  }
+  signature(params)  // signature.js里封装好的函数，把参数传进去，调用一下即可
+</script>
+
+</body>
+</html>

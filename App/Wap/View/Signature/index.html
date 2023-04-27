@@ -1,0 +1,42 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2023/4/27
+  -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>h5手写签名：xunxin家政》结束服务</title>
+</head>
+<include file="Public:head"/>
+<body>
+<div id="app" v-cloak="">
+  <a @click="showLayer">显示签名弹框</a>
+  <!--服务结束、签名 弹框-->
+  <order-service-end-layer ref="orderServiceEndLayer"></order-service-end-layer>
+</div>
+</body>
+<include file="Public:foot"/>
+<include file="Signature/components/order_service_end_layer"/>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    components: {
+      'order-service-end-layer': AppUtil.COMPONENTS.ORDER_SERVICE_END_LAYER,
+    },
+    data: function () {
+      return {
+        query: {
+          start_time: '',
+          end_time: ''
+        }
+      }
+    },
+    methods: {
+      showLayer: function () {
+        this.$refs.orderServiceEndLayer.init();
+      }
+    }
+  })
+</script>
+</html>

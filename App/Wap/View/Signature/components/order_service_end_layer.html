@@ -1,0 +1,104 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2022/11/21
+  -->
+<style>
+  .signature-content {
+    position: relative;
+    height: 210px;
+    padding: 0 15px;
+  }
+  .signature-content .whiteBord {
+    border: 1px solid #EBEBEB;
+    width: 100%;
+    height: 200px;
+  }
+</style>
+<!-- template 服务结束弹框-->
+<script type="x-template" id="order_service_end_layer">
+  <!--region 模版-->
+  <div>
+    <van-popup
+      position="bottom"
+      round
+      closeable
+      v-model="isShowLayer"
+      get-container="body">
+      <div class="popup-body">
+        <div class="popup-title" style="height: 60px;">服务结束客户确认签名</div>
+        <div class="signature-content">
+          <canvas class="whiteBord" id="whiteBord">
+            您的浏览器不支持canvas技术,请升级浏览器!
+          </canvas>
+        </div>
+        <div class="van-picker__toolbar">
+          <button type="button" class="van-picker__cancel" id="againWrite">重签</button>
+          <button type="button" class="van-picker__confirm" id="sureWrite">确定</button>
+        </div>
+      </div>
+    </van-popup>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+
+<script type="text/javascript" src="__COMMON_JS__/plug-in/signature/signature.js?v={$V}"></script>
+<script>
+  AppUtil.COMPONENTS.ORDER_SERVICE_END_LAYER = {
+    template: '#order_service_end_layer',
+    components: {},
+    props: {},
+    data: function () {
+      return {
+        isShowLayer: false,
+      }
+    },
+    computed: {},
+    mounted: function () {
+    },
+    methods: {
+      init: function () {
+        var self = this;
+        self.isShowLayer = true;
+        self.$nextTick(function () {
+          var availWidth = window.screen.availWidth;
+          var availHeight = window.screen.availHeight;
+          let params = {
+            whiteBord:'whiteBord',//canvas标签的id名称
+            againWrite:'againWrite',//重写按钮id名
+            sureWrite:'sureWrite',//确认按钮id名
+            whiteBordPtions:{
+              canvasWidth: availWidth,
+              canvasHeight: 200,
+              otherX: 0,
+              otherY: availHeight - 250,
+            },//白板的配置项（空对象时取默认值）
+            sureWriteCallback,// 签名完成后的回调函数
+          }
+          signature(params)  // signature.js里封装好的函数，把参数传进去，调用一下即可
+        })
+      },
+      signUrl: function (imageBase64) {
+        var self = this;
+        var signFile = commonObj.dataURLtoFile(imageBase64, '客户签名.png');
+        AppUtil.upload({
+          file: signFile,
+          type: 1,
+        }, function (url, img_info) {
+          self.submit(url);
+        })
+      },
+      submit: function (url) {
+        console.log(url);
+        this.isShowLayer = false;
+      },
+    }
+  }
+
+  function sureWriteCallback(imageBase64){
+    vm.$refs.orderServiceEndLayer.signUrl(imageBase64);
+    // 签名完成后的的逻辑代码...
+  }
+</script>

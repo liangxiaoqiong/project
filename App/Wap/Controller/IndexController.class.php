@@ -40,4 +40,13 @@ class IndexController extends Controller {
     public function diyTheme2 () {
         $this->display('Theme/index2');
     }
+
+    // region 手写签名
+    public function signatureDemo () {
+        $this->display('Signature/demo');
+    }
+    public function signatureIndex () {
+        $this->display('Signature/index');
+    }
+    // endregion
 }
