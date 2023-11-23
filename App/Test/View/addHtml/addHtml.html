@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jquery添加元素html元素</title>
+</head>
+<body>
+<div>
+  <div>
+    <h1>Jquery添加元素（append、prepend、after、before四种方法区别对比）</h1>
+    <div>
+      <h2>append的用法：</h2>
+      <div>在选中目标的结尾插入内容</div>
+    </div>
+    <div>
+      <h2>prepend的用法：</h2>
+      <div>在选中目标的起始的地方插入内容</div>
+    </div>
+    <div>
+      <h2>after的用法：</h2>
+      <div>在被选元素之后插入内容</div>
+    </div>
+    <div>
+      <h2>before的用法：</h2>
+      <div>在被选元素之前插入内容</div>
+    </div>
+  </div>
+
+  <div>
+    <div class="layui-tab" lay-filter="layuiminiTab">
+      <ul class="layui-tab-title">
+        <li class="tab_1">tab_0</li>
+        <li class="tab_2">tab_1</li>
+      </ul>
+      <div class="layui-tab-content">
+        <div class="layui-tab-item iframe_1">iframe_0</div>
+        <div class="layui-tab-item iframe_2">iframe_1</div>
+      </div>
+    </div>
+    <div>
+      <button onclick="appendHtml()">新增</button>
+    </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript" src="../../../../Public/common/js/plug-in/jquery/jquery-3.2.1.js"></script>
+<script>
+  var key = 0;
+  var tabkey = 1;
+  function appendHtml() {
+    var e = ".layui-tab-title", l = $(".layui-tab[lay-filter=layuiminiTab]"), n = l.children(e),
+      o = l.children(".layui-tab-content"),
+      r = '<li lay-id="lay__id">新tab_新('+key+')</li>';
+    console.log(n)
+    console.log(o)
+    n.find('li:nth-child('+(tabkey+1)+')').after(r);
+    o.find('.layui-tab-item:nth-child('+(tabkey+1)+')').before('<div>iframe_新('+key+')</div>');
+    key++;
+  }
+</script>
+</html>
