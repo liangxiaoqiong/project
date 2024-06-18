@@ -1,0 +1,356 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2023/6/5
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>表格 复杂表头、新增横向的虚拟滚动条</title>
+  <style>
+    table{
+      border: 1px solid #E0E0E0;
+      background-color: #ffffff;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+    table tr:hover {
+      background-color: #fafafa;
+    }
+    table th,
+    table td {
+      border: 1px solid #E0E0E0;
+      padding: 10px;
+    }
+    table tr th {
+      background-color: #FAFAFA;
+      font-weight: normal;
+      text-align: left;
+    }
+    table td {
+      min-height: 40px;
+      text-align: left;
+    }
+
+    /*region TODO*/
+    /*悬浮置底的样式*/
+    .table-bottom {
+      position: fixed;
+      z-index: 1000;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: inline-block;
+      background: #ffffff;
+    }
+    /*region 虚拟滚动条*/
+    .virtual-scroll-x {
+      overflow-x: auto;
+      width: 100%;
+    }
+    .virtual-scroll-x::-webkit-scrollbar-corner,
+    .virtual-scroll-x::-webkit-scrollbar-track {
+      background-color: #e2e2e2;
+    }
+    .virtual-scroll-x .virtual-scroll-content {
+      height: 10px;
+    }
+    /*endregion*/
+
+    /*region 隐藏表格底部的滚动条*/
+    .table-responsive::-webkit-scrollbar {
+      height: 0;
+    }
+    /*endregion*/
+    /*endregion TODO*/
+  </style>
+</head>
+<body>
+<div id="wrapper" style="width: 100%; overflow-x: hidden;margin-bottom: 50px;">
+  <div class="table-responsive" id="table-responsive" style="overflow-x: auto;">
+    <div class="table-width" style="width: 2000px;">
+      <table id="sales-table">
+        <thead>
+        <tr>
+          <th style="width: 1200px;">姓名</th>
+          <th style="width: 1200px;">姓别</th>
+          <th style="width: 1200px;">年龄</th>
+          <th style="width: 1200px;">国籍</th>
+          <th style="width: 1200px;">地址</th>
+          <th style="width: 1200px;">是否未婚</th>
+          <th style="width: 1200px;">子女</th>
+          <th style="width: 1200px;">房产</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        <tr>
+          <td>张三</td>
+          <td>男</td>
+          <td>30</td>
+          <td>中国</td>
+          <td>福建</td>
+          <td>是</td>
+          <td>无</td>
+          <td>
+            <div>有：</div>
+            <div>厦门</div>
+            <div>福州</div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-bottom">
+      <div class="virtual-scroll-x" id="table__virtual-scroll-x">
+        <!--虚拟的横向滚动条-->
+        <div class="virtual-scroll-content" id="virtual-scroll-content"></div>
+      </div>
+      <div>分页</div>
+    </div>
+  </div>
+</div>
+</body>
+<script type="text/javascript" src="http://dev.duinin.com/Public/common/js/plug-in/jquery/jquery-3.2.1.min.js"></script>
+<script>
+  var tableScrollWidth = 2000;  // 表格宽度(有滚动条)，目前固定2000
+  initScrollTable();
+  function initScrollTable() {
+    /*region目前固定 tableScrollWidth=2000；以下注释的代码是自适应获取表格宽度*/
+    // 获取需要绑定的table
+   /* var tableDom = document.getElementById('sales-table');
+    // 获取表格宽度
+    var scrollWidth = tableDom.scrollWidth; // 网页正文全文宽
+    var offsetWidth  = tableDom.offsetWidth ; // 网页可见区域宽(包括边线的宽)
+    if (scrollWidth > offsetWidth) {
+      tableScrollWidth = scrollWidth;
+    } else {
+      tableScrollWidth = 0;
+    }
+    console.log('scrollWidth', scrollWidth)
+    console.log('offsetWidth ', offsetWidth)*/
+    /*endregion*/
+
+    $('#virtual-scroll-content').css('width', tableScrollWidth + 'px')
+    var virtualScrollDom = document.getElementById('table__virtual-scroll-x');
+    virtualScrollDom.addEventListener('scroll', () => {
+      try {
+        var tableEl = document.getElementById('table-responsive');
+        tableEl.scrollLeft = virtualScrollDom.scrollLeft
+      } catch (e) {
+        console.log(e)
+      }
+    })
+  }
+</script>
+</html>

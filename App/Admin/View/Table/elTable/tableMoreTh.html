@@ -1,0 +1,169 @@
+<!--表格 复杂表头、el-table新增横向的虚拟滚动条-->
+<extend name="Public:base"/>
+<block name="content">
+  <style>
+    .virtual-scroll-x {
+      overflow-x: auto;
+      width: calc(100% + 10px);
+      margin-left: -10px;
+    }
+    .virtual-scroll-x::-webkit-scrollbar-corner,
+    .virtual-scroll-x::-webkit-scrollbar-track {
+      background-color: #e2e2e2;
+      border-radius: 3px;
+    }
+    .virtual-scroll-x::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,.3);
+    }
+    .virtual-scroll-x .virtual-scroll-content {
+      height: 10px;
+    }
+    .el-table__body-wrapper::-webkit-scrollbar {
+      height: 0;
+    }
+    .el-table__fixed-right::before,
+    .el-table__fixed::before {
+      display: none;
+    }
+  </style>
+  <div class="admin-main" id="app" v-cloak="">
+    <div style="height: 400px"></div>
+    <div class="table-eldiy bg-white pb-10" id="table-diy-1">
+      <div class="el-table-diy">
+        <el-table ref="table"
+          :data="tableData.list"
+          style="width: 100%">
+          <el-table-column fixed="left"
+            label="商品ID"
+            width="150">
+            <template slot-scope="scope">{{ scope.row.goods_id }}</template>
+          </el-table-column>
+          <el-table-column
+            label="商品名称" fixed="left" min-width="150px">
+            <template slot-scope="scope">{{ scope.row.goods_name }}</template>
+          </el-table-column>
+          <el-table-column
+            label="规格"
+            width="150">
+            <template slot-scope="scope">
+              <div v-for="(i, key) in scope.row.spec_attr">
+                {{ i.spec_name }}
+              </div>
+            </template>
+          </el-table-column>
+          <template v-for="(unit, unitIndex) in 4">
+            <el-table-column :label="'单位'+unitIndex+'信息'">
+              <el-table-column
+                label="单位"
+                width="120">
+                <template slot-scope="scope">
+                  {{ scope.row['units_name_'+unitIndex] }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="成本（元）"
+                width="120">
+                <template slot-scope="scope">
+                  {{ scope.row['units_name_'+unitIndex] }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="成本（元）"
+                width="120">
+                <template slot-scope="scope">
+                  {{ scope.row['units_name_'+unitIndex] }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="成本（元）"
+                width="120">
+                <template slot-scope="scope">
+                  {{ scope.row['units_name_'+unitIndex] }}
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="成本（元）"
+                width="120">
+                <template slot-scope="scope">
+                  {{ scope.row['units_name_'+unitIndex] }}
+                </template>
+              </el-table-column>
+            </el-table-column>
+          </template>
+        </el-table>
+      </div>
+      <div class="table-bottom">
+        <div class="virtual-scroll-x" ref="virtualScrollDom">
+          <!--虚拟的横向滚动条-->
+          <div class="virtual-scroll-content" :style="'width:'+tableScrollWidth+'px'"></div>
+        </div>
+        <pagination ref="pagination" v-show="+tableData.total > 0"
+                    :query="query"
+                    :table-total="tableData.total"
+                    @temp-page-event="getTableData"></pagination>
+      </div>
+    </div>
+  </div>
+  <include file="Public/components/diy_table/pagination"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'pagination': AppUtil.COMPONENTS.TEMP_PAGINATION,
+      },
+      data: function () {
+        return {
+          query: {
+            page: 1,
+            limit: 15,
+            load: false
+          },
+          tableData: {
+            "list":[{"goods_id":"188173","goods_name":"新的品质","goods_image":[{"url":"http://dl.duinin.com/data/upload/20220311/07003334552828448.jpg"},{"url":"http://dl.duinin.com/data/upload/20220311/07003334557665596.jpg"},{"url":"http://dl.duinin.com/data/upload/20220311/07003334558854930.jpg"},{"url":"http://dl.duinin.com/data/upload/20220311/07003334559780569.jpg"},{"url":"http://dl.duinin.com/data/upload/20220311/07003334562782775.jpg"}],"goods_figure":[{"url":"http://dl.duinin.com/data/upload/20220311/07003334552058545.jpg","text":""},{"url":"http://dl.duinin.com/data/upload/20220311/07003334552649044.jpg","text":""}],"is_promote":"0","is_qianggou":"0","gc_id":"2949","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"1","base_unit_name":"瓶","auxiliary_units":[{"id":"227","goods_id":"188173","store_id":16,"units_id":"5","name":"箱","translated":12,"is_default":0,"is_show":1}],"goods_price":"0.01","goods_pv":"0.00","goods_promoteprice":"0.01","goods_barcode":"6953511500368","goods_number":"6953511500368","main_img":"http://dl.duinin.com/data/upload/20220311/07003334552828448.jpg","gc_text":"香烟茶叶","spec_attr":[{"primary_id":"186536","spec_id":"194962_195020","spec_price":0.01,"spec_stock":0,"spec_goods_barcode":"6953511500368","spec_goods_number":"6953511500368","spec_goods_pv":0,"spec_sales_base":0,"spec_promote_price":0.01,"spec_goods_img":null,"spec_name":"M+200g","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"0.01","goods_id":"188173","goods_name":"新的品质","base_unit_name":"瓶","units_primary_id_1":"227","units_name_1":"箱","units_id_1":"5","can_use_stock":0,"new_price":0.01,"goods_price_1":"0.12","goods_pv_1":"0.00","goods_cost_1":"0.12","goods_promoteprice_1":"0.12","new_price_1":"0.12","goods_cost":0.01,"agent_price":"0.01","agent_price_1":"","agent_price_2":"","agent_price_3":""},{"primary_id":"186592","spec_id":"194962_195021","spec_price":90,"spec_stock":0,"spec_goods_barcode":"188173-2","spec_goods_number":"188173-2","spec_goods_pv":0,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"M+500g","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"90.00","goods_id":"188173","goods_name":"新的品质","base_unit_name":"瓶","units_primary_id_1":"227","units_name_1":"箱","units_id_1":"5","can_use_stock":0,"new_price":90,"goods_price_1":"1080.00","goods_pv_1":"0.00","goods_cost_1":"1080.00","goods_promoteprice_1":"0.00","new_price_1":"1080.00","goods_cost":90,"agent_price":"2.00","agent_price_1":"","agent_price_2":"","agent_price_3":""},{"primary_id":"186593","spec_id":"195018_195020","spec_price":46,"spec_stock":0,"spec_goods_barcode":"6953511500368","spec_goods_number":"6953511500368","spec_goods_pv":0,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"L+200g","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"46.00","goods_id":"188173","goods_name":"新的品质","base_unit_name":"瓶","units_primary_id_1":"227","units_name_1":"箱","units_id_1":"5","can_use_stock":0,"new_price":46,"goods_price_1":"552.00","goods_pv_1":"0.00","goods_cost_1":"552.00","goods_promoteprice_1":"0.00","new_price_1":"552.00","goods_cost":46,"agent_price":"3.00","agent_price_1":"","agent_price_2":"","agent_price_3":""},{"primary_id":"186594","spec_id":"195018_195021","spec_price":0.01,"spec_stock":0,"spec_goods_barcode":"188173-4","spec_goods_number":"188173-4","spec_goods_pv":0,"spec_sales_base":0,"spec_promote_price":0.01,"spec_goods_img":null,"spec_name":"L+500g","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"0.01","goods_id":"188173","goods_name":"新的品质","base_unit_name":"瓶","units_primary_id_1":"227","units_name_1":"箱","units_id_1":"5","can_use_stock":0,"new_price":0.01,"goods_price_1":"0.12","goods_pv_1":"0.00","goods_cost_1":"0.12","goods_promoteprice_1":"0.12","new_price_1":"0.12","goods_cost":0.01,"agent_price":0.01,"agent_price_1":"","agent_price_2":"","agent_price_3":""}],"alias_name":""},{"goods_id":"188259","goods_name":"混合商品","goods_image":[{"url":"http://dl.duinin.com/data/upload/20220722/07118079866993148.jpg","file_type":"image","name":"31.jpg"}],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"20951","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"0","base_unit_name":"件","auxiliary_units":[],"goods_price":"8.00","goods_pv":"5.00","goods_promoteprice":"8.00","goods_barcode":"","goods_number":"","main_img":"http://dl.duinin.com/data/upload/20220722/07118079866993148.jpg","gc_text":"服饰鞋帽","spec_attr":[{"primary_id":"186666","spec_id":"195094","spec_price":8,"spec_stock":0,"spec_goods_barcode":"","spec_goods_number":"","spec_goods_pv":5,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"3.00","goods_id":"188259","goods_name":"混合商品","base_unit_name":"件","can_use_stock":0,"new_price":8,"goods_cost":3,"agent_price":8,"agent_price_1":"","agent_price_2":"","agent_price_3":""}]},{"goods_id":"188258","goods_name":"供应商添加运费模板测试","goods_image":[{"url":"http://dl.duinin.com/data/upload/20220721/07117593581998986.png","file_type":"image","name":"微信图片_20220721225534.png"}],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"0","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"0","base_unit_name":"件","auxiliary_units":[],"goods_price":"200.00","goods_pv":"100.00","goods_promoteprice":"200.00","goods_barcode":"","goods_number":"","main_img":"http://dl.duinin.com/data/upload/20220721/07117593581998986.png","gc_text":"","spec_attr":[{"primary_id":"186665","spec_id":"195093","spec_price":200,"spec_stock":0,"spec_goods_barcode":"","spec_goods_number":"","spec_goods_pv":100,"spec_sales_base":0,"spec_promote_price":180,"spec_goods_img":null,"spec_name":"","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"100.00","goods_id":"188258","goods_name":"供应商添加运费模板测试","base_unit_name":"件","can_use_stock":0,"new_price":200,"goods_cost":100,"agent_price":"200.00","agent_price_1":"","agent_price_2":"","agent_price_3":""}],"alias_name":"微软"},{"goods_id":"188256","goods_name":"测试期初值","goods_image":[{"url":"http://dl.duinin.com/data/upload/20220704/07102716683280353.jpg"}],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"-1","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"1","base_unit_name":"件","auxiliary_units":[{"id":"223","goods_id":"188256","store_id":16,"units_id":"39","name":"盒","translated":4,"is_default":0,"is_show":1},{"id":"224","goods_id":"188256","store_id":16,"units_id":"5","name":"箱","translated":6,"is_default":0,"is_show":1}],"goods_price":"7.00","goods_pv":"1.00","goods_promoteprice":"7.00","goods_barcode":"188256","goods_number":"1882520","main_img":"http://dl.duinin.com/data/upload/20220704/07102716683280353.jpg","gc_text":"","spec_attr":[{"primary_id":"186653","spec_id":"195080","spec_price":7,"spec_stock":0,"spec_goods_barcode":"188256","spec_goods_number":"1882520","spec_goods_pv":1,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"6.00","goods_id":"188256","goods_name":"测试期初值","base_unit_name":"件","units_primary_id_1":"223","units_name_1":"盒","units_id_1":"39","units_primary_id_2":"224","units_name_2":"箱","units_id_2":"5","can_use_stock":0,"new_price":7,"goods_price_1":"28.00","goods_pv_1":"4.00","goods_cost_1":"24.00","goods_promoteprice_1":"0.00","new_price_1":"28.00","goods_price_2":"42.00","goods_pv_2":"6.00","goods_cost_2":"36.00","goods_promoteprice_2":"0.00","new_price_2":"42.00","goods_cost":6,"agent_price":7,"agent_price_1":"3.00","agent_price_2":"","agent_price_3":""}]},{"goods_id":"188255","goods_name":"商品A","goods_image":[],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"0","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"1","base_unit_name":"件","auxiliary_units":[{"id":"217","goods_id":"188255","store_id":16,"units_id":"5","name":"箱","translated":3,"is_default":0,"is_show":1}],"goods_price":"3.00","goods_pv":"1.00","goods_promoteprice":"3.00","goods_barcode":"188255","goods_number":"188255(0)","main_img":"","gc_text":"","spec_attr":[{"primary_id":"186652","spec_id":"195079","spec_price":3,"spec_stock":0,"spec_goods_barcode":"188255","spec_goods_number":"188255(0)","spec_goods_pv":1,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"2.00","goods_id":"188255","goods_name":"商品A","base_unit_name":"件","units_primary_id_1":"217","units_name_1":"箱","units_id_1":"5","can_use_stock":0,"new_price":3,"goods_price_1":"9.00","goods_pv_1":"3.00","goods_cost_1":"6.00","goods_promoteprice_1":"0.00","new_price_1":"9.00","goods_cost":2,"agent_price":3,"agent_price_1":"","agent_price_2":"","agent_price_3":""}],"alias_name":"商品A别名"},{"goods_id":"188253","goods_name":"仓位/货架","goods_image":[],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"-1","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"0","base_unit_name":"件","auxiliary_units":[],"goods_price":"6.00","goods_pv":"1.00","goods_promoteprice":"6.00","goods_barcode":"6953511500368","goods_number":"","main_img":"","gc_text":"","spec_attr":[{"primary_id":"186650","spec_id":"195077","spec_price":6,"spec_stock":0,"spec_goods_barcode":"6953511500368","spec_goods_number":"","spec_goods_pv":1,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"5.00","goods_id":"188253","goods_name":"仓位/货架","base_unit_name":"件","can_use_stock":0,"new_price":6,"goods_cost":5,"agent_price":6,"agent_price_1":"","agent_price_2":"","agent_price_3":""}]},{"goods_id":"188241","goods_name":"新品称重","goods_image":[],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"0","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"0","base_unit_name":"件","auxiliary_units":[],"goods_price":"0.01","goods_pv":"0.00","goods_promoteprice":"0.01","goods_barcode":"6953511500368","goods_number":"87654","main_img":"","gc_text":"","spec_attr":[{"primary_id":"186633","spec_id":"195060","spec_price":0.01,"spec_stock":0,"spec_goods_barcode":"6953511500368","spec_goods_number":"87654","spec_goods_pv":0,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"新鲜.无杂质.层次好.肥肉少","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"0.01","goods_id":"188241","goods_name":"新品称重","base_unit_name":"件","can_use_stock":0,"new_price":0.01,"goods_cost":0.01,"agent_price":0.01,"agent_price_1":"","agent_price_2":"","agent_price_3":""}]},{"goods_id":"188225","goods_name":"限时抢购","goods_image":[],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"-1","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"1","base_unit_name":"件","auxiliary_units":[{"id":"211","goods_id":"188225","store_id":16,"units_id":"27","name":"车","translated":5,"is_default":0,"is_show":0}],"goods_price":"30.00","goods_pv":"10.00","goods_promoteprice":"30.00","goods_barcode":"","goods_number":"","main_img":"","gc_text":"","spec_attr":[{"primary_id":"186610","spec_id":"195037","spec_price":30,"spec_stock":0,"spec_goods_barcode":"","spec_goods_number":"","spec_goods_pv":10,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"新鲜.无杂质.无新鲜净龙骨块.砍2.5cm／段.大小均匀","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"20.00","goods_id":"188225","goods_name":"限时抢购","base_unit_name":"件","units_primary_id_1":"211","units_name_1":"车","units_id_1":"27","can_use_stock":0,"new_price":30,"goods_price_1":"150.00","goods_pv_1":"50.00","goods_cost_1":"100.00","goods_promoteprice_1":"0.00","new_price_1":"150.00","goods_cost":20,"agent_price":30,"agent_price_1":"","agent_price_2":"","agent_price_3":""}]},{"goods_id":"188215","goods_name":"新1","goods_image":[],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"0","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"1","base_unit_name":"件","auxiliary_units":[{"id":"204","goods_id":"188215","store_id":16,"units_id":"21","name":"条","translated":10,"is_default":0,"is_show":1},{"id":"205","goods_id":"188215","store_id":16,"units_id":"5","name":"箱","translated":100,"is_default":0,"is_show":1}],"goods_price":"2.00","goods_pv":"0.00","goods_promoteprice":"2.00","goods_barcode":"111","goods_number":"65432","main_img":"","gc_text":"","spec_attr":[{"primary_id":"186598","spec_id":"195024","spec_price":2,"spec_stock":0,"spec_goods_barcode":"111","spec_goods_number":"65432","spec_goods_pv":0,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"2.00","goods_id":"188215","goods_name":"新1","base_unit_name":"件","units_primary_id_1":"204","units_name_1":"条","units_id_1":"21","units_primary_id_2":"205","units_name_2":"箱","units_id_2":"5","can_use_stock":0,"new_price":2,"goods_price_1":"20.00","goods_pv_1":"0.00","goods_cost_1":"20.00","goods_promoteprice_1":"0.00","new_price_1":"20.00","goods_price_2":"200.00","goods_pv_2":"0.00","goods_cost_2":"200.00","goods_promoteprice_2":"0.00","new_price_2":"200.00","goods_cost":2,"agent_price":2,"agent_price_1":"","agent_price_2":"","agent_price_3":""}],"alias_name":"新商品"},{"goods_id":"188214","goods_name":"辅助单位","goods_image":[],"goods_figure":[],"is_promote":"0","is_qianggou":"0","gc_id":"0","qianggou_start_time":"0","qianggou_end_time":"0","spec_open":"1","goods_spec":"","is_more_unit":"1","base_unit_name":"件","auxiliary_units":[{"id":"202","goods_id":"188214","store_id":16,"units_id":"39","name":"盒","translated":5,"is_default":0,"is_show":1},{"id":"203","goods_id":"188214","store_id":16,"units_id":"5","name":"箱","translated":12,"is_default":0,"is_show":1}],"goods_price":"5.00","goods_pv":"4.00","goods_promoteprice":"5.00","goods_barcode":"111","goods_number":"aaa","main_img":"","gc_text":"","spec_attr":[{"primary_id":"186597","spec_id":"195023","spec_price":5,"spec_stock":0,"spec_goods_barcode":"111","spec_goods_number":"aaa","spec_goods_pv":4,"spec_sales_base":0,"spec_promote_price":0,"spec_goods_img":null,"spec_name":"","spec_sales_num":0,"spec_all_sale_num":0,"cost_price":"1.00","goods_id":"188214","goods_name":"辅助单位","base_unit_name":"件","units_primary_id_1":"202","units_name_1":"盒","units_id_1":"39","units_primary_id_2":"203","units_name_2":"箱","units_id_2":"5","can_use_stock":0,"new_price":5,"goods_price_1":"25.00","goods_pv_1":"20.00","goods_cost_1":"5.00","goods_promoteprice_1":"0.00","new_price_1":"25.00","goods_price_2":"60.00","goods_pv_2":"48.00","goods_cost_2":"12.00","goods_promoteprice_2":"0.00","new_price_2":"60.00","goods_cost":1,"agent_price":5,"agent_price_1":"","agent_price_2":"","agent_price_3":""}]}],"meta":[],"total":1147
+          },
+          tableScrollWidth: 0, // 表格宽度(有滚动条)
+        }
+      },
+      mounted: function () {
+        var self = this;
+        // 获取需要绑定的table
+        var tableDom = self.$refs.table.bodyWrapper;
+        // 获取表格宽度
+        self.$nextTick(function () {
+          var scrollWidth = tableDom.scrollWidth; // 网页正文全文宽
+          var offsetWidth  = tableDom.offsetWidth ; // 网页可见区域宽(包括边线的宽)
+          if (scrollWidth > offsetWidth) {
+            self.tableScrollWidth = scrollWidth;
+          } else {
+            self.tableScrollWidth = 0;
+          }
+          console.log('scrollWidth', scrollWidth)
+          console.log('offsetWidth ', offsetWidth)
+
+          var virtualScrollDom = self.$refs.virtualScrollDom;
+          console.log(virtualScrollDom)
+          virtualScrollDom.addEventListener('scroll', () => {
+            console.log(virtualScrollDom.scrollLeft);
+            try {
+              var tableEl = $('#table-diy-1')
+              $(tableEl).find('.el-table__header-wrapper')[0].scrollLeft = virtualScrollDom.scrollLeft
+              $(tableEl).find('.el-table__body-wrapper')[0].scrollLeft = virtualScrollDom.scrollLeft
+            } catch (e) {
+              console.log(e)
+            }
+          })
+        })
+      },
+      methods: {
+        getTableData: function () {
+          var self = this;
+          self.query.load = false;
+          self.$nextTick(function () {
+            self.$refs.pagination.paginationTop();
+          })
+        },
+      }
+    })
+  </script>
+</block>
+
