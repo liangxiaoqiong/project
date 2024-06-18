@@ -5,7 +5,7 @@
       主要样式：富文本编辑器；引用ueditor<br>
     </div>
     <textarea name="store_introduction" v-u-editor style="width:100%;height:360px"></textarea>
-    <textarea name="store_introduction2" id="store_introduction2" v-u-editor-list style="width:100%;height:360px"></textarea>
+    <!--<textarea name="store_introduction2" id="store_introduction2" v-u-editor-list style="width:100%;height:360px"></textarea>-->
     <div class="form-submit">
       <a class="xxbtn-primary" @click="submit">保存</a>
     </div>
@@ -46,41 +46,20 @@
         },
         submit: function () {
           var self = this
-         // self.info.store_introduction = ue.getContent();
+          // self.info.store_introduction = ue.getContent();
         }
       },
       directives: {
         uEditor: {
           bind: function (el) {
-            ue = UE.getEditor(el, {
-              serverUrl: "{:U('Public/uEditor')}",
-            });
-            // 初始化
-            ue.ready(function () {
-              ue.execCommand('serverparam', {
-                'type': 3,
-                'from': 'ueditor',
-                'domain': window.location.protocol + '//' + window.location.host
-              });
-            });
+            UE_INIT(el)
           }
         },
-        uEditorList: {
+        /*uEditorList: {
           bind: function (el) {
-            ue2 = UE.getEditor('store_introduction2', {
-              serverUrl: "{:U('Public/uEditor')}",
-            });
-            // 初始化
-            ue2.ready(function () {
-              // 设置参数
-              ue2.execCommand('serverparam', {
-                'type': 3,
-                'from': 'ueditor',
-                'domain': window.location.protocol + '//' + window.location.host
-              });
-            });
+            UE_INIT(el)
           }
-        },
+        },*/
       }
     })
   </script>

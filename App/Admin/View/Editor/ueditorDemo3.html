@@ -1,0 +1,42 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form has-sub" id="app" v-cloak="">
+    <div class="color-orange mb-10">
+      主要样式：富文本编辑器；引用ueditor<br>
+    </div>
+    <div>
+      text1:{{info.text1}}
+      text2:{{info.text2}}
+    </div>
+    <ueditor :info="info" param="text1"></ueditor>
+    <ueditor :info="info" param="text2" type="2"></ueditor>
+    <div class="form-submit">
+      <a class="xxbtn-primary" @click="submit">保存</a>
+    </div>
+  </div>
+  <include file="Public:ueditor"/>
+  <include file="Public/components/rich_text/ueditor"/>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'ueditor': AppUtil.COMPONENTS.RICH_TEXT_UEDITOR
+      },
+      data: function () {
+        return {
+          info: {
+            text1: '<p>2</p><div>erere</div>',
+            text2: '安徽合肥',
+          }
+        }
+      },
+      mounted: function () {
+      },
+      methods: {
+        submit: function () {
+          var self = this
+        }
+      },
+    })
+  </script>
+</block>

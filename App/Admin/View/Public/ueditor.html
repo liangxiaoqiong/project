@@ -2,3 +2,18 @@
 <script src="/Public/common/js/plug-in/ueditor/ueditor.config.js?v={$V}"></script>
 <!-- 编辑器源码文件 -->
 <script src="/Public/common/js/plug-in/ueditor/ueditor.all.js?v={$V}"></script>
+<script>
+  // 该方法一个页面只能调用一次，否则报错：not import language file
+  ueditorInit();
+  function ueditorInit() {
+    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+    UE.Editor.prototype.getActionUrl = function (action) {
+      if (action === 'uploadimage' || action === 'uploadscrawl' || action === 'uploadimage' || action === 'uploadvideo' ||
+        action === 'uploadfile') {
+        return '{$uploadUrl}' + '?action=' + action;
+      } else {
+        return this._bkGetActionUrl.call(this, action);
+      }
+    };
+  }
+</script>

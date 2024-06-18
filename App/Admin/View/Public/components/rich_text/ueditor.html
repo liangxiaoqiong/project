@@ -1,0 +1,127 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2022/9/8
+  -->
+<style>
+  .ueditor-box {
+    width: 100%;
+    height: 300px;
+  }
+</style>
+<!-- template 百度富文本编辑器
+1、同步实时监听获取富文本数据
+2、兼容一个页面引入多个富文本组件
+-->
+<script type="x-template" id="rich_text_ueditor">
+  <!--region 模版-->
+  <div>
+    <div :id="'ue-content-html'+type" style="display: none;"></div>
+    <div :id="'ueditor'+type" class="ueditor-box" type="text/plain" v-bind="$attrs"></div>
+  </div>
+  <!--endregion-->
+</script>
+
+<!-- JS -->
+<script>
+  AppUtil.COMPONENTS.RICH_TEXT_UEDITOR = {
+    template: '#rich_text_ueditor',
+    components: {},
+    props: {
+      info: Object, // 必填：对应参数的数据对象
+      param: String, // 必填：对应参数名info[param]
+      type: {
+        type: String,
+        default: ''
+      }, // type类型，主要区别一个页面引入多个该组件
+      config: {
+        type: Object
+      },
+    },
+    data: function () {
+      return {
+        editor: null
+      }
+    },
+    computed: {},
+    mounted: function () {
+      this.init();
+    },
+    methods: {
+      init: function () {
+        var self = this;
+        var UE_EL = 'ueditor' + self.type;
+        // 实例化ue实例
+        var config = Object.assign({}, {
+          serverUrl: "{:U('Public/uEditor')}",
+          elementPathEnabled: false, // 禁止元素路径显示
+          wordCount: false, // 禁止字数统计
+          zIndex: 99
+        }, self.config || {})
+        this.editor = UE.getEditor(UE_EL, config); // 初始化UE
+        this.editor.addListener("ready", function () {
+          // 设置参数
+          self.editor.execCommand('serverparam', {
+            'type': 3,
+            'from': 'ueditor',
+            'domain': window.location.protocol + '//' + window.location.host
+          });
+        });
+        self.setContent();
+        self.$nextTick(function () {
+          self.editor.addListener("contentChange",function(){
+            self.getContent().then(function (content) {
+              console.log('内容改变:', content);
+              self.$set(self.info, self.param, content);
+            })
+          });
+        })
+      },
+      setContent: function () {
+        var self = this
+        self.$nextTick(function () {
+          self.editor.ready(function () {
+            console.log(self.info[self.param])
+            self.editor.setContent(self.info[self.param]);
+          });
+        })
+      },
+      getContent: function () {
+        var self = this;
+        return new Promise(function (resolve, reject) {
+          var html = self.editor.getContent();
+          var htmlEl = 'ue-content-html' + self.type;
+          document.getElementById(htmlEl).innerHTML = html;
+          if (html !== '') {
+            var videoList = document.getElementById(htmlEl).getElementsByTagName('video');
+            var float = 0;
+            for (var i = 0; i < videoList.length; i++) {
+              var videoDom = videoList[i];
+              var videoSrc = videoDom.getAttribute('src');
+              var videoUrlOrigin = videoSrc.split('/');
+              if (['dl.duinin.com'].indexOf(videoUrlOrigin[2]) > -1) {
+                videoDom.setAttribute('src', videoSrc + '?v=1'); // 用于处理跨域缓存
+                commonObj.getVideoPoster(videoDom).then(function (posterUrl){
+                  if (float === videoList.length - 1) {
+                    videoDom.setAttribute('preload', 'none');
+                    // videoDom.setAttribute('src', videoSrc);
+                    resolve(document.getElementById(htmlEl).innerHTML);
+                  } else {
+                    float++;
+                  }
+                })
+              } else {
+                if (float === videoList.length - 1) {
+                  resolve(document.getElementById(htmlEl).innerHTML);
+                } else {
+                  float++;
+                }
+              }
+            }
+          }
+          resolve(document.getElementById(htmlEl).innerHTML);
+        })
+      }
+    },
+  }
+</script>

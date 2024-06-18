@@ -184,6 +184,9 @@ class IndexController extends Controller {
     public function ueditorDemo2 () {
         $this->display('Editor/ueditorDemo2');
     }
+    public function ueditorDemo3 () {
+        $this->display('Editor/ueditorDemo3');
+    }
     public function printTplList () {
         $this->display('PrintTpl/printTplList');
     }
@@ -196,6 +199,12 @@ class IndexController extends Controller {
         $req = I('GET.');
         $this->assign('req', $req);
         $this->display('PrintTpl/print');
+    }
+    // endregion
+
+    // region 设计装修
+    public function decorationInfoText () {
+        $this->display('Decoration/info_text');
     }
     // endregion
 
