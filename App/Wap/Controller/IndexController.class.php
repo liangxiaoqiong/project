@@ -31,6 +31,10 @@ class IndexController extends Controller {
     public function mapTencent4 () {
         $this->display('Map/tencent/index4');
     }
+    // 驾车路线规划
+    public function drivingRoutePlanning () {
+        $this->display('Map/tencent/drivingRoutePlanning');
+    }
     // endregion
 
     public function diyTheme () {

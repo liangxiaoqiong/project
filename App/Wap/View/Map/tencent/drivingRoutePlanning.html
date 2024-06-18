@@ -1,0 +1,135 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2023/8/3
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="format-detect" content="telephone=no"/>
+  <title>驾车路线规划</title>
+  <style>
+    #map-box {
+      width: 100%;
+      height: 800px;
+    }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="">
+  <div id="map-box"></div>
+  <div id="panel"><h4>驾车路线规划</h4><div id="instruction"></div></div>
+</div>
+</body>
+<include file="Public:base"/>
+<!--引入Javascript API GL，参数说明参见下文-->
+<script charset="utf-8"
+        src="https://map.qq.com/api/gljs?v=1.exp&key=TU6BZ-JJWC3-W3E3N-3UGEZ-2JM4H-ERBCG&libraries=service"></script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        mapEl: '',//地图元素
+        carInfo: {
+          "carNum": '闽D88888', // "varchar	车牌"
+          "lat": 24.520511, // "double	纬度"
+          "lng": 118.136267, // "double	经度"
+        }, // 车辆信息【起始地】
+        userAddress: {
+          address: '厦门中山医院',
+          "lat": 24.513235, // "double	纬度"
+          "lng": 118.163457, // "double	经度"
+        }, // 用户收货地址【目的地】
+      }
+    },
+    mounted: function () {
+      this.initMap();
+    },
+    methods: {
+      //创建地图
+      initMap: function () {
+        var self = this;
+        self.mapEl = new TMap.Map('map-box', {
+          center: new TMap.LatLng(self.carInfo.lat, self.carInfo.lng),
+          zoom: 12,
+        });
+        var startPosition = new TMap.LatLng(self.carInfo.lat, self.carInfo.lng); // 路线规划起点
+        var endPosition = new TMap.LatLng(self.userAddress.lat, self.userAddress.lng); // 路线规划终点
+        var marker = new TMap.MultiMarker({
+          // 创造MultiMarker显示起终点标记
+          id: 'marker-layer',
+          map: self.mapEl,
+          styles: {
+            start: new TMap.MarkerStyle({
+              width: 25,
+              height: 35,
+              anchor: { x: 16, y: 32 },
+              src: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/start.png',
+            }),
+            end: new TMap.MarkerStyle({
+              width: 25,
+              height: 35,
+              anchor: { x: 16, y: 32 },
+              src: 'https://mapapi.qq.com/web/lbs/javascriptGL/demo/img/end.png',
+            }),
+          },
+          geometries: [
+            {
+              id: 'start',
+              styleId: 'start',
+              position: startPosition,
+            },
+            {
+              id: 'end',
+              styleId: 'end',
+              position: endPosition,
+            },
+          ],
+        });
+
+        var driving = new TMap.service.Driving({
+          // 新建一个驾车路线规划类
+          mp: false, // 是否返回多方案
+          policy: 'PICKUP,NAV_POINT_FIRST', // 规划策略
+        });
+        driving.search({ from: startPosition, to: endPosition }).then((result) => {
+          // 搜索路径
+          /*result.result.routes[0].steps.forEach((step, index) => {
+            document.getElementById('instruction').innerHTML += `<p>${index + 1}. ${
+              step.instruction
+            }</p>`;
+            // 展示路线引导
+          });*/
+          self.displayPolyline(result.result.routes[0].polyline); // 绘制路径折线
+        });
+      },
+      displayPolyline: function (pl) {
+        // 创建 MultiPolyline显示路径折线
+        var polylineLayer = new TMap.MultiPolyline({
+          id: 'polyline-layer',
+          map: this.mapEl,
+          styles: {
+            style_blue: new TMap.PolylineStyle({
+              color: '#3777FF',
+              width: 8,
+              borderWidth: 5,
+              borderColor: '#FFF',
+              lineCap: 'round',
+            }),
+          },
+          geometries: [
+            {
+              id: 'pl_1',
+              styleId: 'style_blue',
+              paths: pl,
+            },
+          ],
+        });
+      }
+    }
+  })
+</script>
+</html>

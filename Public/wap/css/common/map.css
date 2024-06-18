@@ -42,7 +42,7 @@ html, body, #app {
   border: 1px solid #e5e5e5 !important;
 }
 
-#map-box .BMapLabel {
+#map-box .BMap_Marker > .BMapLabel {
   font-size: 10px !important;
   text-align: center;
   padding: 0 5px !important;
@@ -55,9 +55,10 @@ html, body, #app {
   box-shadow: none;
   background-color: rgba(0, 0, 0, 0.5) !important;
   margin-left: 18px;
+  top: 49px !important;
 }
 
-#map-box .BMapLabel:before {
+#map-box .BMap_Marker > .BMapLabel:before {
   content: '';
   position: absolute;
   border-top: 9px solid transparent;
@@ -123,8 +124,8 @@ html, body, #app {
 
 .current-btn {
   position: fixed;
-  z-index: 1;
-  bottom: 7rem;
+  z-index: 10001;
+  bottom: 8rem;
   left: .5rem;
   width: 1.65rem;
   height: 1.65rem;
@@ -133,7 +134,7 @@ html, body, #app {
 }
 .map-bottom {
   position: fixed;
-  z-index: 1;
+  z-index: 10001;
   bottom: 0;
   width: 100%;
   background-color: #F3F3F3;
@@ -176,4 +177,29 @@ html, body, #app {
   font-size: .9rem;
   height: 2.4rem;
   border-radius: .25rem;
+}
+#fast-float-box {
+  z-index: 10002!important;
+}
+
+.map-window {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: .5rem;
+  pointer-events: revert;
+  color: #ffffff;
+  padding: .25rem .5rem;
+}
+.map-window:before {
+  position: absolute;
+  z-index: 1;
+  top: -11px;
+  border-width: 5.5px;
+  border-color: transparent transparent rgba(0, 0, 0, 0.5) transparent;
+  border-style: solid;
+  content: '';
+  left: calc(50% - 3px);
+}
+
+.map-window * {
+  font-size: .6rem;
 }
