@@ -1,0 +1,28 @@
+<!--
+  @author   liangxiaoqiong
+  @version  1.0
+  @date 2023/11/16
+  -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div onclick="removeHtml()">移除</div>
+</body>
+</html>
+<script type="" src="../../../Public/common/js/plug-in/jquery/jquery-3.2.1.min.js"></script>
+<script>
+  addHtml();
+  function addHtml() {
+    var html = '<div id="add-html">新增内容</div>';
+    $('body').append(html);
+  }
+  function removeHtml() {
+    if ($('body').find('#add-html').html() !== undefined) {
+      document.body.removeChild(document.getElementById('add-html'))
+    }
+  }
+</script>
