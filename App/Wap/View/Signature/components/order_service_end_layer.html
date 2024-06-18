@@ -24,7 +24,7 @@
       round
       closeable
       v-model="isShowLayer"
-      get-container="body">
+      get-container="body" @opened="openedLayer">
       <div class="popup-body">
         <div class="popup-title" style="height: 60px;">服务结束客户确认签名</div>
         <div class="signature-content">
@@ -55,6 +55,14 @@
         isShowLayer: false,
       }
     },
+    watch: {
+      'isShowLayer': function () {
+        var self = this;
+        self.$nextTick(function () {
+          publicWap.bodyFixed(self.isShowLayer);
+        })
+      }
+    },
     computed: {},
     mounted: function () {
     },
@@ -62,9 +70,16 @@
       init: function () {
         var self = this;
         self.isShowLayer = true;
+      },
+      // 打开弹框后获取高度，不然ios端availHeight高度获取异常
+      openedLayer: function () {
+        var self = this;
         self.$nextTick(function () {
+          // 获取css的值
+          //alert('sab='+getComputedStyle(document.documentElement).getPropertyValue("--sab"))
           var availWidth = window.screen.availWidth;
-          var availHeight = window.screen.availHeight;
+          //var availHeight = window.screen.availHeight;
+          var availHeight = document.documentElement.clientHeight;
           let params = {
             whiteBord:'whiteBord',//canvas标签的id名称
             againWrite:'againWrite',//重写按钮id名
@@ -92,6 +107,7 @@
       },
       submit: function (url) {
         console.log(url);
+        var self = this;
         this.isShowLayer = false;
       },
     }

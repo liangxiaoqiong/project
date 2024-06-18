@@ -4157,6 +4157,18 @@ img[src=""],img:not([src]){opacity:0;}
          padding-bottom: constant(safe-area-inset-bottom); !*为底下圆弧的高度 34px*!
          padding-bottom: env(safe-area-inset-bottom); !*为底下圆弧的高度 34px*!
      }*/
+
+    :root {
+        --sat: constant(safe-area-inset-top);
+        --sar: constant(safe-area-inset-right);
+        --sab: constant(safe-area-inset-bottom);
+        --sal: constant(safe-area-inset-left);
+
+        --sat: env(safe-area-inset-top);
+        --sar: env(safe-area-inset-right);
+        --sab: env(safe-area-inset-bottom);
+        --sal: env(safe-area-inset-left);
+    }
     .footer,
     .footerHeight {
         height: calc(40px + env(safe-area-inset-bottom))!important;
