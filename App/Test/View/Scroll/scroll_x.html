@@ -25,6 +25,7 @@
       overflow: hidden;
       padding: 0;
       margin: 0;
+      transition: all .3s;
     }
     .layui-tab-title li {
       display: inline-block;
@@ -78,7 +79,7 @@
       }
     },
     mounted: function () {
-      this.clickTab('', 3);
+      this.clickTab('', 8);
     },
     methods: {
       /**
@@ -93,7 +94,7 @@
     }
   })
   var moveX = 0;
-  function changeScroll(tab, index) {
+  function changeScroll() {
     var tabDom = document.getElementById('layui-tab-list');
 
     // 获取包裹盒子 tabDom.offsetWidth
@@ -107,15 +108,49 @@
         // 获取到当前点击元素的 offsetLeft  - 包裹盒子 offsetWidth 的一半 + 当前点击元素 offsetWidth 的一半
         var scrollLeftNum = element.offsetLeft - tabDomOffsetWidth / 2 + element.offsetWidth / 2;
         // 赋值
-        tabDom.scrollLeft = scrollLeftNum;
+        //tabDom.scrollLeft = scrollLeftNum;
+        $('#layui-tab-list').animate({scrollLeft: scrollLeftNum}, 1000);
+        isShowMenuMore();
       }
     })
   }
   function prev() {
+    var tabDom = document.getElementById('layui-tab-list');
+    var scrollLeftNum = tabDom.scrollLeft - tabDom.offsetWidth;
+    $('#layui-tab-list').animate({scrollLeft: scrollLeftNum}, 1000);
+    isShowMenuMore();
 
   }
   function next() {
+    var tabDom = document.getElementById('layui-tab-list');
+    var scrollLeftNum = tabDom.scrollLeft + tabDom.offsetWidth;
+    $('#layui-tab-list').animate({scrollLeft: scrollLeftNum}, 1000);
+    isShowMenuMore();
 
+  }
+  // 菜单是否有滚条分页【是否需要显示向左、向右箭头】
+  function isShowMenuMore() {
+    setTimeout(function () {
+      var isShowPrev = false;
+      var isShowNext = false;
+      var tabDom = document.getElementById('layui-tab-list');
+      if (+tabDom.scrollWidth > +tabDom.offsetWidth) {
+        console.log('有滚动条')
+        if (tabDom.scrollLeft > 0) {
+          // 滚动条不在最左侧=》显示[向左]按钮
+          isShowPrev = true;
+        }
+        var scrollLeftNum = tabDom.scrollLeft + tabDom.clientWidth;
+        console.log('scrollLeftNum', scrollLeftNum);
+        console.log('scrollWidth', tabDom.scrollWidth);
+        if (+scrollLeftNum < +tabDom.scrollWidth) {
+          // 滚动条不在最右侧=》显示[向右]按钮
+          isShowNext = true;
+        }
+      }
+      console.log('显示向左按钮', isShowPrev)
+      console.log('显示向右按钮', isShowNext)
+    }, 1100)
   }
 </script>
 </html>
