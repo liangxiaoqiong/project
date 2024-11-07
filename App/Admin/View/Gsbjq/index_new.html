@@ -1,0 +1,21 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    公式编辑器组件：更多具体看caiwu项目
+    <formula-new ref="formulaPage"></formula-new>
+  </div>
+  <include file="Public/components/base_input" />
+  <include file="Gsbjq/components/formula_new" />
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'formula-new': AppUtil.COMPONENTS.FORMULA_NEW,
+      },
+      data: function () {
+        return {
+        }
+      }
+    })
+  </script>
+</block>

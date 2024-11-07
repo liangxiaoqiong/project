@@ -202,6 +202,15 @@ class IndexController extends Controller {
     }
     // endregion
 
+    // region 公式编辑器
+    public function gsbjq () {
+        $this->display('Gsbjq/index');
+    }
+    public function gsbjq_new () {
+        $this->display('Gsbjq/index_new');
+    }
+    // endregion
+
     // region 设计装修
     public function decorationInfoText () {
         $this->display('Decoration/info_text');

@@ -1,0 +1,20 @@
+<extend name="Public:base"/>
+<block name="content">
+  <div class="admin-main admin-main-form" id="app" v-cloak="">
+    <formula ref="formulaPage"></formula>
+  </div>
+  <include file="Public/components/base_input" />
+  <include file="Gsbjq/components/formula" />
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      components: {
+        'formula': AppUtil.COMPONENTS.FORMULA,
+      },
+      data: function () {
+        return {
+        }
+      }
+    })
+  </script>
+</block>
