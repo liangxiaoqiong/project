@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>简单例子</title>
+
+  <style>
+    .signature-pad--body {
+      position: relative;
+      width: 100%;
+      height: 500px;border: 1px solid #ddd;
+    }
+    #canvas_pad {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.02) inset;
+    }
+  </style>
+</head>
+<body>
+
+
+<div id="signature-pad" class="signature-pad">
+  <div class="signature-pad--body">
+    <canvas id="canvas_pad">
+      Update your browser to support the canvas element!
+    </canvas>
+  </div>
+</div>
+
+<script src='../SignaturePad/demo/Signature/signature_pad.min.js'></script>
+<script>
+  var canvas = document.getElementById('canvas_pad')
+  const signaturePad = new SignaturePad(canvas, {
+    backgroundColor: 'rgb(255, 255, 255)'
+  })
+  function resizeCanvas() {
+    var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    canvas.getContext("2d").scale(ratio, ratio);
+    signaturePad.clear(); // otherwise isEmpty() might return incorrect value
+  }
+
+  window.addEventListener("resize", resizeCanvas);
+  resizeCanvas();
+</script>
+
+</body>
+</html>
