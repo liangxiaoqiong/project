@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Slider(“新图片从底部滑出，旧图片向上滑动”的效果)</title>
+  <style>
+    .image-container {
+      position: relative;
+      width: 150px; /* 根据图片大小调整 */
+      height: 150px; /* 根据图片大小调整 */
+      overflow: hidden;
+      border: 1px solid #ccc; /* 可选：添加边框以便观察效果 */
+    }
+
+    .image {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    }
+
+    /* 定义向上滑动的动画 */
+    @keyframes slideUp {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+    }
+
+    /* 定义从底部滑出的动画 */
+    @keyframes slideIn {
+      0% {
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="image-container">
+  <img alt="Image" class="image current-image" id="currentImage">
+  <img alt="Image" class="image next-image" id="nextImage" style="opacity: 0;">
+</div>
+<button onclick="nextImage()">Next Image</button>
+<script>
+  var list = [
+    { imgurl: 'http://dl.duinin.com/data/goods/20200525/06437332827513636.jpg?_400x400x2' },
+    { imgurl: 'https://dl.duinin.com/data/page/20241202/07864628924113568.png?_750xx2' },
+    { imgurl: 'http://dl.duinin.com/data/goods/20200515/06428787020256708.jpg?_400x400x2' },
+    { imgurl: 'http://dl.duinin.com/data/upload/20210811/06819973186710367.jpg?_400x400x2' },
+    { imgurl: 'http://dl.duinin.com/data/upload/20191029/06256611984694588.jpeg' },
+    { imgurl: 'http://dl.duinin.com/data/upload/20210811/06820081842755595.jpg?_400x400x2' },
+    { imgurl: 'http://dl.duinin.com/data/upload/20210708/06790553205042353.jpg?_400x400x2' },
+    { imgurl: 'https://dl.duinin.com/data/goods/20190326/06069386826677705.png?_400x400x2' },
+    { imgurl: 'http://dl.duinin.com/data/upload/20210112/06637853395114552.jpg?_400x400x2' },
+    { imgurl: 'http://dl.duinin.com/data/upload/20240327/07648673010436580.png?_300x300x2' }
+  ];
+
+  var index = 0; // 当前显示的图片索引
+  nextImage();
+
+  function nextImage() {
+    const currentImage = document.getElementById('currentImage');
+    const nextImage = document.getElementById('nextImage');
+
+    // 设置旧图片向上滑动
+    currentImage.style.animation = 'slideUp 0.5s forwards';
+
+    // 设置新图片从底部滑出
+    nextImage.src = list[(index + 1) % list.length].imgurl;
+    nextImage.style.animation = 'slideIn 0.5s forwards';
+
+    // 等待动画完成
+    setTimeout(() => {
+      // 交换图片
+      const temp = currentImage.src;
+      currentImage.src = nextImage.src;
+      nextImage.src = temp;
+
+      // 重置动画
+      currentImage.style.animation = '';
+      nextImage.style.animation = '';
+    }, 500); // 等待动画完成（动画持续时间为 0.5s）
+
+    index = (index + 1) % list.length;
+  }
+</script>
+</body>
+</html>
