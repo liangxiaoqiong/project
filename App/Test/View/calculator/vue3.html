@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>计算器-模拟手机计算器-有光标</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    .calculator-container {
+      width: 250px;
+      background-color: #EEEEEE;
+      border-radius: 5px;
+    }
+    .calculator-btn-list {
+      display: flex;
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flex;
+      display: -o-flex;
+      flex-wrap: wrap;
+      width: 100%;
+      padding: 5px;
+    }
+    .calculator-btn-list a {
+      cursor: pointer;
+      width: 50px;
+      height: 35px;
+      border-radius: 5px;
+      box-shadow: 0 0 7px 1px #999;
+      display: flex;
+      display: -webkit-flex;
+      display: -moz-flex;
+      display: -ms-flex;
+      display: -o-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .calculator-btn-list a:hover {
+      background-color: rgba(0, 60, 255, 0.2);
+    }
+    .calculator-step-list {
+      display: flex;
+      align-items: center;
+    }
+    .calculator-step-list .step-li {
+      display: flex;
+      align-items: center;
+    }
+    .calculator-step-list .step-li .gap {
+      width: 4px;
+      height: 20px;
+      position: relative;
+    }
+    .calculator-step-list .step-li .gap .cursor {
+      position: absolute;
+      z-index: 1;
+      top: calc(50% - 15px);
+      left: 2px;
+      width: 1px;
+      height: 30px;
+      display: inline-block;
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="">
+<div class="calculator-container">
+  <div style="height: 100px">
+
+    <template v-if="isEqual">
+      <div>
+        <span v-for="(item, i) in calculateEqualStepList">{{ item }}</span>
+      </div>
+      <b style="font-size: 16px;">= {{ equalVal }}</b>
+    </template>
+
+    <template v-else>
+      <div class="calculator-step-list" style="font-weight: bold;font-size: 18px;display: flex">
+        <template v-for="(item, i) in calculateStepList">
+          <div class="step-li" @click="focusStepKey = i">
+            <span>{{ item }}</span>
+            <span class="gap" @click.stop="focusStepKey = i"><i class="cursor" v-if="focusStepKey === i"><!--光标--></i></span>
+          </div>
+        </template>
+      </div>
+      <div v-if="calculateStepList.length > 0">
+        =
+        {{ resultVal }}
+      </div>
+    </template>
+
+  </div>
+  <div class="calculator-btn-list">
+    <a v-for="(item, i) in calculatorBtnList" :title="item.title" @click="calculatorAct(item)">{{ item.label }}</a>
+  </div>
+</div>
+</div>
+</body>
+<script type="text/javascript" src="__JQUERY__"></script>
+<script type="text/javascript" src="__COMMON_JS__/plug-in/layer/2.3.0/layer.js?v={$V}"></script>
+<script type="text/javascript" src="__VUE_NEWEST__"></script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        isEqual: false, // 是否显示等于号，取最后值
+        calculatorBtnList: [
+          {value: 'left_bracket', label: '(', title: '左括号', type: 'symbol'},
+          {value: 'right_bracket', label: ')', title: '右括号', type: 'symbol'},
+          {value: 'backspace', label: '←', title: '删除', type: 'symbol'},
+          {value: 'clear', label: 'AC', title: '清零', type: 'symbol'},
+
+          {value: '7', label: '7', title: '7', type: 'number'},
+          {value: '8', label: '8', title: '8', type: 'number'},
+          {value: '9', label: '9', title: '9', type: 'number'},
+          {value: 'divide', label: '÷', title: '除', type: 'symbol'},
+          {value: '4', label: '4', title: '4', type: 'number'},
+          {value: '5', label: '5', title: '5', type: 'number'},
+          {value: '6', label: '6', title: '6', type: 'number'},
+          {value: 'multiply', label: '×', title: '乘', type: 'symbol'},
+          {value: '1', label: '1', title: '1', type: 'number'},
+          {value: '2', label: '2', title: '2', type: 'number'},
+          {value: '3', label: '3', title: '3', type: 'number'},
+          {value: 'minus', label: '-', title: '减', type: 'symbol'},
+          {value: '0', label: '0', title: '0', type: 'number'},
+          {value: 'point', label: '.', title: '小数点', type: 'number'},
+          {value: 'equal', label: '=', title: '等于', type: 'equal'},
+          {value: 'plus', label: '+', title: '加', type: 'symbol'},
+        ],
+        calculateStepList: [], // 计算步骤列表
+        calculateEqualStepList: [], // 等于后的计算步骤列表
+        calculateRecordList: [], // 计算记录：=后生成一条记录
+        focusStepKey: -1, // 当前聚焦的步骤key，calculateStepList的项
+      }
+    },
+    computed: {
+      // calculateStepList的计算结果值
+      resultVal: function () {
+        return this.calculatorVal(this.calculateStepList);
+      },
+      // calculateEqualStepList的计算结果值
+      equalVal: function () {
+        return this.calculatorVal(this.calculateEqualStepList);
+      },
+    },
+    mounted: function () {
+    },
+    methods: {
+      // 按键操作
+      calculatorAct: function (item) {
+        var self = this;
+        self.isEqual = false;
+        switch (item.value) {
+          case '0':
+          case '1':
+          case '2':
+          case '3':
+          case '4':
+          case '5':
+          case '6':
+          case '7':
+          case '8':
+          case '9':
+            if (self.focusStepKey > -1) {
+              if (['+', '-', '×', '÷'].indexOf(self.calculateStepList[self.focusStepKey]) > -1) {
+                self.calculateStepList.splice(self.focusStepKey+1, 0, item.label);
+                self.focusStepKey++;
+              } else {
+                var newVal = self.calculateStepList[self.focusStepKey] + item.label;
+                self.$set(self.calculateStepList, self.focusStepKey, newVal);
+              }
+            } else {
+              self.calculateStepList.splice(self.focusStepKey+1, 0, item.label);
+              self.focusStepKey++;
+            }
+            break
+          case 'left_bracket': // (
+          case 'right_bracket': // )
+            self.calculateStepList.splice(self.focusStepKey+1, 0, item.label);
+            self.focusStepKey++;
+            break
+          case 'backspace': // ←
+            self.removeCharacter();
+            break
+          case 'clear': // AC清除
+            self.calculateStepList = [];
+            self.focusStepKey = -1;
+            break
+          case 'plus': // +
+          case 'minus': // -
+          case 'multiply': // ×
+          case 'divide': // ÷
+            if (self.focusStepKey > -1) {
+              if (['+', '-', '×', '÷'].indexOf(self.calculateStepList[self.focusStepKey]) === -1) {
+                self.calculateStepList.splice(self.focusStepKey+1, 0, item.label);
+                self.focusStepKey++;
+              }
+            } else {
+              self.calculateStepList.splice(self.focusStepKey+1, 0, '0');
+              self.focusStepKey++;
+              self.calculateStepList.splice(self.focusStepKey+1, 0, item.label);
+              self.focusStepKey++;
+            }
+            break
+          case 'point': // 小数点
+            if (self.focusStepKey > -1) {
+              if (self.calculateStepList[self.focusStepKey].includes('.')) {
+                // 输入框值已有小数点
+                return false;
+              } else {
+                var value = self.calculateStepList[self.focusStepKey] + item.label;
+                self.$set(self.calculateStepList, self.focusStepKey, value);
+              }
+            } else {
+              self.calculateStepList.splice(self.focusStepKey+1, 0, '0'+item.label);
+              self.focusStepKey++;
+            }
+            break
+          case 'equal':
+            self.calculateRecordList.push(self.calculateStepList);
+            self.calculateEqualStepList = JSON.parse(JSON.stringify(self.calculateStepList));
+            self.calculateStepList = [];
+            self.isEqual = true;
+            break
+          default:
+            break
+        }
+      },
+
+      // 移除数组
+      removeCharacter: function () {
+        var self = this;
+        if (self.focusStepKey > -1) {
+          // 如果当前元素是字符串且长度大于0
+          if (typeof self.calculateStepList[self.focusStepKey] === 'string' && self.calculateStepList[self.focusStepKey].length > 0) {
+            // 删除最后一个字符
+            if (self.calculateStepList[self.focusStepKey].length === 1) {
+              // 最后一个字符直接移除数组元素
+              self.calculateStepList.splice(self.focusStepKey, 1);
+              self.focusStepKey--;
+              if (self.focusStepKey === -1 && self.calculateStepList.length > 0) self.focusStepKey = self.calculateStepList.length -1;
+            } else {
+              self.$set(self.calculateStepList, self.focusStepKey, self.calculateStepList[self.focusStepKey].slice(0, -1));
+            }
+          }
+        }
+      },
+
+      // 计算步骤结果值
+      calculatorVal: function (calculator_list) {
+        var list = [];
+        calculator_list.forEach(function (val) {
+          if (val === '×') list.push('*');
+          else if (val === '÷') list.push('/');
+          else list.push(val);
+        })
+        if (['+', '-', '*', '/'].indexOf(list[list.length - 1]) > -1) {
+          list.splice(list.length - 1, 1);
+        }
+        try {
+          return list.length > 0 ? eval(list.join('')) : '';
+        }catch (e) {
+          return '出错';
+        }
+      },
+    }
+  })
+</script>
+</html>
