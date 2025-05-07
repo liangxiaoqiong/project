@@ -211,12 +211,6 @@ class IndexController extends Controller {
     }
     // endregion
 
-    // region 设计装修
-    public function decorationInfoText () {
-        $this->display('Decoration/info_text');
-    }
-    // endregion
-
     public function addTab () {
         $this->display('Component/addTab');
     }
