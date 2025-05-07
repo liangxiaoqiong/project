@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>table表格集中</title>
+    <style>
+
+        /*解决table td里面长串数字或字母不换行的问题*/
+        /*table-layout:fixed;会使表格列宽无法控制*/
+        #table1{word-break: break-all;/*table-layout:fixed;*/}
+    </style>
+</head>
+<body>
+    <table id="table1">
+        <tr>
+            <td width="30px">2222222222222222sddffffffffffffffffffffff</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td width="30px">2222222222222222sddffffffffffffffffffffff</td>
+        </tr>
+    </table>
+</body>
+</html>
