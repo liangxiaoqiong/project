@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>vue.draggable例子</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+  <script src="https://www.itxst.com/package/vue/vue.js"></script>
+  <script src="https://www.itxst.com/package/sortable/Sortable.min.js"></script>
+  <script src="https://www.itxst.com/package/vuedraggable/vuedraggable.umd.min.js"></script>
+  <style scoped>
+    .itxst {
+      margin: 10px;
+      text-align :left;
+    }
+    .col {
+      width: 40%;
+      flex: 1;
+      padding: 10px;
+      border: solid 1px #eee;
+      border-radius: 5px;
+      float: left;
+    }
+    .col + .col {
+      margin-left: 10px;
+    }
+    .item {
+      padding: 6px 12px;
+      margin: 0px 10px 0px 10px;
+      border: solid 1px #eee;
+      background-color: #f1f1f1;
+      text-align: left;
+    }
+    .item + .item {
+      border-top: none;
+      margin-top: 6px;
+    }
+
+    .item:hover {
+      background-color: #fdfdfd;
+      cursor: move;
+    }
+    .item2 {
+      padding: 6px 12px;
+      margin: 0px 10px 0px 10px;
+      border: solid 1px #eee;
+      background-color: pink;
+      text-align: left;
+    }
+    .item2 + .item2 {
+      border-top: none;
+      margin-top: 6px;
+    }
+
+    .item2:hover {
+      outline: solid 1px #ddd;
+      cursor: move;
+    }
+
+    .left-tool {
+
+    }
+  </style>
+</head>
+<body style="padding:10px;">
+<div id="app">
+  <div class="itxst">
+    <div class="left-tool">
+      <draggable v-model="arr1"   @end="end1" @start="startLeft" :options="{group:{name: 'itxst',pull:true,put:false},sort: false}"  animation="300"  :move="onMoveLeft" tag="div">
+        <transition-group>
+          <div class="item" v-for="item in arr1" :key="item.id">{{item.name}}</div>
+        </transition-group>
+      </draggable>
+    </div>
+    <div class="col">
+      <draggable v-model="arr2"   @end="end2" @start="startRight" :options="{group:{name: 'itxst'}}"  animation="300" :move="onMove" tag="div">
+        <transition-group>
+          <div class="item" v-for="item in arr2" :key="item.id">{{item.name}}</div>
+        </transition-group>
+      </draggable>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  // 全局注册组件
+  Vue.component('vuedraggable', window.vuedraggable)
+  var app = new Vue({
+    el: '#app',
+    components: {
+      vuedraggable: window.vuedraggable,//当前页面注册组件
+    },
+    data() {
+      return {
+        //定义要被拖拽对象的数组
+        arr1:[
+          { id: 1, name: 'www.itxst.com',type: 'left'},
+          { id: 2, name: 'www.jd.com',type: 'left' },
+          { id: 3, name: 'www.baidu.com',type: 'left' },
+          { id: 5, name: 'www.google.com',type: 'left' },
+          { id: 4, name: 'www.taobao.com',type: 'left' }
+        ],
+        arr2:[{ id: 11, name: '常用菜单',type: 'right'},{ id: 12, name: '常用5菜单',type: 'right'},],
+        arr1DragBefore: '', // 左侧数据改变前数据
+        arr2DragBefore: '', // 右侧数据改变前数据
+        moveId: -1,
+        isLeftDrag: false
+      };
+    },
+    methods: {
+      /*region 左侧栏*/
+      startLeft: function () {
+        this.isLeftDrag = true;
+        this.arr1DragBefore = JSON.stringify(this.arr1);
+        this.arr2DragBefore = JSON.stringify(this.arr2);
+      },
+      // 左侧拖拽
+      onMoveLeft: function (e) {
+        //console.log(e.draggedContext.index); // 左侧拖动对象的索引
+        //console.log(e.draggedContext.element); // 左侧拖动对象的数据
+        //console.log(e.draggedContext.futureIndex); // 右侧选择放置位置的索引
+        var arr2 = JSON.parse(this.arr2DragBefore);
+        arr2.splice(e.draggedContext.futureIndex, 0, {id: -1, type: 'drag'});
+        this.arr2 = arr2;
+      },
+      //左边往右边拖动时的事件
+      end1(e){
+        //console.log(e)
+        //console.log(e.oldIndex); // 左侧选中对象的索引
+        //console.log(e.newIndex); // 右侧选择放置位置的索引
+        var that=this;
+        /*var  items=this.arr2.filter(function(m){
+          return  m.id==that.moveId
+        })*/
+        this.arr1 = JSON.parse(this.arr1DragBefore);
+        this.arr2 = JSON.parse(this.arr2DragBefore);
+        this.isLeftDrag = false;
+      },
+      /*endregion*/
+
+      /*region 右边*/
+      startRight: function () {
+        this.arr2DragBefore = JSON.stringify(this.arr2);
+      },
+      //右边往左边拖动时的事件
+      end2(e){
+    //    console.log(e)
+        var that=this;
+      },
+      /*endregion*/
+      //move回调方法
+      onMove(e,originalEvent){
+        this.moveId=e.relatedContext.element.id;
+         //不允许停靠
+       /* if (e.relatedContext.element.id == 1) return false;
+        //不允许拖拽
+        if (e.draggedContext.element.id == 4) return false;
+        if (e.draggedContext.element.id == 11) return false;
+        if (e.draggedContext.element.id == 12) return false;*/
+        return true;
+      },
+
+
+
+
+      getArrayKey: function (config) {
+        var activeIndex = -1;
+        for (var i = 0; i < config.list.length; i++) {
+          if (config.value === config.list[i][config.param]) {
+            activeIndex = i;
+            break;
+          }
+        }
+        return activeIndex
+      },
+    },
+  });
+</script>
+</body>
+</html>

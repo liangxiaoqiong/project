@@ -1,0 +1,3 @@
+vue-draggable 拖拽移动
+官网文档：https://www.itxst.com/vue-draggable/tutorial.html
+
