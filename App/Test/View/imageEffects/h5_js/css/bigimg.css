@@ -1,0 +1,41 @@
+*{
+  margin:0px;
+  padding:0px;
+}
+#box{
+  width:400px;
+  height:400px;
+  margin:100px;
+  margin-left:17%;
+  position:relative;//这里使用相对定位，好让其他的元素能依靠这个元素定位
+}
+#box img {
+  width: 100%;
+  height: 100%;
+}
+#move{
+  background-image:url('../../../../../../Public/img/move.png');
+  background-color: rgba(255,255,255,0.5);
+  width:200px;
+  height:200px;
+  position:absolute;
+  left:0px;
+  top:0px;
+  display:none;//先让他隐藏，用js使其显示
+}
+#bimg{
+  width:400px;
+  height:400px;
+  overflow:hidden;
+  position:absolute;
+  top:0px;
+  left:450px;
+  display:none;//先让他隐藏，用js使其显示
+}
+#bimg img{
+  width:800px;
+  height:800px;
+  position:absolute;
+  top:0px;
+  left:0px;
+}
