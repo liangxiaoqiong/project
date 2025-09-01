@@ -8,6 +8,10 @@ class IndexController extends Controller {
     public function scroll_x(){
         $this->display('Scroll/scroll_x');
     }
+
+    public function vue_seamless_scroll () {
+        $this->display('Scroll/vue_seamless_scroll/index');
+    }
     /*endregion*/
     /*region 计算器*/
     public function calculator(){

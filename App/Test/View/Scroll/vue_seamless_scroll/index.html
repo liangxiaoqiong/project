@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+    .warp {
+      width: 100%;
+      height: 120px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+    }
+    ul.ul-item {
+      display: flex;
+    }
+    .li-item {
+      margin-right: 10px;
+      line-height: 120px;
+      text-align: center;
+      font-size: 30px;
+    }
+
+  </style>
+</head>
+<body>
+<div id="app" v-cloak="">
+  <a href="https://chenxuan0000.github.io/vue-seamless-scroll/zh/guide/">文档：https://chenxuan0000.github.io/vue-seamless-scroll/zh/guide/</a>
+  <vue-seamless-scroll :data="textList"  :class-option="classOption"
+                       class="warp">
+    <ul class="ul-item">
+      <li class="li-item" v-for="(item, index) in textList" :key="index">
+        {{ item }}
+      </li>
+    </ul>
+  </vue-seamless-scroll>
+</div>
+</body>
+<script type="text/javascript" src="/Public/common/js/plug-in/jquery/jquery-3.2.1.js"></script>
+<script type="text/javascript" src="__VUE_NEWEST__"></script>
+<script type="text/javascript" src="__COMMON_JS__/plug-in/vue-seamless-scroll/vue-seamless-scroll.min.js?v={$V}"></script>
+<script>
+  var vm = new Vue({
+    el: '#app',
+    components: {
+    },
+    data: function () {
+      return {
+        textList: ['11111这是一条不会留白的公告222222222！'],
+        classOption: {
+          limitMoveNum: 1,
+          direction: 2,
+        }
+      }
+    },
+    methods: {
+    }
+  })
+</script>
+</html>
